@@ -1,0 +1,22 @@
+{
+  // 파일 저장 시 자동으로 포맷팅 적용
+  "editor.formatOnSave": true,
+
+  // 파일 포맷팅 도구로 Prettier 사용 (Prettier 설정 파일이 있어야 적용)
+  "prettier.requireConfig": true,
+  // 각 파일 유형별 기본 포맷터 설정
+  "[javascript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  },
+  "WillLuke.nextjs.addTypesOnSave": true,
+  "WillLuke.nextjs.hasPrompted": true
+}

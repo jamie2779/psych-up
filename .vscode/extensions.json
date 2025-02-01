@@ -1,0 +1,8 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint", // ESLint 지원
+    "esbenp.prettier-vscode", // Prettier 포맷터
+    "Prisma.prisma", // Prisma 관련 문법 지원 및 하이라이팅
+    "dsznajder.es7-react-js-snippets" // React/Next.js 스니펫
+  ]
+}
