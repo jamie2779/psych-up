@@ -1,0 +1,57 @@
+<svg width="600" height="760" viewBox="0 0 600 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path d="M440 720L300 760L160 720L60 660L-4.57764e-05 520L40 360L160 160L300 0L440 160L560 360L600 520L540 660L440 720Z" fill="url(#paint0_linear_52_785)"/>
+<path d="M320 240L160 160L320 80L440 160L320 240Z" fill="white" fill-opacity="0.2"/>
+<path d="M320 80L300 0L160 160L320 80Z" fill="white" fill-opacity="0.1"/>
+<path d="M440 160L300 0L320 80L440 160Z" fill="white" fill-opacity="0.3"/>
+<path d="M320 240L40 360L160.5 160L320 240Z" fill="white" fill-opacity="0.05"/>
+<path d="M440 480L320 240L160 560H320L440 480Z" fill="white" fill-opacity="0.3"/>
+<path d="M0 520L40 360L320 240L0 520Z" fill="white" fill-opacity="0.21"/>
+<path d="M560 360L440 320L320 240L440 160L560 360Z" fill="white" fill-opacity="0.4"/>
+<path d="M440 320L320 240L440 480V320Z" fill="white" fill-opacity="0.5"/>
+<path d="M560 360L440 320V480L600 520L560 360Z" fill="white" fill-opacity="0.45"/>
+<path d="M300 760L320 680L440 720L300 760Z" fill="white" fill-opacity="0.16"/>
+<path d="M480 640L320 680L440 720L540 660L480 640Z" fill="white" fill-opacity="0.1"/>
+<path d="M480 640L440 480L600 520L540 660L480 640Z" fill="white" fill-opacity="0.3"/>
+<path d="M160 560L0 520L320 240L160 560Z" fill="white" fill-opacity="0.15"/>
+<path d="M60 660L160 560L0 520L60 660Z" fill="white" fill-opacity="0.2"/>
+<path d="M320 680L240 640L160 720L300 760L320 680Z" fill="white" fill-opacity="0.2"/>
+<path d="M240 640L160 560L60 660L160 720L240 640Z" fill="white" fill-opacity="0.1"/>
+<path d="M240 640L320 680V620V560H160L240 640Z" fill="white" fill-opacity="0.35"/>
+<path d="M440 480L320 560V680L480 640L440 480Z" fill="white" fill-opacity="0.21"/>
+<g filter="url(#filter0_bd_52_785)">
+<path d="M264.719 247.694C264.326 236.383 273.389 227 284.707 227H315.294C326.611 227 335.674 236.383 335.281 247.694L326.67 495.694C326.296 506.463 317.458 515 306.682 515H293.318C282.542 515 273.704 506.463 273.33 495.694L264.719 247.694Z" fill="white" fill-opacity="0.5" shape-rendering="crispEdges"/>
+</g>
+<g filter="url(#filter1_bd_52_785)">
+<path d="M271.604 562.249C272.978 552.361 281.432 545 291.414 545H308.586C318.568 545 327.022 552.361 328.396 562.249L332.84 594.249C334.51 606.273 325.17 617 313.03 617H286.97C274.83 617 265.49 606.273 267.16 594.249L271.604 562.249Z" fill="white" fill-opacity="0.5" shape-rendering="crispEdges"/>
+</g>
+<defs>
+<filter id="filter0_bd_52_785" x="250.706" y="213" width="110.588" height="328" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feGaussianBlur in="BackgroundImageFix" stdDeviation="5"/>
+<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_52_785"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="6" dy="6"/>
+<feGaussianBlur stdDeviation="10"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0"/>
+<feBlend mode="normal" in2="effect1_backgroundBlur_52_785" result="effect2_dropShadow_52_785"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_52_785" result="shape"/>
+</filter>
+<filter id="filter1_bd_52_785" x="252.966" y="531" width="106.068" height="112" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feGaussianBlur in="BackgroundImageFix" stdDeviation="5"/>
+<feComposite in2="SourceAlpha" operator="in" result="effect1_backgroundBlur_52_785"/>
+<feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha"/>
+<feOffset dx="6" dy="6"/>
+<feGaussianBlur stdDeviation="10"/>
+<feComposite in2="hardAlpha" operator="out"/>
+<feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0"/>
+<feBlend mode="normal" in2="effect1_backgroundBlur_52_785" result="effect2_dropShadow_52_785"/>
+<feBlend mode="normal" in="SourceGraphic" in2="effect2_dropShadow_52_785" result="shape"/>
+</filter>
+<linearGradient id="paint0_linear_52_785" x1="-4.47114e-05" y1="79.9999" x2="600" y2="680" gradientUnits="userSpaceOnUse">
+<stop stop-color="#BFFFF4"/>
+<stop offset="1" stop-color="#0984E3"/>
+</linearGradient>
+</defs>
+</svg>

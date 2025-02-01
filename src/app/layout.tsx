@@ -1,5 +1,7 @@
+import Provider from "@/components/ui/provider";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+
 import "./globals.css";
 
 const geistSans = Geist({
@@ -19,13 +21,21 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {children}
+      <head>
+        {/* Paperlogy 폰트 CSS 로드 */}
+        <link
+          rel="stylesheet"
+          type="text/css"
+          href="https://cdn.jsdelivr.net/gh/whitedev7773/Paperlogy/paperlogy.css"
+        />
+      </head>
+      <body>
+        <Provider>{children}</Provider>
       </body>
     </html>
   );
