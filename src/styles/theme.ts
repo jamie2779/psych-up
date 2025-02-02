@@ -44,11 +44,21 @@ export const theme = extendTheme(
       success: "var(--general-success)",
       danger: "var(--general-danger)",
       warning: "var(--general-warning)",
+      body: "var(--general-body)",
       grey: {
         _default: "var(--general-grey)",
         shade0: "var(--grey-0)",
         shade1: "var(--grey-1)",
         shade2: "var(--grey-2)",
+      },
+      gradient:
+        "linear-gradient(151deg, var(--gradient-primary), var(--gradient-secondary))",
+    },
+    textStyles: {
+      gradient: {
+        background: "gradient",
+        backgroundClip: "text",
+        color: "transparent",
       },
     },
     semanticTokens: {
