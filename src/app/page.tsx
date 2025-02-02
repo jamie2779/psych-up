@@ -12,6 +12,7 @@ export default function Home() {
         width="100%"
         backgroundColor="body"
         position="relative"
+        overflow="hidden"
       >
         {/* 배경 이미지 */}
         <Box
