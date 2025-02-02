@@ -25,7 +25,7 @@ export default function Navbar() {
         justifyContent="space-between"
       >
         <Image
-          src="/logo.svg"
+          src="/Logo.svg"
           alt="logo"
           width="205"
           height="80"
