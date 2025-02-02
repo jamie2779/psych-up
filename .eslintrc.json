@@ -1,37 +1,25 @@
 {
-    "extends": [
-      "next/core-web-vitals",
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:jsx-a11y/recommended",
-      "plugin:prettier/recommended"
-    ],
-    "plugins": ["react", "jsx-a11y", "prettier"],
-    "rules": {
-      "react/react-in-jsx-scope": "off",
-      "prettier/prettier": [
-        "error",
-        {
-          "semi": true,
-          "singleQuote": false,
-          "tabWidth": 2,
-          "trailingComma": "es5",
-          "endOfLine": "auto"
-        }
-      ]
-    },
-    "settings": {
-      "react": {
-        "version": "detect"
-      }
-    },
-    "env": {
-      "browser": true,
-      "node": true,
-      "es6": true
-    },
-    "globals": {
-      "React": "writable"
-    }
+  "root": true,
+  "parser": "@typescript-eslint/parser",
+  "plugins": ["@typescript-eslint", "prettier"],
+  "parserOptions": {
+    "project": "./tsconfig.json",
+    "createDefaultProgram": true
+  },
+  "env": {
+    "browser": true,
+    "node": true,
+    "es6": true
+  },
+  "extends": [
+    "next/core-web-vitals",
+    "next/typescript",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react-hooks/recommended",
+    "plugin:prettier/recommended",
+    "prettier"
+  ],
+  "rules": {
+    "@typescript-eslint/no-unused-vars": "warn"
   }
-  
+}

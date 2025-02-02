@@ -1,7 +1,7 @@
-import Provider from "@/components/ui/provider";
+import Providers from "@/providers";
 import type { Metadata } from "next";
 
-import "./globals.css";
+import "@/styles/globals.css";
 
 export const metadata: Metadata = {
   title: "Psych Up",
@@ -15,16 +15,8 @@ export default function RootLayout({
 }) {
   return (
     <html suppressHydrationWarning>
-      <head>
-        {/* Paperlogy 폰트 CSS 로드 */}
-        <link
-          rel="stylesheet"
-          type="text/css"
-          href="https://cdn.jsdelivr.net/gh/whitedev7773/Paperlogy/paperlogy.css"
-        />
-      </head>
       <body>
-        <Provider>{children}</Provider>
+        <Providers>{children}</Providers>
       </body>
     </html>
   );
