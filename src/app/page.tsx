@@ -2,8 +2,10 @@
 
 import Navbar from "@/components/Navbar";
 import { Box, Flex, Image, Text, Button } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
+  const router = useRouter();
   return (
     <>
       <Navbar />
@@ -101,6 +103,7 @@ export default function Home() {
               borderColor="primary"
               color="primary"
               _hover={{ bg: "primary", color: "white" }}
+              onClick={() => router.push("/login")}
             >
               사이크업 시작하기
             </Button>
