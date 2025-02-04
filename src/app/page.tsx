@@ -1,7 +1,11 @@
 "use client";
 
+import icon from "@/assets/Icon.svg";
+import background from "@/assets/index/background.svg";
+
 import Navbar from "@/components/Navbar";
-import { Box, Flex, Image, Text, Button } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/next-js";
+import { Box, Flex, Text, Button } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
 export default function Home() {
@@ -17,25 +21,23 @@ export default function Home() {
         overflow="hidden"
       >
         {/* 배경 이미지 */}
-        <Box
+        <Image
+          src={background}
+          alt="background"
           position="absolute"
           top="0"
           left="0"
-          width="100%"
-          height="100%"
-          backgroundImage="url('/index/background.svg')"
-          backgroundSize="cover"
-          backgroundPosition="center"
           opacity="0.15"
+          fill
         />
 
         {/* 배경 원 1 */}
         <Box
           position="absolute"
-          top="-810px"
-          left="-407px"
-          width="1173px"
-          height="1173px"
+          top={-810}
+          left={-407}
+          width={1173}
+          height={1173}
           zIndex="0"
         >
           <svg width="100%" height="100%" viewBox="0 0 1200 1200" fill="none">
@@ -54,10 +56,10 @@ export default function Home() {
         {/* 배경 원 2 */}
         <Box
           position="absolute"
-          top="411px"
-          left="1267px"
-          width="846px"
-          height="846px"
+          bottom={-297}
+          right={-193}
+          width={846}
+          height={846}
           zIndex="0"
         >
           <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none">
@@ -76,7 +78,7 @@ export default function Home() {
           flexDirection="row"
           gap="70px"
         >
-          <Box width="540px">
+          <Box width={540}>
             <Text
               fontSize="64px"
               marginBottom="60px"
@@ -89,7 +91,7 @@ export default function Home() {
             <Text
               fontSize="l"
               marginBottom="60px"
-              maxWidth="600px"
+              maxWidth={600}
               userSelect="none"
             >
               여기에 사이크-업에 대한 목표나 간단한 서비스를 소개하는 곳입니다
@@ -111,17 +113,12 @@ export default function Home() {
           <Flex
             backgroundColor="rgba(255, 255, 255, 0.5)"
             borderRadius="30px"
-            width="420px"
-            height="420px"
+            width={420}
+            height={420}
             justifyContent="center"
             alignItems="center"
           >
-            <Image
-              src="/Icon.svg"
-              alt="Training Illustration"
-              boxSize="300px"
-              draggable="false"
-            />
+            <Image src={icon} alt="icon" boxSize="300px" draggable="false" />
           </Flex>
         </Flex>
       </Box>

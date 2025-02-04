@@ -1,7 +1,10 @@
 "use client";
+import background from "@/assets/index/background.svg";
+import logo from "@/assets/Logo2.svg";
+import google from "@/assets/login/google.svg";
 
-import Navbar from "@/components/Navbar";
-import { Box, Flex, Image, Text, Button } from "@chakra-ui/react";
+import { Image } from "@chakra-ui/next-js";
+import { Box, Flex, Text, Button } from "@chakra-ui/react";
 
 export default function Login() {
   return (
@@ -14,25 +17,23 @@ export default function Login() {
         overflow="hidden"
       >
         {/* 배경 이미지 */}
-        <Box
+        <Image
+          src={background}
+          alt="background"
           position="absolute"
           top="0"
           left="0"
-          width="100%"
-          height="100%"
-          backgroundImage="url('/index/background.svg')"
-          backgroundSize="cover"
-          backgroundPosition="center"
           opacity="0.15"
+          fill
         />
 
         {/* 배경 원 1 */}
         <Box
           position="absolute"
-          top="-810px"
-          left="-407px"
-          width="1173px"
-          height="1173px"
+          top={-810}
+          left={-407}
+          width={1173}
+          height={1173}
           zIndex="0"
         >
           <svg width="100%" height="100%" viewBox="0 0 1200 1200" fill="none">
@@ -51,10 +52,10 @@ export default function Login() {
         {/* 배경 원 2 */}
         <Box
           position="absolute"
-          top="411px"
-          left="1267px"
-          width="846px"
-          height="846px"
+          bottom={-297}
+          right={-193}
+          width={846}
+          height={846}
           zIndex="0"
         >
           <svg width="100%" height="100%" viewBox="0 0 100 100" fill="none">
@@ -79,7 +80,7 @@ export default function Login() {
           top="50%"
           left="50%"
           transform="translate(-50%, -50%)"
-          width="670px"
+          width={670}
           backgroundColor="white"
           borderRadius="20px"
           boxShadow="0 0 30px rgba(0, 0, 0, 0.03)"
@@ -89,16 +90,22 @@ export default function Login() {
           flexDirection="column"
           gap="20px"
         >
-          <Image src="/Logo2.svg" width="160px" margin="18px 27px" />
+          <Image src={logo} alt="logo" width={160} margin="18px 27px" />
           <Button
             variant="outline"
-            width="400px"
-            height="56px"
+            width={400}
+            height={56}
             borderRadius="100px"
             borderColor="#747775"
             borderWidth="1px"
           >
-            <Image src="/login/google.svg" width="28px" marginRight="10px" />
+            <Image
+              src={google}
+              alt="google"
+              width={28}
+              height={28}
+              marginRight="10px"
+            />
             <Text fontSize="s" fontWeight="midium">
               Google로 로그인
             </Text>

@@ -1,5 +1,7 @@
 "use client";
-import Image from "next/image";
+import logo from "@/assets/Logo.svg";
+
+import { Image } from "@chakra-ui/next-js";
 import { Box, Flex, Button } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
 
@@ -13,7 +15,7 @@ export default function Navbar() {
       top="0"
       left="0"
       right="0"
-      height="80px"
+      height={80}
       backgroundColor="white"
       zIndex="1000"
     >
@@ -25,15 +27,16 @@ export default function Navbar() {
         justifyContent="space-between"
       >
         <Image
-          src="/Logo.svg"
+          src={logo}
           alt="logo"
-          width="205"
-          height="80"
+          width={205}
+          height={80}
           draggable="false"
         />
         <Button
           colorScheme="primary"
-          width="100px"
+          width={100}
+          height={46}
           onClick={() => router.push("/login")}
         >
           로그인
