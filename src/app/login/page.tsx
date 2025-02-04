@@ -6,6 +6,8 @@ import google from "@/assets/login/google.svg";
 import { Image } from "@chakra-ui/next-js";
 import { Box, Flex, Text, Button } from "@chakra-ui/react";
 
+import { signIn } from "next-auth/react";
+
 export default function Login() {
   return (
     <>
@@ -98,6 +100,7 @@ export default function Login() {
             borderRadius="100px"
             borderColor="#747775"
             borderWidth="1px"
+            onClick={() => signIn("google", { redirectTo: "/dashboard" })}
           >
             <Image
               src={google}
