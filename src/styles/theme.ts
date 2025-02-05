@@ -71,12 +71,13 @@ export const theme = extendTheme(
       Button: {
         baseStyle: {
           fontSize: "m",
+          borderRadius: "10px",
         },
         sizes: {
           md: {
-            h: "40px",
+            h: "50px",
             fontSize: "m",
-            py: 6,
+            px: 20,
           },
         },
         variants: {

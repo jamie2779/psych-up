@@ -22,7 +22,9 @@
   --grey-2: #344a53;
 
   --gradient-primary : #008CFF;
-  --gradient-secondary : #3555D6;
+  --gradient-secondary : #666a79;
+
+  font-size : 4px;
 }
 
 body {
