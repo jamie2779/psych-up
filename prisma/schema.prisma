@@ -1,15 +1,105 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-generator client {
-  provider = "prisma-client-js"
-}
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Todo {
+  todoId        Int       @id @default(autoincrement())
+  trainingId    Int
+  target        String
+  isCompleted   Boolean   @default(false)
+  completedDate DateTime?
+  createdDate   DateTime  @default(now())
+  modifiedDate  DateTime  @default(now()) @updatedAt
+
+  training Training @relation(fields: [trainingId], references: [trainingId])
+}
+
+model User {
+  memerId      Int        @id @default(autoincrement())
+  name         String
+  nickname     String
+  profileImg   String?
+  permission   Permission @default(user)
+  createdDate  DateTime   @default(now())
+  modifiedDate DateTime   @default(now()) @updatedAt
+
+  trainings Training[]
+}
+
+model Training {
+  trainingId    Int            @id @default(autoincrement())
+  memerId       Int
+  scenarioId    Int
+  status        TrainingStatus @default(ACTIVE)
+  limitDate     DateTime
+  completedDate DateTime?
+  score         Int?
+  createdDate   DateTime       @default(now())
+  modifiedDate  DateTime       @default(now()) @updatedAt
+
+  user        User         @relation(fields: [memerId], references: [memerId])
+  scenario    Scenario     @relation(fields: [scenarioId], references: [scenarioId])
+  todos       Todo[]
+  mailHolders MailHolder[]
+}
+
+model MailHolder {
+  mailHolderId Int @id @default(autoincrement())
+  trainingId   Int
+  mailId       Int
+
+  training Training @relation(fields: [trainingId], references: [trainingId])
+  mail     Mail     @relation(fields: [mailId], references: [mailId])
+}
+
+model Scenario {
+  scenarioId   Int      @id @default(autoincrement())
+  title        String
+  article      String
+  files        Json
+  todoTemplate Json
+  mailTemplate Json
+  createdDate  DateTime @default(now())
+  modifiedDate DateTime @default(now()) @updatedAt
+
+  trainings Training[]
+}
+
+model Mail {
+  mailId       Int        @id @default(autoincrement())
+  sender       String
+  /// 'from'는 SQL 예약어이므로 내부 필드명은 그대로 사용하고 실제 DB 컬럼명은 "from"으로 매핑
+  from         String     @map("from")
+  to           String
+  title        String
+  article      String
+  files        Json
+  isRead       Boolean    @default(false)
+  isDownloaded Boolean    @default(false)
+  status       MailStatus @default(DEFAULT)
+  createdDate  DateTime   @default(now())
+  modifiedDate DateTime   @default(now()) @updatedAt
+
+  mailHolders MailHolder[]
+}
+
+enum Permission {
+  admin
+  user
+}
+
+enum TrainingStatus {
+  ACTIVE
+  COMPLETE
+  FAIL
+}
+
+enum MailStatus {
+  DEFAULT
+  DELETED
+}
