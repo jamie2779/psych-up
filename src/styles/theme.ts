@@ -115,7 +115,7 @@ export const theme = extendTheme(
                 borderColor: "grey",
               },
               _focusVisible: {
-                borderColor: "primary",
+                borderColor: "secondary",
               },
               _placeholder: {
                 color: "grey",

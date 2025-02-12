@@ -1,5 +1,6 @@
 import Providers from "@/providers";
 import type { Metadata } from "next";
+import { Toaster } from "react-hot-toast";
 
 import "@/styles/globals.css";
 
@@ -16,7 +17,18 @@ export default function RootLayout({
   return (
     <html suppressHydrationWarning>
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          <Toaster
+            position="top-center"
+            reverseOrder={false}
+            toastOptions={{
+              style: {
+                fontSize: "14px",
+              },
+            }}
+          />
+          {children}
+        </Providers>
       </body>
     </html>
   );
