@@ -20,6 +20,7 @@ import ky from "ky";
 export default function SignUp() {
   const [name, setName] = useState("");
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async () => {
@@ -29,10 +30,10 @@ export default function SignUp() {
     }
 
     setError(false);
+    setIsLoading(true); // 버튼 비활성화
 
-    // 회원가입 요청 + toast 적용
-    toast
-      .promise(
+    try {
+      await toast.promise(
         ky.post("/api/users", {
           json: { name },
         }),
@@ -41,12 +42,14 @@ export default function SignUp() {
           success: "성공적으로 회원가입 처리되었습니다!",
           error: "회원가입 처리 중 문제가 발생했습니다.",
         }
-      )
-      .then(() => {
-        setTimeout(() => {
-          router.push("/dashboard"); // 회원가입 성공 후 /dashboard로 이동
-        }, 1000);
-      });
+      );
+
+      setTimeout(() => {
+        router.push("/dashboard"); // 성공 시 대시보드로 이동
+      }, 1000);
+    } catch (error) {
+      setIsLoading(false); // 실패하면 버튼 다시 활성화
+    }
   };
 
   return (
@@ -57,7 +60,6 @@ export default function SignUp() {
       position="relative"
       overflow="hidden"
     >
-      {/* 배경 이미지 */}
       <Image
         src={background}
         alt="background"
@@ -68,7 +70,6 @@ export default function SignUp() {
         fill
       />
 
-      {/* 배경 원 1 */}
       <Box
         position="absolute"
         top={-810}
@@ -90,7 +91,6 @@ export default function SignUp() {
         </svg>
       </Box>
 
-      {/* 배경 원 2 */}
       <Box
         position="absolute"
         bottom={-297}
@@ -104,7 +104,6 @@ export default function SignUp() {
         </svg>
       </Box>
 
-      {/* 배경 블러 */}
       <Box
         position="absolute"
         top="0"
@@ -115,7 +114,6 @@ export default function SignUp() {
         backdropFilter="blur(10px)"
       />
 
-      {/* 메인 컨텐츠 */}
       <Flex
         position="absolute"
         top="50%"
@@ -134,7 +132,6 @@ export default function SignUp() {
         <Image src={logo} alt="logo" width={160} margin="18px 27px" />
 
         <Flex width="100%" flexDirection="column" gap="12px">
-          {/* 이름 입력 필드 (FormControl 사용) */}
           <FormControl isInvalid={error}>
             <FormLabel fontSize="m">사용자님의 이름을 알려주세요</FormLabel>
             <Input
@@ -154,6 +151,8 @@ export default function SignUp() {
             width="100%"
             mt={4}
             onClick={handleSubmit}
+            isLoading={isLoading} // 로딩 중이면 버튼 비활성화
+            isDisabled={isLoading} // 추가적으로 클릭 방지
           >
             다음
           </Button>
