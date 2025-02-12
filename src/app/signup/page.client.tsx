@@ -30,7 +30,7 @@ export default function SignUp() {
     }
 
     setError(false);
-    setIsLoading(true); // 버튼 비활성화
+    setIsLoading(true);
 
     try {
       await toast.promise(
@@ -45,10 +45,10 @@ export default function SignUp() {
       );
 
       setTimeout(() => {
-        router.push("/dashboard"); // 성공 시 대시보드로 이동
+        router.push("/dashboard");
       }, 1000);
     } catch (error) {
-      setIsLoading(false); // 실패하면 버튼 다시 활성화
+      setIsLoading(false);
     }
   };
 
@@ -151,8 +151,8 @@ export default function SignUp() {
             width="100%"
             mt={4}
             onClick={handleSubmit}
-            isLoading={isLoading} // 로딩 중이면 버튼 비활성화
-            isDisabled={isLoading} // 추가적으로 클릭 방지
+            isLoading={isLoading}
+            isDisabled={isLoading}
           >
             다음
           </Button>
