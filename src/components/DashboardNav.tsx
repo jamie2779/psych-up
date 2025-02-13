@@ -16,7 +16,8 @@ interface DashboardNavProps {
 
 export default function DashboardNav({ user }: DashboardNavProps) {
   const router = useRouter();
-  const pathname = usePathname(); // 현재 경로 가져오기
+  const pathname = usePathname();
+
   console.log(user.profileImg);
 
   const menuItems = [
