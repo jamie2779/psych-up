@@ -19,7 +19,7 @@ export const theme = extendTheme(
       black: 900,
     },
     fontSizes: {
-      xs: "12px",
+      xs: "11px",
       s: "13px",
       m: "16px",
       l: "20px",
