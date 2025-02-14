@@ -11,18 +11,21 @@
   --general-white: #ffffff;
   --general-body: #f4f7ff;
 
-  --shade-0: #09ccff;
-  --shade-1: #00a2d3;
-  --shade-2: #007aa9;
-  --shade-3: #005481;
-  --shade-4: #00315a;
+  --shade-0: #0984E3;
+  --shade-1: #0F75C5;
+  --shade-2: #1E6399;
+  --shade-3: #133C5B;
+  --shade-4: #0A1D2C;
 
-  --grey-0: #09ccff;
-  --grey-1: #98afba;
-  --grey-2: #344a53;
+  --grey-0: #0984E3;
+  --grey-1: #E0E8F8;
+  --grey-2: #343D53;
 
   --gradient-primary : #008CFF;
   --gradient-secondary : #666a79;
+
+  --gradient-primary2 : #008CFF;
+  --gradient-secondary2 : #77ADFF;
 
   font-size : 4px;
 }

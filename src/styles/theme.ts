@@ -53,10 +53,17 @@ export const theme = extendTheme(
       },
       gradient:
         "linear-gradient(151deg, var(--gradient-primary), var(--gradient-secondary))",
+      gradient2:
+        "linear-gradient(151deg, var(--gradient-primary2), var(--gradient-secondary2))",
     },
     textStyles: {
       gradient: {
         background: "gradient",
+        backgroundClip: "text",
+        color: "transparent",
+      },
+      gradient2: {
+        background: "gradient2",
         backgroundClip: "text",
         color: "transparent",
       },
