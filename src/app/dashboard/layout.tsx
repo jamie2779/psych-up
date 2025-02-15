@@ -1,6 +1,7 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import DashboardNav from "@/components/DashboardNav";
+import AnimationWrapper from "@/components/AnimationWrapper";
 import { Flex, Box } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
@@ -29,9 +30,11 @@ export default async function DashboardLayout({
   return (
     <Flex backgroundColor="body">
       <DashboardNav user={user} />
-      <Box h="100%" flex="1">
-        {children}
-      </Box>
+      <AnimationWrapper>
+        <Box h="100%" flex="1">
+          {children}
+        </Box>
+      </AnimationWrapper>
     </Flex>
   );
 }
