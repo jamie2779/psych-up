@@ -12,7 +12,14 @@ export default async function DashboardHomePage() {
     });
 
     if (user) {
-      return <DashboardHome user={user} totalTodo={12} completedTodo={5} />;
+      return (
+        <DashboardHome
+          user={user}
+          currentTraining={10}
+          totalTodo={12}
+          completedTodo={5}
+        />
+      );
     } else {
       return redirect("/signup");
     }

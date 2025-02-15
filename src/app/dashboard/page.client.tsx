@@ -12,12 +12,26 @@ import { useEffect, useState } from "react";
 
 interface DashboardHomePageProps {
   user: User;
+  currentTraining: number;
   totalTodo: number;
   completedTodo: number;
 }
 
+interface TrainingData {
+  badge: string;
+  text: string;
+  data: number;
+}
+
+interface MailData {
+  title: string;
+  color: string;
+  count: number;
+}
+
 export default function DashboardHome({
   user,
+  currentTraining,
   totalTodo,
   completedTodo,
 }: DashboardHomePageProps) {
@@ -27,7 +41,7 @@ export default function DashboardHome({
     setIsClient(true);
   }, []);
 
-  const trainingData = [
+  const trainingData: TrainingData[] = [
     {
       badge: PassBadge,
       text: "이번주에 성공한 훈련",
@@ -45,6 +59,12 @@ export default function DashboardHome({
     },
   ];
 
+  const mailData: MailData[] = [
+    { title: "수신한 메일", count: 102, color: "black" },
+    { title: "승인한 메일", count: 71, color: "primary" },
+    { title: "삭제한 메일", count: 31, color: "danger" },
+  ];
+
   return (
     <Box h="100%">
       <VStack pt={70} pb={30} px={45} spacing={6} align="flex-start">
@@ -57,6 +77,7 @@ export default function DashboardHome({
       </VStack>
 
       <VStack w={950} px={40} spacing={20}>
+        {/* 1단 */}
         <Flex
           w="100%"
           p={30}
@@ -69,11 +90,13 @@ export default function DashboardHome({
             😁
           </Text>
           <Text fontSize="s" fontWeight="medium">
-            현재 x개의 훈련을 진행하고 있어요!
+            현재 {currentTraining}개의 훈련을 진행하고 있어요!
           </Text>
         </Flex>
 
+        {/* 2단 */}
         <Flex w="100%" gap={20}>
+          {/* 2단 좌측 */}
           <Flex
             w={550}
             h={376}
@@ -142,6 +165,7 @@ export default function DashboardHome({
               </Flex>
             </VStack>
           </Flex>
+          {/* 2단 우측 */}
           <VStack w={300} spacing={20}>
             {trainingData.map((item, index) => (
               <Flex
@@ -165,6 +189,34 @@ export default function DashboardHome({
               </Flex>
             ))}
           </VStack>
+        </Flex>
+
+        {/* 3단 */}
+        <Flex gap={20} align="center" w="100%">
+          {mailData.map((item, index) => (
+            <VStack
+              key={index}
+              w={`${100 / mailData.length}%`}
+              h={150}
+              bg="white"
+              borderRadius={14}
+              spacing={8}
+              align="center"
+              justify="center"
+            >
+              <Text fontSize="xl" fontWeight="bold" color={item.color}>
+                {item.count}개
+              </Text>
+              <Text
+                fontSize="s"
+                fontWeight="regular"
+                color="black"
+                opacity={0.5}
+              >
+                {item.title}
+              </Text>
+            </VStack>
+          ))}
         </Flex>
       </VStack>
     </Box>
