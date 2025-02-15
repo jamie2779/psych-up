@@ -9,6 +9,7 @@ import { User } from "@prisma/client";
 import { ArrowIcon } from "@/assets/IconSet";
 import { PieChart, Pie, Cell } from "recharts";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 
 interface DashboardHomePageProps {
   user: User;
@@ -36,6 +37,7 @@ export default function DashboardHome({
   completedTodo,
 }: DashboardHomePageProps) {
   const [isClient, setIsClient] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     setIsClient(true);
@@ -153,7 +155,16 @@ export default function DashboardHome({
                 </Text>
               </VStack>
 
-              <Flex gap={5} align="center">
+              <Flex
+                gap={5}
+                align="center"
+                onClick={() => router.push("/dashboard/training")}
+                _hover={{
+                  cursor: "pointer",
+                  transform: "scale(1.02)",
+                  transition: "0.2s",
+                }}
+              >
                 <Text color="#ABABAB" fontSize="xs" fontWeight="regular">
                   훈련으로 이동
                 </Text>
