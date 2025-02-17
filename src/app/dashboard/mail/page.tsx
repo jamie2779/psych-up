@@ -1,7 +1,6 @@
 "use client";
 import { Box, Text, VStack, Flex } from "@chakra-ui/react";
 import MailboxElement, { MailboxData } from "@/components/MailboxElement";
-import { useRouter } from "next/navigation";
 
 export default function DashboardMailPage() {
   const mailboxData: MailboxData[] = [
@@ -27,8 +26,6 @@ export default function DashboardMailPage() {
     //   trainingId: 3,
     // },
   ];
-
-  const router = useRouter();
 
   return (
     <Box h="100%">
