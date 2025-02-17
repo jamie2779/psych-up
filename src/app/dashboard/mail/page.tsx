@@ -6,27 +6,27 @@ import { useRouter } from "next/navigation";
 
 export default function DashboardMailPage() {
   const mailboxData: MailboxData[] = [
-    {
-      type: "분류 3",
-      typeColor: "danger",
-      title: "훈련 시나리오 이름1",
-      progress: 76,
-      trainingId: 1,
-    },
-    {
-      type: "분류 1",
-      typeColor: "success",
-      title: "훈련 시나리오 이름2",
-      progress: 100,
-      trainingId: 2,
-    },
-    {
-      type: "분류 2",
-      typeColor: "warning",
-      title: "훈련 시나리오 이름3",
-      progress: 50,
-      trainingId: 3,
-    },
+    // {
+    //   type: "분류 3",
+    //   typeColor: "danger",
+    //   title: "훈련 시나리오 이름1",
+    //   progress: 76,
+    //   trainingId: 1,
+    // },
+    // {
+    //   type: "분류 1",
+    //   typeColor: "success",
+    //   title: "훈련 시나리오 이름2",
+    //   progress: 100,
+    //   trainingId: 2,
+    // },
+    // {
+    //   type: "분류 2",
+    //   typeColor: "warning",
+    //   title: "훈련 시나리오 이름3",
+    //   progress: 50,
+    //   trainingId: 3,
+    // },
   ];
 
   const router = useRouter();
@@ -47,7 +47,7 @@ export default function DashboardMailPage() {
         {/* progress가 100이 아닌 메일함이 있을경우 표시 */}
         {mailboxData.filter((data) => data.progress < 100).length > 0 && (
           <VStack w="100%" spacing={10} align="flex-start">
-            <Text fontSize="l" fontWeight="medium" color="grey.shade2">
+            <Text px={5} fontSize="l" fontWeight="medium" color="grey.shade2">
               훈련 중인 메일함
             </Text>
             {mailboxData
@@ -62,7 +62,7 @@ export default function DashboardMailPage() {
         {/* progress가 100인 메일함이 있을경우 표시 */}
         {mailboxData.filter((data) => data.progress === 100).length > 0 && (
           <VStack w="100%" spacing={10} align="flex-start">
-            <Text fontSize="l" fontWeight="medium" color="grey.shade2">
+            <Text px={5} fontSize="l" fontWeight="medium" color="grey.shade2">
               훈련을 끝마친 메일함
             </Text>
             {mailboxData
@@ -75,26 +75,43 @@ export default function DashboardMailPage() {
 
         {/* 메일함이 없을 경우 표시 */}
         {mailboxData.length === 0 && (
-          <VStack w="100%" spacing={10} align="center">
-            <Text fontSize="xl" fontWeight="medium" color="grey.shade2">
-              훈련 중인 메일함이 없습니다
-            </Text>
-            <Flex
-              gap={5}
-              align="center"
-              onClick={() => router.push("/dashboard/training")}
-              _hover={{
-                cursor: "pointer",
-                transform: "scale(1.02)",
-                transition: "0.2s",
-              }}
+          <Box position="relative" w="100%" h="100px">
+            <Box
+              as="svg"
+              position="absolute"
+              top="0"
+              left="0"
+              width="100%"
+              height="100%"
+              viewBox="0 0 100% 100%"
+              pointerEvents="none"
             >
-              <Text fontSize="m" fontWeight="regular" color="#ABABAB">
-                새로운 훈련을 시작해보세요!
+              <rect
+                x="0"
+                y="0"
+                width="100%"
+                height="100%"
+                rx="14"
+                ry="14"
+                fill="none"
+                stroke="rgba(0, 0, 0, 0.1)"
+                strokeWidth="1"
+                strokeDasharray="8 8"
+              />
+            </Box>
+            <Flex
+              w="100%"
+              h="100%"
+              align="center"
+              justify="center"
+              bg="#EFF4FC"
+              borderRadius={14}
+            >
+              <Text fontSize="s" fontWeight="medium" color="grey.shade2">
+                아직 참여중인 훈련이 없네요
               </Text>
-              <ArrowIcon boxSize={24} color="#ABABAB" transform="scaleX(-1)" />
             </Flex>
-          </VStack>
+          </Box>
         )}
       </VStack>
     </Box>

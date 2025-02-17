@@ -133,7 +133,9 @@ export default function SignUp() {
 
         <Flex width="100%" flexDirection="column" gap="12px">
           <FormControl isInvalid={error}>
-            <FormLabel fontSize="m">사용자님의 이름을 알려주세요</FormLabel>
+            <FormLabel px={5} fontSize="m">
+              사용자님의 이름을 알려주세요
+            </FormLabel>
             <Input
               height={46}
               borderRadius={10}
@@ -141,7 +143,7 @@ export default function SignUp() {
               value={name}
               onChange={(e) => setName(e.target.value)}
             />
-            <FormErrorMessage fontSize="m">
+            <FormErrorMessage px={5} fontSize="m">
               이름을 입력해주세요.
             </FormErrorMessage>
           </FormControl>

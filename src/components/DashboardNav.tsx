@@ -30,7 +30,8 @@ export default function DashboardNav({ user }: DashboardNavProps) {
     <Flex
       direction="column"
       align="center"
-      w="250px"
+      w={250}
+      minW={250}
       h="100vh"
       bg="white"
       py={40}
