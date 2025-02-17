@@ -1,5 +1,4 @@
 "use client";
-import { ArrowIcon } from "@/assets/IconSet";
 import { Box, Text, VStack, Flex } from "@chakra-ui/react";
 import MailboxElement, { MailboxData } from "@/components/MailboxElement";
 import { useRouter } from "next/navigation";
