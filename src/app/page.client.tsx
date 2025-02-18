@@ -28,6 +28,7 @@ export default function Home() {
           top="0"
           left="0"
           opacity="0.15"
+          sx={{ objectFit: "cover" }}
           fill
         />
 
