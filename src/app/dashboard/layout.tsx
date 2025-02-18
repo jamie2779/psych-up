@@ -30,11 +30,9 @@ export default async function DashboardLayout({
   return (
     <Flex backgroundColor="body">
       <DashboardNav user={user} />
-      <AnimationWrapper>
-        <Box h="100%" flex="1">
-          {children}
-        </Box>
-      </AnimationWrapper>
+      <Box h="100%" flex="1">
+        <AnimationWrapper>{children}</AnimationWrapper>
+      </Box>
     </Flex>
   );
 }

@@ -38,7 +38,7 @@ export default function DashboardMailPage() {
         </Text>
       </VStack>
 
-      <VStack w={1280} px={40} spacing={20}>
+      <VStack maxW={1280} px={40} spacing={20}>
         {/* 훈련 중인 메일함 목록 */}
         {/* progress가 100이 아닌 메일함이 있을경우 표시 */}
         {mailboxData.filter((data) => data.progress < 100).length > 0 && (
