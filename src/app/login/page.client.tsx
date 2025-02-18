@@ -26,6 +26,7 @@ export default function Login() {
           top="0"
           left="0"
           opacity="0.15"
+          sx={{ objectFit: "cover" }}
           fill
         />
 

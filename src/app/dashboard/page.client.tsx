@@ -78,7 +78,7 @@ export default function DashboardHome({
         </Text>
       </VStack>
 
-      <VStack w={950} px={40} spacing={20}>
+      <VStack maxW={950} px={40} spacing={20}>
         {/* 1단 */}
         <Flex
           w="100%"
@@ -177,7 +177,7 @@ export default function DashboardHome({
             </VStack>
           </Flex>
           {/* 2단 우측 */}
-          <VStack w={300} spacing={20}>
+          <VStack flex="1" spacing={20}>
             {trainingData.map((item, index) => (
               <Flex
                 key={index}
