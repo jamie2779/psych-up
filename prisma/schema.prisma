@@ -16,7 +16,9 @@ model Todo {
   createdDate   DateTime  @default(now())
   modifiedDate  DateTime  @default(now()) @updatedAt
 
-  training Training @relation(fields: [trainingId], references: [trainingId])
+  training     Training       @relation(fields: [trainingId], references: [trainingId])
+  ScenarioTodo ScenarioTodo[]
+  TodoHolder   TodoHolder[]
 }
 
 model User {
@@ -46,12 +48,14 @@ model Training {
   scenario    Scenario     @relation(fields: [scenarioId], references: [scenarioId])
   todos       Todo[]
   mailHolders MailHolder[]
+  TodoHolder  TodoHolder[]
 }
 
 model MailHolder {
-  mailHolderId Int @id @default(autoincrement())
+  mailHolderId Int     @id @default(autoincrement())
   trainingId   Int
   mailId       Int
+  mailBox      MailBox @default(INBOX)
 
   training Training @relation(fields: [trainingId], references: [trainingId])
   mail     Mail     @relation(fields: [mailId], references: [mailId])
@@ -61,6 +65,7 @@ model Scenario {
   scenarioId   Int      @id @default(autoincrement())
   title        String
   article      String
+  isPublic     Boolean  @default(false)
   todoTemplate Json
   mailTemplate Json
   createdDate  DateTime @default(now())
@@ -68,13 +73,14 @@ model Scenario {
 
   trainings     Training[]
   scenarioFiles ScenarioFile[]
+  scenarioMails ScenarioMail[]
+  scenarioTodos ScenarioTodo[]
 }
 
 model Mail {
   mailId       Int        @id @default(autoincrement())
   sender       String
-  /// 'from'는 SQL 예약어이므로 내부 필드명은 그대로 사용하고 실제 DB 컬럼명은 "from"으로 매핑
-  from         String     @map("from")
+  from         String     @map("from") // 'from'은 SQL 예약어이므로 DB 필드명 매핑
   to           String
   title        String
   article      String
@@ -84,30 +90,16 @@ model Mail {
   createdDate  DateTime   @default(now())
   modifiedDate DateTime   @default(now()) @updatedAt
 
-  mailHolders MailHolder[]
-  mailFiles   MailFile[]
-}
-
-enum Permission {
-  admin
-  user
-}
-
-enum TrainingStatus {
-  ACTIVE
-  COMPLETE
-  FAIL
-}
-
-enum MailStatus {
-  DEFAULT
-  DELETED
+  mailHolders  MailHolder[]
+  mailFiles    MailFile[]
+  ScenarioMail ScenarioMail[]
 }
 
 model File {
   fileId       Int      @id @default(autoincrement())
   filename     String
   path         String
+  size         Int
   createdDate  DateTime @default(now())
   modifiedDate DateTime @default(now()) @updatedAt
 
@@ -131,4 +123,57 @@ model ScenarioFile {
 
   file     File     @relation(fields: [fileId], references: [fileId])
   scenario Scenario @relation(fields: [scenarioId], references: [scenarioId])
+}
+
+model ScenarioMail {
+  scenarioMailId Int @id @default(autoincrement())
+  scenarioId     Int
+  mailId         Int
+
+  scenario Scenario @relation(fields: [scenarioId], references: [scenarioId])
+  mail     Mail     @relation(fields: [mailId], references: [mailId])
+}
+
+model ScenarioTodo {
+  scenarioTodoId Int @id @default(autoincrement())
+  scenarioId     Int
+  todoId         Int
+
+  scenario Scenario @relation(fields: [scenarioId], references: [scenarioId])
+  todo     Todo     @relation(fields: [todoId], references: [todoId])
+}
+
+model TodoHolder {
+  todoHolderId  Int       @id @default(autoincrement())
+  trainingId    Int
+  todoId        Int
+  isCompleted   Boolean   @default(false)
+  completedDate DateTime?
+  createdDate   DateTime  @default(now())
+
+  training Training @relation(fields: [trainingId], references: [trainingId])
+  todo     Todo     @relation(fields: [todoId], references: [todoId])
+}
+
+enum Permission {
+  admin
+  user
+}
+
+enum TrainingStatus {
+  ACTIVE
+  COMPLETE
+  FAIL
+}
+
+enum MailStatus {
+  DEFAULT
+  DELETED
+}
+
+enum MailBox {
+  INBOX
+  STARRED
+  SPAM
+  TRASH
 }
