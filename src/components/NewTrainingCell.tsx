@@ -1,5 +1,5 @@
 "use client";
-import Plus from "@/assets/dashboard/plus.svg";
+import Plus from "@/assets/dashboard/Plus.svg";
 import { Image } from "@chakra-ui/next-js";
 import { Box, Text, Flex } from "@chakra-ui/react";
 
