@@ -5,7 +5,6 @@ import { ArrowIcon } from "@/assets/IconSet";
 import { useRouter } from "next/navigation";
 
 interface TrainingDetailProps {
-  id: string;
   title: string;
   detail: string;
   type: string;
@@ -14,7 +13,6 @@ interface TrainingDetailProps {
 }
 
 export default function TrainingDetail({
-  id,
   title,
   detail,
   type,
@@ -91,7 +89,17 @@ export default function TrainingDetail({
                 이 훈련은 지금까지 2명이 성공했어요
               </Text>
             </Flex>
-            <Button w={95} h={35} bg="success" fontSize="s" fontWeight="medium">
+            <Button
+              w={95}
+              h={35}
+              bg="success"
+              fontSize="s"
+              fontWeight="medium"
+              _hover={{
+                bg: "success",
+                transform: "scale(1.02)",
+              }}
+            >
               수락 및 시작
             </Button>
           </Flex>

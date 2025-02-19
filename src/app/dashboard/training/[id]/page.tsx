@@ -19,5 +19,5 @@ export default function TrainingDetailPage({
       "의심스러운 이메일을 보안팀에 신고하세요.",
     ],
   };
-  return <TrainingDetail id={params.id || "404"} {...trainingDetail} />;
+  return <TrainingDetail {...trainingDetail} />;
 }
