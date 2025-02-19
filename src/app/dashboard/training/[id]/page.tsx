@@ -1,10 +1,6 @@
 import TrainingDetail from "./page.client";
 
-export default function TrainingDetailPage({
-  params,
-}: {
-  params: { id?: string };
-}) {
+export default function TrainingDetailPage() {
   const trainingDetail = {
     title: "급여 명세서 사칭 이메일 훈련",
     detail:
