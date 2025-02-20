@@ -8,17 +8,14 @@ generator client {
 }
 
 model Todo {
-  todoId        Int       @id @default(autoincrement())
-  trainingId    Int
-  target        String
-  isCompleted   Boolean   @default(false)
-  completedDate DateTime?
-  createdDate   DateTime  @default(now())
-  modifiedDate  DateTime  @default(now()) @updatedAt
+  todoId       Int      @id @default(autoincrement())
+  scenarioId   Int
+  target       String
+  createdDate  DateTime @default(now())
+  modifiedDate DateTime @default(now()) @updatedAt
 
-  training     Training       @relation(fields: [trainingId], references: [trainingId])
-  ScenarioTodo ScenarioTodo[]
-  TodoHolder   TodoHolder[]
+  scenario   Scenario     @relation(fields: [scenarioId], references: [scenarioId])
+  TodoHolder TodoHolder[]
 }
 
 model User {
@@ -46,7 +43,6 @@ model Training {
 
   user        User         @relation(fields: [memberId], references: [memberId])
   scenario    Scenario     @relation(fields: [scenarioId], references: [scenarioId])
-  todos       Todo[]
   mailHolders MailHolder[]
   TodoHolder  TodoHolder[]
 }
@@ -64,17 +60,16 @@ model MailHolder {
 model Scenario {
   scenarioId   Int      @id @default(autoincrement())
   title        String
-  article      String
+  detail       String
   isPublic     Boolean  @default(false)
-  todoTemplate Json
-  mailTemplate Json
+  type         String
   createdDate  DateTime @default(now())
   modifiedDate DateTime @default(now()) @updatedAt
 
   trainings     Training[]
   scenarioFiles ScenarioFile[]
   scenarioMails ScenarioMail[]
-  scenarioTodos ScenarioTodo[]
+  Todo          Todo[]
 }
 
 model Mail {
@@ -132,15 +127,6 @@ model ScenarioMail {
 
   scenario Scenario @relation(fields: [scenarioId], references: [scenarioId])
   mail     Mail     @relation(fields: [mailId], references: [mailId])
-}
-
-model ScenarioTodo {
-  scenarioTodoId Int @id @default(autoincrement())
-  scenarioId     Int
-  todoId         Int
-
-  scenario Scenario @relation(fields: [scenarioId], references: [scenarioId])
-  todo     Todo     @relation(fields: [todoId], references: [todoId])
 }
 
 model TodoHolder {
