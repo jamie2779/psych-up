@@ -14,8 +14,8 @@ model Todo {
   createdDate  DateTime @default(now())
   modifiedDate DateTime @default(now()) @updatedAt
 
-  scenario   Scenario     @relation(fields: [scenarioId], references: [scenarioId], onDelete: Cascade)
-  TodoHolder TodoHolder[]
+  scenario    Scenario     @relation(fields: [scenarioId], references: [scenarioId], onDelete: Cascade)
+  TodoHolders TodoHolder[]
 }
 
 model User {
@@ -86,9 +86,9 @@ model Mail {
   createdDate   DateTime @default(now())
   modifiedDate  DateTime @default(now()) @updatedAt
 
-  mailHolders  MailHolder[]
-  mailFiles    MailFile[]
-  ScenarioMail ScenarioMail[]
+  mailHolders   MailHolder[]
+  mailFiles     MailFile[]
+  ScenarioMails ScenarioMail[]
 }
 
 model File {
