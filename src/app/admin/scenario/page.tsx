@@ -6,6 +6,9 @@ export default async function AdminScenarioPage() {
     include: {
       todos: true,
     },
+    orderBy: {
+      scenarioId: "asc",
+    },
   });
   return <AdminScenario scenarioList={scenarioList} />;
 }
