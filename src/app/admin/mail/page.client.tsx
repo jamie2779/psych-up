@@ -60,7 +60,7 @@ export default function AdminUser({ scenarioList }: AdminUserProps) {
           <Button
             h={40}
             px={20}
-            onClick={() => router.push("/admin/training/new")}
+            onClick={() => router.push("/admin/scenario/new")}
           >
             시나리오 추가
           </Button>
@@ -105,7 +105,7 @@ export default function AdminUser({ scenarioList }: AdminUserProps) {
                       _hover={{ bg: "grey.shade1" }}
                       onClick={() =>
                         router.push(
-                          `/admin/training/edit/${scenario.scenarioId}`
+                          `/admin/scenario/edit/${scenario.scenarioId}`
                         )
                       }
                     />

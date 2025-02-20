@@ -30,7 +30,7 @@ export default function DashboardNav({ user }: DashboardNavProps) {
   const menuItems = [
     { label: "관리 홈", icon: HomeIcon, route: "/admin" },
     { label: "유저 관리", icon: PersonIcon, route: "/admin/user" },
-    { label: "시나리오 관리", icon: PuzzleIcon, route: "/admin/training" },
+    { label: "시나리오 관리", icon: PuzzleIcon, route: "/admin/scenario" },
     { label: "메일 관리", icon: MailIcon, route: "/admin/mail" },
     { label: "파일 관리", icon: FileIcon, route: "/admin/file" },
   ];

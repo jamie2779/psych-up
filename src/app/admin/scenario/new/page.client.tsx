@@ -74,7 +74,7 @@ export default function AdminNewScenario() {
       );
 
       setTimeout(() => {
-        router.push("/admin/training");
+        router.push("/admin/scenario");
       }, 1000);
     } catch (error) {
       setIsLoading(false);
@@ -88,7 +88,7 @@ export default function AdminNewScenario() {
         <Flex
           gap={5}
           align="center"
-          onClick={() => router.push("/admin/training")}
+          onClick={() => router.push("/admin/scenario")}
           _hover={{
             cursor: "pointer",
             transform: "scale(1.02)",
