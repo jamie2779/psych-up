@@ -14,7 +14,7 @@ model Todo {
   createdDate  DateTime @default(now())
   modifiedDate DateTime @default(now()) @updatedAt
 
-  scenario   Scenario     @relation(fields: [scenarioId], references: [scenarioId])
+  scenario   Scenario     @relation(fields: [scenarioId], references: [scenarioId], onDelete: Cascade)
   TodoHolder TodoHolder[]
 }
 
@@ -41,8 +41,8 @@ model Training {
   createdDate   DateTime       @default(now())
   modifiedDate  DateTime       @default(now()) @updatedAt
 
-  user        User         @relation(fields: [memberId], references: [memberId])
-  scenario    Scenario     @relation(fields: [scenarioId], references: [scenarioId])
+  user        User         @relation(fields: [memberId], references: [memberId], onDelete: Cascade)
+  scenario    Scenario     @relation(fields: [scenarioId], references: [scenarioId], onDelete: Cascade)
   mailHolders MailHolder[]
   TodoHolder  TodoHolder[]
 }
@@ -53,8 +53,8 @@ model MailHolder {
   mailId       Int
   mailBox      MailBox @default(INBOX)
 
-  training Training @relation(fields: [trainingId], references: [trainingId])
-  mail     Mail     @relation(fields: [mailId], references: [mailId])
+  training Training @relation(fields: [trainingId], references: [trainingId], onDelete: Cascade)
+  mail     Mail     @relation(fields: [mailId], references: [mailId], onDelete: Cascade)
 }
 
 model Scenario {
@@ -69,7 +69,7 @@ model Scenario {
   trainings     Training[]
   scenarioFiles ScenarioFile[]
   scenarioMails ScenarioMail[]
-  Todo          Todo[]
+  todos         Todo[]
 }
 
 model Mail {
@@ -107,8 +107,8 @@ model MailFile {
   fileId       Int
   mailId       Int
 
-  file File @relation(fields: [fileId], references: [fileId])
-  mail Mail @relation(fields: [mailId], references: [mailId])
+  file File @relation(fields: [fileId], references: [fileId], onDelete: Cascade)
+  mail Mail @relation(fields: [mailId], references: [mailId], onDelete: Cascade)
 }
 
 model ScenarioFile {
@@ -116,8 +116,8 @@ model ScenarioFile {
   fileId       Int
   scenarioId   Int
 
-  file     File     @relation(fields: [fileId], references: [fileId])
-  scenario Scenario @relation(fields: [scenarioId], references: [scenarioId])
+  file     File     @relation(fields: [fileId], references: [fileId], onDelete: Cascade)
+  scenario Scenario @relation(fields: [scenarioId], references: [scenarioId], onDelete: Cascade)
 }
 
 model ScenarioMail {
@@ -125,8 +125,8 @@ model ScenarioMail {
   scenarioId     Int
   mailId         Int
 
-  scenario Scenario @relation(fields: [scenarioId], references: [scenarioId])
-  mail     Mail     @relation(fields: [mailId], references: [mailId])
+  scenario Scenario @relation(fields: [scenarioId], references: [scenarioId], onDelete: Cascade)
+  mail     Mail     @relation(fields: [mailId], references: [mailId], onDelete: Cascade)
 }
 
 model TodoHolder {
@@ -137,8 +137,8 @@ model TodoHolder {
   completedDate DateTime?
   createdDate   DateTime  @default(now())
 
-  training Training @relation(fields: [trainingId], references: [trainingId])
-  todo     Todo     @relation(fields: [todoId], references: [todoId])
+  training Training @relation(fields: [trainingId], references: [trainingId], onDelete: Cascade)
+  todo     Todo     @relation(fields: [todoId], references: [todoId], onDelete: Cascade)
 }
 
 enum Permission {
