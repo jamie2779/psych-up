@@ -48,10 +48,13 @@ model Training {
 }
 
 model MailHolder {
-  mailHolderId Int     @id @default(autoincrement())
+  mailHolderId Int      @id @default(autoincrement())
   trainingId   Int
   mailId       Int
-  mailBox      MailBox @default(INBOX)
+  mailBox      MailBox  @default(INBOX)
+  isRead       Boolean  @default(false)
+  isDownloaded Boolean  @default(false)
+  createdDate  DateTime @default(now())
 
   training Training @relation(fields: [trainingId], references: [trainingId], onDelete: Cascade)
   mail     Mail     @relation(fields: [mailId], references: [mailId], onDelete: Cascade)
@@ -73,17 +76,15 @@ model Scenario {
 }
 
 model Mail {
-  mailId       Int        @id @default(autoincrement())
-  sender       String
-  from         String     @map("from") // 'from'은 SQL 예약어이므로 DB 필드명 매핑
-  to           String
-  title        String
-  article      String
-  isRead       Boolean    @default(false)
-  isDownloaded Boolean    @default(false)
-  status       MailStatus @default(DEFAULT)
-  createdDate  DateTime   @default(now())
-  modifiedDate DateTime   @default(now()) @updatedAt
+  mailId        Int      @id @default(autoincrement())
+  sender        String
+  from          String   @map("from") // 'from'은 SQL 예약어이므로 DB 필드명 매핑
+  title         String
+  article       String
+  isFishing     Boolean  @default(false)
+  fishingDetail String?
+  createdDate   DateTime @default(now())
+  modifiedDate  DateTime @default(now()) @updatedAt
 
   mailHolders  MailHolder[]
   mailFiles    MailFile[]
@@ -92,7 +93,7 @@ model Mail {
 
 model File {
   fileId       Int      @id @default(autoincrement())
-  filename     String
+  name         String
   path         String
   size         Int
   createdDate  DateTime @default(now())
@@ -150,11 +151,6 @@ enum TrainingStatus {
   ACTIVE
   COMPLETE
   FAIL
-}
-
-enum MailStatus {
-  DEFAULT
-  DELETED
 }
 
 enum MailBox {
