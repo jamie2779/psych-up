@@ -108,7 +108,7 @@ model MailFile {
   fileId       Int
   mailId       Int
 
-  file File @relation(fields: [fileId], references: [fileId], onDelete: Cascade)
+  file File @relation(fields: [fileId], references: [fileId])
   mail Mail @relation(fields: [mailId], references: [mailId], onDelete: Cascade)
 }
 
@@ -117,7 +117,7 @@ model ScenarioFile {
   fileId       Int
   scenarioId   Int
 
-  file     File     @relation(fields: [fileId], references: [fileId], onDelete: Cascade)
+  file     File     @relation(fields: [fileId], references: [fileId])
   scenario Scenario @relation(fields: [scenarioId], references: [scenarioId], onDelete: Cascade)
 }
 
