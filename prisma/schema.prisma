@@ -127,7 +127,7 @@ model ScenarioMail {
   mailId         Int
 
   scenario Scenario @relation(fields: [scenarioId], references: [scenarioId], onDelete: Cascade)
-  mail     Mail     @relation(fields: [mailId], references: [mailId], onDelete: Cascade)
+  mail     Mail     @relation(fields: [mailId], references: [mailId])
 }
 
 model TodoHolder {
