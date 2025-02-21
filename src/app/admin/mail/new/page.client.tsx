@@ -12,7 +12,7 @@ export default function AdminNewMail() {
         <Flex
           gap={5}
           align="center"
-          onClick={() => router.push("/admin/scenario")}
+          onClick={() => router.push("/admin/mail")}
           _hover={{
             cursor: "pointer",
             transform: "scale(1.02)",
