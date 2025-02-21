@@ -1,5 +1,5 @@
 import { ProhibitIcon, StarIcon, TrashIcon } from "@/assets/IconSet";
-import { Flex } from "@chakra-ui/react";
+import { Flex, IconButton } from "@chakra-ui/react";
 
 interface MailQuickActionProps {
   mailID: number;
@@ -8,40 +8,59 @@ interface MailQuickActionProps {
 export default function MailQuickAction({ mailID }: MailQuickActionProps) {
   return (
     <Flex gap={16}>
-      <StarIcon
+      <IconButton
         w={24}
         h={24}
-        _hover={{
-          cursor: "pointer",
-          fill: "yellow",
-        }}
-        // 원래 onClick은 button 같은 상호작용 요소에서 사용해야 하지만, 여기서는 빠른 개발을 위해 사용
+        aria-label="Star"
+        variant="ghost"
         onClick={() => {
-          // 여기에 삭제 로직 추가
           confirm(`Delete mail ID: ${mailID}`);
         }}
+        icon={
+          <StarIcon
+            boxSize="100%"
+            _hover={{
+              cursor: "pointer",
+              fill: "yellow",
+            }}
+          />
+        }
       />
-      <ProhibitIcon
+      <IconButton
         w={24}
         h={24}
-        _hover={{
-          cursor: "pointer",
-          fill: "danger",
-        }}
+        aria-label="Prohibit"
+        variant="ghost"
         onClick={() => {
           confirm(`Delete mail ID: ${mailID}`);
         }}
+        icon={
+          <ProhibitIcon
+            boxSize="100%"
+            _hover={{
+              cursor: "pointer",
+              fill: "danger",
+            }}
+          />
+        }
       />
-      <TrashIcon
+      <IconButton
         w={24}
         h={24}
-        _hover={{
-          cursor: "pointer",
-          fill: "grey",
-        }}
+        aria-label="Trash"
+        variant="ghost"
         onClick={() => {
           confirm(`Delete mail ID: ${mailID}`);
         }}
+        icon={
+          <TrashIcon
+            boxSize="100%"
+            _hover={{
+              cursor: "pointer",
+              fill: "grey",
+            }}
+          />
+        }
       />
     </Flex>
   );
