@@ -22,7 +22,7 @@ import { File } from "@prisma/client";
 
 interface AddFileModalProps {
   isDisabled?: boolean;
-  addFile: (newFile: File) => void;
+  addFile?: (newFile: File) => void;
 }
 
 export default function AddFileModal({
