@@ -28,7 +28,7 @@ export default function TrainingDetail({
           과연 어떤 시나리오의 훈련일까요?
         </Text>
         <Text fontSize="m" color="grey.shade2" fontWeight="regular">
-          언제든지 훈련을 시작 수 있어요!
+          언제든지 훈련을 시작할 수 있어요!
         </Text>
       </VStack>
       <Flex maxW={1280} px={40} gap={10}>
