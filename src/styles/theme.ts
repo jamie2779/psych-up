@@ -195,6 +195,19 @@ export const theme = extendTheme(
           },
         },
       },
+      Badge: {
+        baseStyle: {
+          w: "fit-content",
+          h: "fit-content",
+          px: "14px",
+          py: "4px",
+          borderRadius: "24px",
+          fontSize: "s",
+          fontWeight: "regular",
+          bg: "primary",
+          color: "white",
+        },
+      },
     },
   },
   withDefaultColorScheme({

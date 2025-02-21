@@ -61,13 +61,13 @@ model Scenario {
   scenarioId   Int      @id @default(autoincrement())
   title        String
   article      String
-  files        Json
   todoTemplate Json
   mailTemplate Json
   createdDate  DateTime @default(now())
   modifiedDate DateTime @default(now()) @updatedAt
 
-  trainings Training[]
+  trainings     Training[]
+  scenarioFiles ScenarioFile[]
 }
 
 model Mail {
@@ -78,7 +78,6 @@ model Mail {
   to           String
   title        String
   article      String
-  files        Json
   isRead       Boolean    @default(false)
   isDownloaded Boolean    @default(false)
   status       MailStatus @default(DEFAULT)
@@ -86,6 +85,7 @@ model Mail {
   modifiedDate DateTime   @default(now()) @updatedAt
 
   mailHolders MailHolder[]
+  mailFiles   MailFile[]
 }
 
 enum Permission {
@@ -102,4 +102,33 @@ enum TrainingStatus {
 enum MailStatus {
   DEFAULT
   DELETED
+}
+
+model File {
+  fileId       Int      @id @default(autoincrement())
+  filename     String
+  path         String
+  createdDate  DateTime @default(now())
+  modifiedDate DateTime @default(now()) @updatedAt
+
+  mailFiles     MailFile[]
+  scenarioFiles ScenarioFile[]
+}
+
+model MailFile {
+  fileHolderId Int @id @default(autoincrement())
+  fileId       Int
+  mailId       Int
+
+  file File @relation(fields: [fileId], references: [fileId])
+  mail Mail @relation(fields: [mailId], references: [mailId])
+}
+
+model ScenarioFile {
+  fileHolderId Int @id @default(autoincrement())
+  fileId       Int
+  scenarioId   Int
+
+  file     File     @relation(fields: [fileId], references: [fileId])
+  scenario Scenario @relation(fields: [scenarioId], references: [scenarioId])
 }
