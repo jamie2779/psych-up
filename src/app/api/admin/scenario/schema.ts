@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const userPostSchema = z.object({
+export const scenarioPostSchema = z.object({
   title: z.string(),
   type: z.string(),
   detail: z.string(),

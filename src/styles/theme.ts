@@ -1,5 +1,5 @@
 import { Paperlogy } from "@/styles/font";
-import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import { border, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 
 export const theme = extendTheme(
   {
@@ -255,6 +255,15 @@ export const theme = extendTheme(
         },
         defaultProps: {
           size: "md",
+        },
+      },
+      Checkbox: {
+        baseStyle: {
+          control: {
+            w: "24px",
+            h: "24px",
+            borderRadius: "4px",
+          },
         },
       },
     },

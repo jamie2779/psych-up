@@ -24,9 +24,6 @@ interface DashboardNavProps {
 export default function DashboardNav({ user }: DashboardNavProps) {
   const router = useRouter();
   const pathname = usePathname();
-
-  console.log(user.profileImg);
-
   const menuItems = [
     { label: "관리 홈", icon: HomeIcon, route: "/admin" },
     { label: "유저 관리", icon: PersonIcon, route: "/admin/user" },
@@ -48,7 +45,7 @@ export default function DashboardNav({ user }: DashboardNavProps) {
       gap={30}
     >
       {/* 로고 */}
-      <Image src={logo} alt="logo" width={210} />
+      <Image src={logo} alt="logo" width={210} priority />
       {/* 대시보드로 이동 버튼 */}
       <Button
         w="100%"

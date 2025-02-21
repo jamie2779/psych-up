@@ -1,4 +1,4 @@
-import { scenarioPostSchema } from "./schema";
+import { mailPostSchema } from "./schema";
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
   const body = await request.json();
 
-  const parse = scenarioPostSchema.safeParse(body);
+  const parse = mailPostSchema.safeParse(body);
 
   if (!parse.success) {
     return NextResponse.json({ error: parse.error }, { status: 400 });
@@ -31,24 +31,23 @@ export async function POST(request: NextRequest) {
 
   const { data } = parse;
 
-  const scenario = await prisma.scenario.create({
+  const mail = await prisma.mail.create({
     data: {
+      sender: data.sender,
+      from: data.from,
       title: data.title,
-      detail: data.detail,
-      type: data.type,
-      isPublic: data.isPublic,
+      article: data.article,
+      isFishing: data.isFishing,
+      fishingDetail: data.fishingDetail,
+      mailFiles: {
+        create: data.fileList.map((fileId) => ({
+          file: { connect: { fileId } },
+        })),
+      },
+    },
+    include: {
+      mailFiles: true,
     },
   });
-
-  await Promise.all(
-    data.todoList.map(async (todo) => {
-      await prisma.todo.create({
-        data: {
-          target: todo,
-          scenarioId: scenario.scenarioId,
-        },
-      });
-    })
-  );
-  return NextResponse.json(scenario);
+  return NextResponse.json(mail);
 }

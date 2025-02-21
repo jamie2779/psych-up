@@ -1,5 +1,5 @@
 import { auth } from "@/auth";
-import { scenarioPutSchema } from "./schema";
+import { mailPutSchema } from "./schema";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { Permission } from "@prisma/client";
@@ -14,7 +14,7 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  let user = await prisma.user.findUnique({
+  const user = await prisma.user.findUnique({
     where: {
       email: session.user.email!,
     },
@@ -24,23 +24,23 @@ export async function DELETE(
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const scenarioId = parseInt(params.id, 10);
-  if (isNaN(scenarioId)) {
+  const mailId = parseInt(params.id, 10);
+  if (isNaN(mailId)) {
     return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
   }
 
   try {
-    await prisma.scenario.delete({
-      where: { scenarioId: scenarioId },
+    await prisma.mail.delete({
+      where: { mailId: mailId },
     });
 
     return NextResponse.json(
-      { message: "Scenario deleted successfully" },
+      { message: "Mail deleted successfully" },
       { status: 200 }
     );
   } catch (error) {
     return NextResponse.json(
-      { error: "Failed to delete scenario" },
+      { error: "Failed to delete mail" },
       { status: 500 }
     );
   }
@@ -52,7 +52,6 @@ export async function PUT(
 ) {
   const session = await auth();
 
-  // 인증 확인
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -61,20 +60,18 @@ export async function PUT(
     where: { email: session.user.email! },
   });
 
-  // 관리자 권한 확인
   if (!user || user.permission !== Permission.admin) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const scenarioId = Number(params.id);
-  if (Number.isNaN(scenarioId)) {
-    return NextResponse.json({ error: "Invalid scenario ID" }, { status: 400 });
+  const mailId = Number(params.id);
+  if (Number.isNaN(mailId)) {
+    return NextResponse.json({ error: "Invalid mail ID" }, { status: 400 });
   }
 
   const body = await request.json();
-  const parse = scenarioPutSchema.safeParse(body);
+  const parse = mailPutSchema.safeParse(body);
 
-  // 입력값 검증 실패 시
   if (!parse.success) {
     return NextResponse.json({ error: parse.error }, { status: 400 });
   }
@@ -82,50 +79,53 @@ export async function PUT(
   const { data } = parse;
 
   try {
-    // 기존 시나리오 확인
-    const existingScenario = await prisma.scenario.findUnique({
-      where: { scenarioId },
-    });
-
-    if (!existingScenario) {
-      return NextResponse.json(
-        { error: "Scenario not found" },
-        { status: 404 }
-      );
-    }
-
-    // 시나리오 업데이트
-    const updatedScenario = await prisma.scenario.update({
-      where: { scenarioId },
-      data: {
-        title: data.title,
-        detail: data.detail,
-        type: data.type,
-        isPublic: data.isPublic,
+    const existingMail = await prisma.mail.findUnique({
+      where: { mailId: mailId },
+      include: {
+        mailFiles: true,
       },
     });
 
-    // 기존 TODO 삭제 후 새롭게 저장
-    await prisma.todo.deleteMany({
-      where: { scenarioId },
+    if (!existingMail) {
+      return NextResponse.json({ error: "Mail not found" }, { status: 404 });
+    }
+
+    await prisma.mail.update({
+      where: { mailId: mailId },
+      data: {
+        sender: data.sender,
+        from: data.from,
+        title: data.title,
+        article: data.article,
+        isFishing: data.isFishing,
+        fishingDetail: data.fishingDetail,
+      },
     });
 
-    await Promise.all(
-      data.todoList.map(async (todo) => {
-        await prisma.todo.create({
-          data: {
-            target: todo,
-            scenarioId: updatedScenario.scenarioId,
-          },
-        });
-      })
-    );
+    await prisma.mailFile.deleteMany({
+      where: { mailId: mailId },
+    });
 
-    return NextResponse.json(updatedScenario);
+    if (data.fileList.length > 0) {
+      await prisma.mailFile.createMany({
+        data: data.fileList.map((fileId) => ({
+          mailId: mailId,
+          fileId: fileId,
+        })),
+      });
+    }
+
+    const finalMail = await prisma.mail.findUnique({
+      where: { mailId: mailId },
+      include: {
+        mailFiles: true,
+      },
+    });
+
+    return NextResponse.json(finalMail);
   } catch (error) {
-    console.error("PUT /api/scenario/:id error:", error);
     return NextResponse.json(
-      { error: "Failed to update scenario" },
+      { error: "Failed to update mail" },
       { status: 500 }
     );
   }
