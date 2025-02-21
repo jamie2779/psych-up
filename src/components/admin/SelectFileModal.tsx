@@ -20,9 +20,7 @@ import {
   TableContainer,
   Checkbox,
   CheckboxGroup,
-  FormControl,
   FormLabel,
-  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
@@ -30,8 +28,6 @@ import { File } from "@prisma/client";
 import { CheckIcon } from "@/assets/IconSet";
 import ky from "ky";
 import toast from "react-hot-toast";
-import path from "path";
-import { set } from "zod";
 
 interface SelectFileModalProps {
   isDisabled?: boolean;

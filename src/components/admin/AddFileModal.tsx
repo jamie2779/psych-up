@@ -1,5 +1,8 @@
 "use client";
 import {
+  Box,
+  Text,
+  Flex,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -8,6 +11,10 @@ import {
   ModalBody,
   ModalCloseButton,
   Button,
+  Input,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
@@ -15,7 +22,7 @@ import { File } from "@prisma/client";
 
 interface AddFileModalProps {
   isDisabled?: boolean;
-  addFile?: (newFile: File) => void;
+  addFile: (newFile: File) => void;
 }
 
 export default function AddFileModal({
