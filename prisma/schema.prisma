@@ -93,7 +93,8 @@ model Mail {
 
 model File {
   fileId       Int      @id @default(autoincrement())
-  name         String
+  uuid         String   @unique
+  name         String   @unique
   path         String
   size         Int
   createdDate  DateTime @default(now())

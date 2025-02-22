@@ -46,6 +46,20 @@ export default function AdminFile({ fileList }: AdminFileProps) {
     }
   };
 
+  const downloadHandler = async (fileUUID: string) => {
+    try {
+      const data = await toast.promise(ky.get(`/api/file/${fileUUID}`), {
+        loading: "파일을 로딩 중입니다.",
+        success: "파일 다운로드가 시작 되었습니다.",
+        error: "파일 로딩 중 문제가 발생하였습니다",
+      });
+      console.log(data);
+      window.open(data.url, "_blank");
+    } catch (error) {
+      router.refresh();
+    }
+  };
+
   return (
     <Box h="100%">
       <VStack pt={70} pb={30} px={45} spacing={6} align="flex-start">
@@ -94,7 +108,7 @@ export default function AdminFile({ fileList }: AdminFileProps) {
                       icon={<InboxIcon color="grey.shade2" />}
                       _hover={{ bg: "grey.shade1" }}
                       onClick={() => {
-                        window.open(file.path, "_blank");
+                        downloadHandler(file.uuid);
                       }}
                     />
                   </Td>
@@ -132,7 +146,7 @@ export default function AdminFile({ fileList }: AdminFileProps) {
             {fileList.length === 0 && (
               <Tbody>
                 <Tr>
-                  <Td colSpan={5} textAlign="center">
+                  <Td colSpan={9} textAlign="center">
                     파일이 없습니다.
                   </Td>
                 </Tr>

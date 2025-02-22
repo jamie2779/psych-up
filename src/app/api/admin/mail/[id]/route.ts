@@ -98,7 +98,7 @@ export async function PUT(
         title: data.title,
         article: data.article,
         isFishing: data.isFishing,
-        fishingDetail: data.fishingDetail,
+        fishingDetail: data.isFishing ? data.fishingDetail : null,
       },
     });
 
