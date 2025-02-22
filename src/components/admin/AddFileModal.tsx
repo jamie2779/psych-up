@@ -1,8 +1,5 @@
 "use client";
 import {
-  Box,
-  Text,
-  Flex,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -14,14 +11,12 @@ import {
   Input,
   FormControl,
   FormLabel,
-  FormErrorMessage,
 } from "@chakra-ui/react";
 import { useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import ky from "ky";
-import { set } from "zod";
 
 interface AddFileModalProps {
   isDisabled?: boolean;

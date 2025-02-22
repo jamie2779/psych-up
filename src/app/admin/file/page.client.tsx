@@ -48,6 +48,7 @@ export default function AdminFile({ fileList }: AdminFileProps) {
 
   const downloadHandler = async (fileUUID: string, fileName: string) => {
     try {
+      const toastId = toast.loading("파일 불러오는 중...");
       // 서명된 URL 받아오기
       const { url } = await ky
         .get(`/api/file/${fileUUID}`)
@@ -72,6 +73,9 @@ export default function AdminFile({ fileList }: AdminFileProps) {
       // 임시 URL과 a 태그 정리
       a.remove();
       window.URL.revokeObjectURL(blobUrl);
+
+      // 다운로드 성공 메시지
+      toast.success("파일 다운로드가 시작되었습니다.", { id: toastId });
     } catch (error) {
       toast.error("파일 다운로드 중 문제가 발생하였습니다.");
     }
@@ -160,7 +164,12 @@ export default function AdminFile({ fileList }: AdminFileProps) {
                         _hover={{ bg: "grey.shade1" }}
                         onClick={() => {
                           alert(
-                            "연결된 시나리오나 메일이 있어 삭제할 수 없습니다."
+                            `연결된 시나리오나 메일이 있어 삭제할 수 없습니다.
+                            ${file.scenarioFiles.length > 0 ? "\n(시나리오:" : ""}${file.scenarioFiles.map(
+                              (scenario) => ` ${scenario.scenarioId}`
+                            )}${file.mailFiles.length > 0 ? "\n(메일:" : ""}${file.mailFiles.map(
+                              (mail) => ` ${mail.mailId}`
+                            )})`
                           );
                         }}
                       />

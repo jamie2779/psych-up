@@ -88,7 +88,7 @@ export default function AdminMail({ mailList }: AdminMailProps) {
                   <Td>{mail.sender}</Td>
                   <Td>{mail.from}</Td>
                   <Td>{mail.title}</Td>
-                  <Td>{mail.isFishing ? "O" : "X"}</Td>
+                  <Td>{mail.isFishing ? "피싱" : "일반"}</Td>
                   <Td>{mail.mailFiles.length}</Td>
                   <Td>{mail.scenarioMails.length}</Td>
                   <Td>{new Date(mail.createdDate).toLocaleDateString()}</Td>

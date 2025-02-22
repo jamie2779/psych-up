@@ -73,6 +73,7 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
                 <Th>ID</Th>
                 <Th>제목</Th>
                 <Th>내용</Th>
+                <Th>공개여부</Th>
                 <Th>생성일</Th>
                 <Th>Todo 개수</Th>
                 <Th>수정</Th>
@@ -94,6 +95,7 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
                   >
                     {scenario.detail}
                   </Td>
+                  <Td>{scenario.isPublic ? "공개" : "비공개"}</Td>
                   <Td>{new Date(scenario.createdDate).toLocaleDateString()}</Td>
                   <Td>{scenario.todos.length}</Td>
                   <Td>
@@ -126,7 +128,7 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
             {scenarioList.length === 0 && (
               <Tbody>
                 <Tr>
-                  <Td colSpan={5} textAlign="center">
+                  <Td colSpan={8} textAlign="center">
                     시나리오가 없습니다.
                   </Td>
                 </Tr>
