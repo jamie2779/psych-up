@@ -52,6 +52,14 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: "파일이 없습니다." }, { status: 400 });
   }
 
+  //파일 사이즈 제한
+  if (file.size > 1024 * 1024 * 50) {
+    return NextResponse.json(
+      { error: "파일 크기는 50MB 이하여야 합니다." },
+      { status: 400 }
+    );
+  }
+
   //uuid 생성
   let i = 0;
   let download_uuid: string;
@@ -70,44 +78,35 @@ export async function POST(request: NextRequest) {
     }
   }
 
-  //파일 중복이름 제거
-  let fileCount = 1;
-  const originalName = file.name;
-  const lastDotIndex = originalName.lastIndexOf(".");
-  const baseName =
-    lastDotIndex !== -1
-      ? originalName.substring(0, lastDotIndex)
-      : originalName;
-  const extension =
-    lastDotIndex !== -1 ? originalName.substring(lastDotIndex) : "";
-
-  let fileName = originalName;
-
-  while (true) {
-    const existingFile = await prisma.file.findUnique({
-      where: { name: fileName },
-    });
-    if (!existingFile) break;
-    fileName = `${baseName}(${fileCount++})${extension}`;
-  }
-
   //Supabase 스토리지에 업로드
   const { data, error } = await supabaseAdmin.storage
     .from(process.env.NEXT_PUBLIC_STORAGE_BUCKET!)
-    .upload(fileName, file, { contentType: file.type });
+    .upload(download_uuid, file, { contentType: file.type });
 
   if (error)
     return NextResponse.json({ error: error.message }, { status: 500 });
 
-  //Prisma DB에 파일 정보 저장
-  const savedFile = await prisma.file.create({
-    data: {
-      uuid: download_uuid,
-      name: fileName,
-      size: file.size,
-      path: data.path,
-    },
-  });
+  try {
+    //Prisma DB에 파일 정보 저장
+    const savedFile = await prisma.file.create({
+      data: {
+        uuid: download_uuid,
+        name: file.name,
+        size: file.size,
+        path: data.path,
+      },
+    });
 
-  return NextResponse.json(savedFile);
+    return NextResponse.json(savedFile);
+  } catch (error) {
+    //실패 시 스토리지에서 파일 삭제
+    await supabaseAdmin.storage
+      .from(process.env.NEXT_PUBLIC_STORAGE_BUCKET!)
+      .remove([data.path]);
+
+    return NextResponse.json(
+      { error: "Failed to save file to database", details: error },
+      { status: 500 }
+    );
+  }
 }

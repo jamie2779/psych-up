@@ -21,6 +21,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 import ky from "ky";
+import { set } from "zod";
 
 interface AddFileModalProps {
   isDisabled?: boolean;
@@ -32,44 +33,52 @@ export default function AddFileModal({
   isDisabled,
 }: AddFileModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [file, setFile] = useState<File | null>(null);
-  const [uploading, setUploading] = useState<boolean>(false);
-  const [fileUrl, setFileUrl] = useState<string>("");
+  const [files, setFiles] = useState<File[]>([]);
   const [error, setError] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async () => {
-    if (!file) {
+    if (!files) {
       setError(true);
+      return;
+    }
+    if (files.length > 5) {
+      toast.error("파일은 한번에 5개까지만 업로드 가능합니다.");
       return;
     }
 
     setError(false);
-
-    const formData = new FormData();
-    formData.append("file", file);
+    setIsLoading(true);
 
     try {
-      const response: File = await toast.promise(
-        ky
-          .post("/api/admin/file", {
-            body: formData,
-          })
-          .json(),
-        {
-          loading: "파일을 업로드 중입니다...",
-          success: "파일이 성공적으로 업로드되었습니다!",
-          error: "파일 업로드 중 문제가 발생했습니다.",
-        }
-      );
+      await Promise.all(
+        files.map(async (file) => {
+          const formData = new FormData();
+          formData.append("file", file);
 
-      addFile && addFile(response);
+          // 각 파일 업로드 시 toast 메시지 처리
+          const response: File = await toast.promise(
+            ky.post("/api/admin/file", { body: formData }).json(),
+            {
+              loading: `${file.name} 파일 업로드 중...`,
+              success: `${file.name} 업로드 성공!`,
+              error: `${file.name} 업로드 실패!`,
+            }
+          );
+          // 업로드된 파일 하나씩 콜백 호출
+          addFile && addFile(response);
+        })
+      );
       onClose();
       router.refresh();
+      setIsLoading(false);
     } catch (error) {
+      setIsLoading(false);
       onClose();
     }
   };
+
   return (
     <>
       <Button h={40} px={20} isDisabled={isDisabled} onClick={onOpen}>
@@ -95,7 +104,7 @@ export default function AddFileModal({
           <ModalBody w="100%">
             <FormControl isInvalid={error}>
               <FormLabel px={5} fontSize="m">
-                Todo 목표
+                파일 선택
               </FormLabel>
               <Input
                 h={46}
@@ -104,16 +113,28 @@ export default function AddFileModal({
                 py={7}
                 fontSize="m"
                 type="file"
-                onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+                multiple
+                onChange={(e) => {
+                  if (e.target.files) {
+                    setFiles(Array.from(e.target.files));
+                  } else {
+                    setFiles([]);
+                  }
+                }}
               />
-              <FormErrorMessage px={5} fontSize="m">
-                파일을 추가해주세요
-              </FormErrorMessage>
+              <FormLabel color="danger" px={5} fontSize="s">
+                각 파일은 50MB 이하여야 합니다
+              </FormLabel>
             </FormControl>
           </ModalBody>
 
           <ModalFooter w="100%">
-            <Button w="100%" colorScheme="blue" onClick={handleSubmit}>
+            <Button
+              w="100%"
+              colorScheme="blue"
+              onClick={handleSubmit}
+              isLoading={isLoading}
+            >
               업로드
             </Button>
           </ModalFooter>

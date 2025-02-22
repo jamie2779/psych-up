@@ -46,19 +46,45 @@ export default function AdminFile({ fileList }: AdminFileProps) {
     }
   };
 
-  const downloadHandler = async (fileUUID: string) => {
+  const downloadHandler = async (fileUUID: string, fileName: string) => {
     try {
-      const data = await toast.promise(ky.get(`/api/file/${fileUUID}`), {
-        loading: "파일을 로딩 중입니다.",
-        success: "파일 다운로드가 시작 되었습니다.",
-        error: "파일 로딩 중 문제가 발생하였습니다",
-      });
-      console.log(data);
-      window.open(data.url, "_blank");
+      // 서명된 URL 받아오기
+      const { url } = await ky
+        .get(`/api/file/${fileUUID}`)
+        .json<{ url: string }>();
+
+      // 파일을 Blob으로 가져오기
+      const response = await fetch(url);
+      const blob = await response.blob();
+
+      // Blob URL 생성
+      const blobUrl = window.URL.createObjectURL(blob);
+
+      // 임시 a 태그 생성
+      const a = document.createElement("a");
+      a.href = blobUrl;
+
+      // 파일명 변경
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+
+      // 임시 URL과 a 태그 정리
+      a.remove();
+      window.URL.revokeObjectURL(blobUrl);
     } catch (error) {
-      router.refresh();
+      toast.error("파일 다운로드 중 문제가 발생하였습니다.");
     }
   };
+
+  function formatBytes(bytes: number, decimals = 2) {
+    if (bytes === 0) return "0 Bytes";
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB"];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
+  }
 
   return (
     <Box h="100%">
@@ -96,7 +122,7 @@ export default function AdminFile({ fileList }: AdminFileProps) {
                   <Td>{index + 1}</Td>
                   <Td>{file.fileId}</Td>
                   <Td>{file.name}</Td>
-                  <Td>{file.size}</Td>
+                  <Td>{formatBytes(file.size)}</Td>
                   <Td>{new Date(file.createdDate).toLocaleString()}</Td>
                   <Td>{file.scenarioFiles.length}</Td>
                   <Td>{file.mailFiles.length}</Td>
@@ -108,7 +134,7 @@ export default function AdminFile({ fileList }: AdminFileProps) {
                       icon={<InboxIcon color="grey.shade2" />}
                       _hover={{ bg: "grey.shade1" }}
                       onClick={() => {
-                        downloadHandler(file.uuid);
+                        downloadHandler(file.uuid, file.name);
                       }}
                     />
                   </Td>

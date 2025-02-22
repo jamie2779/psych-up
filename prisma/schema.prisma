@@ -94,7 +94,7 @@ model Mail {
 model File {
   fileId       Int      @id @default(autoincrement())
   uuid         String   @unique
-  name         String   @unique
+  name         String
   path         String
   size         Int
   createdDate  DateTime @default(now())

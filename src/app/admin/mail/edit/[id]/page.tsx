@@ -2,11 +2,12 @@ import AdminEditMail from "./page.client";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
-export default async function AdminEditMailPage({
-  params,
-}: {
-  params?: { id?: string };
-}) {
+export default async function AdminEditMailPage(
+  props: {
+    params?: Promise<{ id?: string }>;
+  }
+) {
+  const params = await props.params;
   if (!params?.id) {
     return redirect("/404");
   }

@@ -6,8 +6,9 @@ import { supabaseAdmin } from "@/lib/supabase";
 
 export async function DELETE(
   _request: NextRequest,
-  { params }: { params: { id: string } }
+  props: { params: Promise<{ id: string }> }
 ) {
+  const params = await props.params;
   const session = await auth();
 
   if (!session?.user) {
