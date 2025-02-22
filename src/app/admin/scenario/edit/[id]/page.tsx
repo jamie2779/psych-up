@@ -2,11 +2,9 @@ import AdminEditScenario from "./page.client";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
-export default async function AdminEditScenarioPage(
-  props: {
-    params?: Promise<{ id?: string }>;
-  }
-) {
+export default async function AdminEditScenarioPage(props: {
+  params?: Promise<{ id?: string }>;
+}) {
   const params = await props.params;
   if (!params?.id) {
     return redirect("/404");
@@ -21,7 +19,19 @@ export default async function AdminEditScenarioPage(
   try {
     const scenario = await prisma.scenario.findFirst({
       where: { scenarioId },
-      include: { todos: true },
+      include: {
+        todos: true,
+        scenarioFiles: {
+          include: {
+            file: true,
+          },
+        },
+        scenarioMails: {
+          include: {
+            mail: true,
+          },
+        },
+      },
     });
 
     if (!scenario) {

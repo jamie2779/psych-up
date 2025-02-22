@@ -5,6 +5,16 @@ export default async function AdminScenarioPage() {
   const scenarioList = await prisma.scenario.findMany({
     include: {
       todos: true,
+      scenarioFiles: {
+        include: {
+          file: true,
+        },
+      },
+      scenarioMails: {
+        include: {
+          mail: true,
+        },
+      },
     },
     orderBy: {
       scenarioId: "asc",

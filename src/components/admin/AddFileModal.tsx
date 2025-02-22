@@ -15,12 +15,13 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { File as prismaFile } from "@prisma/client";
 import toast from "react-hot-toast";
 import ky from "ky";
 
 interface AddFileModalProps {
   isDisabled?: boolean;
-  addFile?: (newFile: File) => void;
+  addFile?: (newFile: prismaFile) => void;
 }
 
 export default function AddFileModal({
@@ -53,7 +54,7 @@ export default function AddFileModal({
           formData.append("file", file);
 
           // 각 파일 업로드 시 toast 메시지 처리
-          const response: File = await toast.promise(
+          const response: prismaFile = await toast.promise(
             ky.post("/api/admin/file", { body: formData }).json(),
             {
               loading: `${file.name} 파일 업로드 중...`,

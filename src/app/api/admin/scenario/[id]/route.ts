@@ -4,7 +4,10 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { Permission } from "@prisma/client";
 
-export async function DELETE(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  _request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   const session = await auth();
 
@@ -44,7 +47,10 @@ export async function DELETE(_request: NextRequest, props: { params: Promise<{ i
   }
 }
 
-export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+export async function PUT(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   const session = await auth();
 
@@ -117,7 +123,27 @@ export async function PUT(request: NextRequest, props: { params: Promise<{ id: s
       })
     );
 
-    return NextResponse.json(updatedScenario);
+    await prisma.scenarioFile.deleteMany({
+      where: { scenarioId: scenarioId },
+    });
+
+    if (data.fileList.length > 0) {
+      await prisma.scenarioFile.createMany({
+        data: data.fileList.map((fileId) => ({
+          scenarioId: scenarioId,
+          fileId: fileId,
+        })),
+      });
+    }
+
+    const finalScenario = await prisma.scenario.findUnique({
+      where: { scenarioId: scenarioId },
+      include: {
+        scenarioFiles: true,
+      },
+    });
+
+    return NextResponse.json(finalScenario);
   } catch (error) {
     console.error("PUT /api/scenario/:id error:", error);
     return NextResponse.json(

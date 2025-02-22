@@ -26,6 +26,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
 import { File } from "@prisma/client";
 import { CheckIcon } from "@/assets/IconSet";
+import { formatBytes } from "@/lib/utils";
 import ky from "ky";
 import toast from "react-hot-toast";
 
@@ -127,7 +128,7 @@ export default function SelectFileModal({
                           <Td>{index + 1}</Td>
                           <Td>{file.fileId}</Td>
                           <Td>{file.name}</Td>
-                          <Td>{file.size}</Td>
+                          <Td>{formatBytes(file.size)}</Td>
                           <Td>{new Date(file.createdDate).toLocaleString()}</Td>
                           <Td textAlign="center" py={2}>
                             <Checkbox

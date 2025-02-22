@@ -22,14 +22,27 @@ import {
 } from "@chakra-ui/react";
 import { TrashIcon } from "@/assets/IconSet";
 import CreateTodoModal from "@/components/admin/CreateTodoModal";
+import FileList from "@/components/admin/FileList";
+
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Scenario, Todo } from "@prisma/client";
+import {
+  Scenario,
+  Todo,
+  ScenarioFile,
+  File,
+  ScenarioMail,
+  Mail,
+} from "@prisma/client";
 import toast from "react-hot-toast";
 import ky from "ky";
 
 interface ScenarioFormProps {
-  scenario?: Scenario & { todos: Todo[] };
+  scenario?: Scenario & { todos: Todo[] } & {
+    scenarioFiles: (ScenarioFile & { file: File })[];
+  } & {
+    scenarioMails: (ScenarioMail & { mail: Mail })[];
+  };
 }
 
 export default function ScenarioForm({ scenario }: ScenarioFormProps) {
@@ -43,7 +56,9 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
   const [todoList, setTodoList] = useState<String[]>(
     scenario?.todos.map((todo) => todo.target) || []
   );
-
+  const [fileList, setFileList] = useState<File[]>(
+    scenario?.scenarioFiles.map((scenarioFile) => scenarioFile.file) || []
+  );
   const createTodo = async (newTarget: string) => {
     setTodoList((prev) => [...prev, newTarget]); // 기존 목록에 추가
   };
@@ -57,6 +72,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
           detail: detail,
           isPublic: isPublic,
           todoList: todoList,
+          fileList: fileList.map((file) => file.fileId),
         },
       }),
       {
@@ -76,6 +92,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
           detail: detail,
           isPublic: isPublic,
           todoList: todoList,
+          fileList: fileList.map((file) => file.fileId),
         },
       }),
       {
@@ -250,7 +267,11 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
         </FormErrorMessage>
       </FormControl>
 
-      {/*하단 메뉴 */}
+      <FormControl>
+        <FileList fileList={fileList} setFileList={setFileList} />
+      </FormControl>
+
+      {/*공개여부 */}
       <FormControl display="flex" alignItems="center">
         <FormLabel px={5} fontSize="m">
           시나리오 공개

@@ -17,6 +17,7 @@ import { File, ScenarioFile, MailFile } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { TrashIcon, InboxIcon, ProhibitIcon } from "@/assets/IconSet";
 import AddFileModal from "@/components/admin/AddFileModal";
+import { formatBytes } from "@/lib/utils";
 import toast from "react-hot-toast";
 import ky from "ky";
 
@@ -80,15 +81,6 @@ export default function AdminFile({ fileList }: AdminFileProps) {
       toast.error("파일 다운로드 중 문제가 발생하였습니다.");
     }
   };
-
-  function formatBytes(bytes: number, decimals = 2) {
-    if (bytes === 0) return "0 Bytes";
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ["Bytes", "KB", "MB", "GB", "TB", "PB"];
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + " " + sizes[i];
-  }
 
   return (
     <Box h="100%">
@@ -164,12 +156,15 @@ export default function AdminFile({ fileList }: AdminFileProps) {
                         _hover={{ bg: "grey.shade1" }}
                         onClick={() => {
                           alert(
-                            `연결된 시나리오나 메일이 있어 삭제할 수 없습니다.
-                            ${file.scenarioFiles.length > 0 ? "\n(시나리오:" : ""}${file.scenarioFiles.map(
+                            `연결된 시나리오나 메일이 있어 삭제할 수 없습니다.${
+                              file.scenarioFiles.length > 0
+                                ? "\n시나리오 ID:"
+                                : ""
+                            }${file.scenarioFiles.map(
                               (scenario) => ` ${scenario.scenarioId}`
-                            )}${file.mailFiles.length > 0 ? "\n(메일:" : ""}${file.mailFiles.map(
-                              (mail) => ` ${mail.mailId}`
-                            )})`
+                            )}${
+                              file.mailFiles.length > 0 ? "\n메일 ID:" : ""
+                            }${file.mailFiles.map((mail) => ` ${mail.mailId}`)}`
                           );
                         }}
                       />

@@ -14,14 +14,25 @@ import {
   TableContainer,
   IconButton,
 } from "@chakra-ui/react";
-import { Scenario, Todo } from "@prisma/client";
+import {
+  Scenario,
+  Todo,
+  ScenarioFile,
+  File,
+  ScenarioMail,
+  Mail,
+} from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { EditIcon, TrashIcon } from "@/assets/IconSet";
 import toast from "react-hot-toast";
 import ky from "ky";
 
 interface AdminScenarioProps {
-  scenarioList: (Scenario & { todos: Todo[] })[];
+  scenarioList: (Scenario & { todos: Todo[] } & {
+    scenarioFiles: (ScenarioFile & { file: File })[];
+  } & {
+    scenarioMails: (ScenarioMail & { mail: Mail })[];
+  })[];
 }
 
 export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
@@ -76,6 +87,8 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
                 <Th>공개여부</Th>
                 <Th>생성일</Th>
                 <Th>Todo 개수</Th>
+                <Th>파일 개수</Th>
+                <Th>메일 개수</Th>
                 <Th>수정</Th>
                 <Th>삭제</Th>
               </Tr>
@@ -98,6 +111,8 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
                   <Td>{scenario.isPublic ? "공개" : "비공개"}</Td>
                   <Td>{new Date(scenario.createdDate).toLocaleDateString()}</Td>
                   <Td>{scenario.todos.length}</Td>
+                  <Td>{scenario.scenarioFiles.length}</Td>
+                  <Td>{scenario.scenarioMails.length}</Td>
                   <Td>
                     <IconButton
                       bg="none"
@@ -128,7 +143,7 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
             {scenarioList.length === 0 && (
               <Tbody>
                 <Tr>
-                  <Td colSpan={8} textAlign="center">
+                  <Td colSpan={11} textAlign="center">
                     시나리오가 없습니다.
                   </Td>
                 </Tr>

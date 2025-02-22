@@ -37,6 +37,11 @@ export async function POST(request: NextRequest) {
       detail: data.detail,
       type: data.type,
       isPublic: data.isPublic,
+      scenarioFiles: {
+        create: data.fileList.map((fileId) => ({
+          file: { connect: { fileId } },
+        })),
+      },
     },
   });
 
