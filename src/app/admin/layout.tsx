@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import AdminNav from "@/components/admin/AdminNav";
 import AnimationWrapper from "@/components/AnimationWrapper";
-import { Flex, Box } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { redirect } from "next/navigation";
 import { Permission } from "@prisma/client";
