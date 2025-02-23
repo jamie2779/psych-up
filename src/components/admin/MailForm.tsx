@@ -1,5 +1,9 @@
 "use client";
+import ReactQuill from "react-quill-new";
+import "react-quill-new/dist/quill.snow.css";
+import DOMPurify from "dompurify";
 import {
+  Box,
   Button,
   Input,
   FormControl,
@@ -9,6 +13,7 @@ import {
   Textarea,
   Switch,
 } from "@chakra-ui/react";
+import ArticleEditor from "@/components/admin/ArticleEditor";
 import FileTable from "@/components/admin/FileTable";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -48,7 +53,7 @@ export default function MailForm({ mail }: MailFormProps) {
           sender: sender,
           from: from,
           title: title,
-          article: article,
+          article: DOMPurify.sanitize(article),
           fileList: fileList.map((file) => file.fileId),
           isFishing: isFishing,
           ...(isFishing && { fishingDetail }),
@@ -69,7 +74,7 @@ export default function MailForm({ mail }: MailFormProps) {
           sender: sender,
           from: from,
           title: title,
-          article: article,
+          article: DOMPurify.sanitize(article),
           fileList: fileList.map((file) => file.fileId),
           isFishing: isFishing,
           ...(isFishing && { fishingDetail }),
@@ -89,6 +94,7 @@ export default function MailForm({ mail }: MailFormProps) {
       !sender.trim() ||
       !from.trim() ||
       !article.trim() ||
+      article.trim() === "<p><br></p>" ||
       (isFishing && !fishingDetail.trim())
     ) {
       setError(true);
@@ -171,29 +177,39 @@ export default function MailForm({ mail }: MailFormProps) {
           메일 제목을 입력해주세요.
         </FormErrorMessage>
       </FormControl>
-
-      <FormControl isInvalid={error && !article.trim()}>
+      <FormControl
+        isInvalid={
+          error && (!article.trim() || article.trim() === "<p><br></p>")
+        }
+      >
         <FormLabel px={5} fontSize="m">
           메일 본문
         </FormLabel>
-        <Textarea
-          minH={100}
-          h={200}
+        <Box
+          w="100%"
+          bg="white"
           borderRadius={14}
-          px={20}
-          py={10}
-          value={article}
-          size="xl"
-          fontSize="m"
-          placeholder="메일 본문을 입력해주세요."
-          onChange={(e) => setArticle(e.target.value)}
-          isDisabled={isLoading}
-        />
-        <FormErrorMessage px={5} fontSize="m">
-          메일 본문을 입력해주세요
-        </FormErrorMessage>
+          mt={6}
+          p={20}
+          borderColor={
+            error && (!article.trim() || article.trim() === "<p><br></p>")
+              ? "danger"
+              : "transparent"
+          }
+          borderWidth={2}
+        >
+          <ArticleEditor
+            article={article}
+            setArticle={setArticle}
+            isLoading={isLoading}
+          />
+        </Box>
+        {error && (!article.trim() || article.trim() === "<p><br></p>") && (
+          <FormErrorMessage px={5} fontSize="m">
+            메일 본문을 입력해주세요
+          </FormErrorMessage>
+        )}
       </FormControl>
-
       <FormControl pt={6}>
         {/*파일 목록 */}
         <FileTable fileList={fileList} setFileList={setFileList} />
