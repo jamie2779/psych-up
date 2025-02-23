@@ -1,5 +1,4 @@
 "use client";
-import ReactQuill from "react-quill-new";
 import "react-quill-new/dist/quill.snow.css";
 import DOMPurify from "dompurify";
 import {
@@ -10,10 +9,16 @@ import {
   FormLabel,
   FormErrorMessage,
   VStack,
-  Textarea,
   Switch,
+  Tabs,
+  TabList,
+  TabPanels,
+  Tab,
+  TabPanel,
+  Textarea,
 } from "@chakra-ui/react";
 import ArticleEditor from "@/components/admin/ArticleEditor";
+import ArticleViewer from "@/components/ArticleViewer";
 import FileTable from "@/components/admin/FileTable";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -33,6 +38,7 @@ export default function MailForm({ mail }: MailFormProps) {
   const [from, setFrom] = useState(mail?.from || "");
   const [title, setTitle] = useState(mail?.title || "");
   const [article, setArticle] = useState(mail?.article || "");
+  const [source, setSource] = useState(mail?.article || "");
   const [isFishing, setIsFishing] = useState(mail?.isFishing || false);
   const [fishingDetail, setFishingDetail] = useState(mail?.fishingDetail || "");
   const [fileList, setFileList] = useState<File[]>(
@@ -185,6 +191,7 @@ export default function MailForm({ mail }: MailFormProps) {
         <FormLabel px={5} fontSize="m">
           메일 본문
         </FormLabel>
+
         <Box
           w="100%"
           bg="white"
@@ -198,11 +205,47 @@ export default function MailForm({ mail }: MailFormProps) {
           }
           borderWidth={2}
         >
-          <ArticleEditor
-            article={article}
-            setArticle={setArticle}
-            isLoading={isLoading}
-          />
+          <Tabs>
+            <TabList>
+              <Tab fontSize="l">에디터</Tab>
+              <Tab fontSize="l">소스편집</Tab>
+              <Tab fontSize="l">미리보기</Tab>
+            </TabList>
+
+            <TabPanels>
+              <TabPanel>
+                <ArticleEditor
+                  article={article}
+                  setArticle={setArticle}
+                  setSource={setSource}
+                  isLoading={isLoading}
+                />
+              </TabPanel>
+              <TabPanel>
+                <Textarea
+                  minH={100}
+                  h={200}
+                  borderRadius={14}
+                  px={20}
+                  py={10}
+                  value={source}
+                  size="xl"
+                  fontSize="m"
+                  placeholder="소스코드 원문"
+                  onChange={(e) => {
+                    setSource(e.target.value);
+                  }}
+                  onBlur={(_) => {
+                    setArticle(source);
+                  }}
+                  isDisabled={isLoading}
+                />
+              </TabPanel>
+              <TabPanel>
+                <ArticleViewer content={article} />
+              </TabPanel>
+            </TabPanels>
+          </Tabs>
         </Box>
         {error && (!article.trim() || article.trim() === "<p><br></p>") && (
           <FormErrorMessage px={5} fontSize="m">

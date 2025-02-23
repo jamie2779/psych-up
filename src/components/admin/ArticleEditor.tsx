@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
+import { set } from "zod";
 
 const QuillNoSSRWrapper = dynamic(() => import("react-quill-new"), {
   ssr: false,
@@ -10,6 +11,8 @@ const modules = {
   toolbar: [
     [{ header: "1" }, { header: "2" }, { font: [] }],
     [{ size: [] }],
+    [{ color: [] }, { background: [] }], // 색상 및 배경색 옵션 추가
+
     ["bold", "italic", "underline", "strike", "blockquote"],
     [
       { list: "ordered" },
@@ -17,6 +20,7 @@ const modules = {
       { indent: "-1" },
       { indent: "+1" },
     ],
+
     ["link", "image", "video"],
     ["clean"],
   ],
@@ -33,6 +37,8 @@ const formats = [
   "header",
   "font",
   "size",
+  "color", // 추가
+  "background", // 추가
   "bold",
   "italic",
   "underline",
@@ -47,6 +53,7 @@ const formats = [
 
 interface ArticleEditorProps {
   article: string;
+  setSource: (content: string) => void;
   setArticle: (content: string) => void;
   isLoading: boolean;
 }
@@ -54,6 +61,7 @@ interface ArticleEditorProps {
 export default function ArticleEditor({
   article,
   setArticle,
+  setSource,
   isLoading,
 }: ArticleEditorProps) {
   return (
@@ -62,7 +70,10 @@ export default function ArticleEditor({
       formats={formats}
       theme="snow"
       value={article}
-      onChange={(content) => setArticle(content)}
+      onChange={(content) => {
+        setArticle(content);
+        setSource(content);
+      }}
       readOnly={isLoading}
       placeholder="본문을 입력해주세요."
     />
