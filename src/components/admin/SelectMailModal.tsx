@@ -165,14 +165,14 @@ export default function SelectMailModal({
                       ))}
                       {isLoading && (
                         <Tr>
-                          <Td colSpan={8} textAlign="center">
+                          <Td colSpan={7} textAlign="center">
                             메일 불러오는 중...
                           </Td>
                         </Tr>
                       )}
                       {!isLoading && targetMails.length === 0 && (
                         <Tr>
-                          <Td colSpan={8} textAlign="center">
+                          <Td colSpan={7} textAlign="center">
                             메일이 없습니다.
                           </Td>
                         </Tr>

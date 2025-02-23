@@ -127,6 +127,25 @@ export default function MailForm({ mail }: MailFormProps) {
 
   return (
     <VStack spacing={6} align="flex-start">
+      <FormControl isInvalid={error && !title.trim()}>
+        <FormLabel px={5} fontSize="m">
+          메일 제목
+        </FormLabel>
+        <Input
+          h={46}
+          borderRadius={14}
+          px={20}
+          fontSize="m"
+          value={title}
+          placeholder="메일 제목을 입력해주세요."
+          onChange={(e) => setTitle(e.target.value)}
+          isDisabled={isLoading}
+        />
+        <FormErrorMessage px={5} fontSize="m">
+          메일 제목을 입력해주세요.
+        </FormErrorMessage>
+      </FormControl>
+
       <FormControl isInvalid={error && !sender.trim()}>
         <FormLabel px={5} fontSize="m">
           보낸이
@@ -165,24 +184,6 @@ export default function MailForm({ mail }: MailFormProps) {
         </FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={error && !title.trim()}>
-        <FormLabel px={5} fontSize="m">
-          메일 제목
-        </FormLabel>
-        <Input
-          h={46}
-          borderRadius={14}
-          px={20}
-          fontSize="m"
-          value={title}
-          placeholder="메일 제목을 입력해주세요."
-          onChange={(e) => setTitle(e.target.value)}
-          isDisabled={isLoading}
-        />
-        <FormErrorMessage px={5} fontSize="m">
-          메일 제목을 입력해주세요.
-        </FormErrorMessage>
-      </FormControl>
       <FormControl
         isInvalid={
           error && (!article.trim() || article.trim() === "<p><br></p>")

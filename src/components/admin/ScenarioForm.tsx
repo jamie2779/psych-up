@@ -98,6 +98,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
           detail: detail,
           isPublic: isPublic,
           todoList: todoList,
+          mailList: mailList.map((mail) => mail.mailId),
           fileList: fileList.map((file) => file.fileId),
         },
       }),
