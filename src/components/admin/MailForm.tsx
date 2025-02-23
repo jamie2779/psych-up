@@ -44,9 +44,12 @@ export default function MailForm({ mail }: MailFormProps) {
   const [fileList, setFileList] = useState<File[]>(
     mail?.mailFiles.map((mailFile) => mailFile.file) || []
   );
-
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const sampleData = {
+    name: "홍길동",
+  };
 
   const putMail = async (
     mail: Mail & { scenarioMails: ScenarioMail[] } & {
@@ -243,7 +246,7 @@ export default function MailForm({ mail }: MailFormProps) {
                 />
               </TabPanel>
               <TabPanel>
-                <ArticleViewer content={article} />
+                <ArticleViewer content={article} data={sampleData} />
               </TabPanel>
             </TabPanels>
           </Tabs>

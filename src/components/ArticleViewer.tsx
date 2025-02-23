@@ -1,10 +1,26 @@
 import dynamic from "next/dynamic";
 
-export const QuillNoSSRReader = ({ content }: { content: string }) => {
+interface QuillNoSSRReaderProps {
+  content: string;
+  data: Record<string, string>;
+}
+
+const replacePlaceholders = (content: string, data: Record<string, string>) => {
+  return content.replace(
+    /{{(.*?)}}/g,
+    (_, key) => data[key.trim()] || `{{${key}}}`
+  );
+};
+
+export const QuillNoSSRReader = ({ content, data }: QuillNoSSRReaderProps) => {
+  const processedContent = replacePlaceholders(content, data);
+
   const Result = dynamic(
     async () => {
       const { default: QuillComponent } = await import("react-quill-new");
-      return () => <QuillComponent theme="bubble" readOnly value={content} />;
+      return () => (
+        <QuillComponent theme="bubble" readOnly value={processedContent} />
+      );
     },
     {
       loading: () => (
@@ -13,7 +29,7 @@ export const QuillNoSSRReader = ({ content }: { content: string }) => {
             <div
               className="ql-editor"
               data-gramm="false"
-              dangerouslySetInnerHTML={{ __html: content }}
+              dangerouslySetInnerHTML={{ __html: processedContent }}
             />
           </div>
         </div>
@@ -25,6 +41,12 @@ export const QuillNoSSRReader = ({ content }: { content: string }) => {
   return <Result />;
 };
 
-export default function ArticleViewer({ content }: { content: string }) {
-  return <QuillNoSSRReader content={content} />;
+export default function ArticleViewer({
+  content,
+  data,
+}: {
+  content: string;
+  data: Record<string, string>;
+}) {
+  return <QuillNoSSRReader content={content} data={data} />;
 }
