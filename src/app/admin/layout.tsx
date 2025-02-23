@@ -23,14 +23,14 @@ export default async function DashboardLayout({
 
     if (user && user.permission === Permission.admin) {
       return (
-        <Flex backgroundColor="body">
-          <AdminNav user={user} />
-          <Box flex="1" h="100vh" overflowY="auto">
-            <Box overflowX="visible">
-              <AnimationWrapper>{children}</AnimationWrapper>
-            </Box>
+        <Box backgroundColor="body">
+          <Box position="fixed" w={250} h="100vh" overflow="auto">
+            <AdminNav user={user} />
           </Box>
-        </Flex>
+          <Box flex="1" h="100vh" overflow="auto" pl={250}>
+            <AnimationWrapper>{children}</AnimationWrapper>
+          </Box>
+        </Box>
       );
     }
   }
