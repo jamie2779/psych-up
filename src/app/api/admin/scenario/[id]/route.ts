@@ -116,7 +116,8 @@ export async function PUT(
       data.todoList.map(async (todo) => {
         await prisma.todo.create({
           data: {
-            target: todo,
+            tag: todo.tag,
+            target: todo.target,
             scenarioId: updatedScenario.scenarioId,
           },
         });

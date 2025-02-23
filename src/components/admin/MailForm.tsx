@@ -211,7 +211,7 @@ export default function MailForm({ mail }: MailFormProps) {
         <FormLabel px={5} fontSize="m">
           <Flex gap={8} align="center">
             <Text>메일 본문</Text>
-            <Popover placement="right-end" closeOnBlur={false}>
+            <Popover placement="right">
               <PopoverTrigger>
                 <IconButton
                   w={20}
@@ -229,24 +229,19 @@ export default function MailForm({ mail }: MailFormProps) {
                   }
                 />
               </PopoverTrigger>
-              <PopoverContent w="fit-content">
+              <PopoverContent w="fit-content" px={6} py={2} borderRadius={8}>
                 <PopoverArrow />
                 <PopoverHeader>
                   <Text fontSize="m">
-                    데이터 태그 사용법 : {"{{sample.3}}"}
+                    데이터 태그 사용법 : {"{{태그이름}}"}
                   </Text>
                 </PopoverHeader>
                 <PopoverBody fontSize="s" maxW={400}>
                   <Text>name : 사용자 이름 </Text>
-                  <Text>todo.[todoId] : todo 완료 API로 연결되는 url</Text>
                   <Text>
-                    fishing.this : 현재 메일의 피싱을 기록하는 API로 연결되는
-                    url
+                    todo.[tag] : 특정 태그의 todo 완료 API로 연결되는 url
                   </Text>
-                  <Text>
-                    fishing.[mailId] : 특정 메일의 피싱을 기록하는 API로
-                    연결되는 url
-                  </Text>
+                  <Text>fishing : 현재 메일의 피싱 API로 연결되는 url</Text>
                 </PopoverBody>
               </PopoverContent>
             </Popover>

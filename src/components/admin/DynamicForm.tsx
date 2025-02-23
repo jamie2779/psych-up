@@ -22,7 +22,7 @@ export default function DynamicForm({
     return (
       <Box p={5}>
         <Text px={5} fontSize="m" color="gray.500">
-          태그가 없거나 잘못되었습니다.
+          데이터 태그가 없거나 잘못되었습니다.
         </Text>
       </Box>
     );

@@ -10,6 +10,7 @@ generator client {
 model Todo {
   todoId       Int      @id @default(autoincrement())
   scenarioId   Int
+  tag          String
   target       String
   createdDate  DateTime @default(now())
   modifiedDate DateTime @default(now()) @updatedAt

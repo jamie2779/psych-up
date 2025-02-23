@@ -1,8 +1,5 @@
 "use client";
 import {
-  Box,
-  Text,
-  Flex,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -19,9 +16,14 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { useState } from "react";
 
+export interface TodoItem {
+  tag: string;
+  target: string;
+}
+
 interface CreateTodoModalProps {
   isDisabled?: boolean;
-  createTodo: (newTodo: string) => void;
+  createTodo: (newTodo: TodoItem) => void;
 }
 
 export default function CreateTodoModal({
@@ -29,17 +31,19 @@ export default function CreateTodoModal({
   isDisabled,
 }: CreateTodoModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [tag, setTag] = useState("");
   const [target, setTarget] = useState("");
   const [error, setError] = useState(false);
 
   const handleSubmit = async () => {
-    if (!target.trim()) {
+    if (!tag.trim() || !target.trim()) {
       setError(true);
       return;
     }
 
     setError(false);
-    createTodo(target);
+    createTodo({ tag, target });
+    setTag("");
     setTarget("");
     onClose();
   };
@@ -67,7 +71,24 @@ export default function CreateTodoModal({
           <ModalHeader w="100%">Todo 추가</ModalHeader>
           <ModalCloseButton m={10} />
           <ModalBody w="100%">
-            <FormControl isInvalid={error}>
+            <FormControl isInvalid={error && !tag.trim()}>
+              <FormLabel px={5} fontSize="m">
+                Todo 태그
+              </FormLabel>
+              <Input
+                h={46}
+                borderRadius={14}
+                px={20}
+                fontSize="m"
+                value={tag}
+                placeholder="Todo 태그를 입력해주세요."
+                onChange={(e) => setTag(e.target.value)}
+              />
+              <FormErrorMessage px={5} fontSize="m">
+                목표를 입력해주세요
+              </FormErrorMessage>
+            </FormControl>
+            <FormControl isInvalid={error && !target.trim()}>
               <FormLabel px={5} fontSize="m">
                 Todo 목표
               </FormLabel>

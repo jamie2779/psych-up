@@ -21,7 +21,7 @@ import {
   IconButton,
 } from "@chakra-ui/react";
 import { TrashIcon } from "@/assets/IconSet";
-import CreateTodoModal from "@/components/admin/CreateTodoModal";
+import CreateTodoModal, { TodoItem } from "@/components/admin/CreateTodoModal";
 import MailTable from "@/components/admin/MailTable";
 import FileTable from "@/components/admin/FileTable";
 
@@ -54,9 +54,13 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
   const [isPublic, setIsPublic] = useState(scenario?.isPublic || false);
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [todoList, setTodoList] = useState<String[]>(
-    scenario?.todos.map((todo) => todo.target) || []
+  const [todoList, setTodoList] = useState<TodoItem[]>(
+    scenario?.todos.map((todo) => ({
+      tag: todo.tag,
+      target: todo.target,
+    })) || []
   );
+
   const [mailList, setMailList] = useState<Mail[]>(
     scenario?.scenarioMails.map((scenarioMail) => scenarioMail.mail) || []
   );
@@ -64,7 +68,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
   const [fileList, setFileList] = useState<File[]>(
     scenario?.scenarioFiles.map((scenarioFile) => scenarioFile.file) || []
   );
-  const createTodo = async (newTarget: string) => {
+  const createTodo = async (newTarget: TodoItem) => {
     setTodoList((prev) => [...prev, newTarget]); // 기존 목록에 추가
   };
 
@@ -228,6 +232,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
               <Thead>
                 <Tr>
                   <Th>No.</Th>
+                  <Th>태그</Th>
                   <Th>목표</Th>
                   <Th>삭제</Th>
                 </Tr>
@@ -236,7 +241,8 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
                 {todoList.map((todo, index) => (
                   <Tr key={index}>
                     <Td>{index + 1}</Td>
-                    <Td>{todo}</Td>
+                    <Td>{todo.tag}</Td>
+                    <Td>{todo.target}</Td>
                     <Td>
                       <IconButton
                         bg="none"
