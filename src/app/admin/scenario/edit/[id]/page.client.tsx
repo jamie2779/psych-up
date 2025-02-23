@@ -3,10 +3,21 @@ import { Box, Text, Flex, VStack } from "@chakra-ui/react";
 import ScenarioForm from "@/components/admin/ScenarioForm";
 import { ArrowIcon } from "@/assets/IconSet";
 import { useRouter } from "next/navigation";
-import { Scenario, Todo } from "@prisma/client";
+import {
+  Scenario,
+  Todo,
+  ScenarioFile,
+  File,
+  ScenarioMail,
+  Mail,
+} from "@prisma/client";
 
 interface AdminEditScenarioProps {
-  scenario: Scenario & { todos: Todo[] };
+  scenario: Scenario & { todos: Todo[] } & {
+    scenarioFiles: (ScenarioFile & { file: File })[];
+  } & {
+    scenarioMails: (ScenarioMail & { mail: Mail })[];
+  };
 }
 
 export default function AdminEditScenario({

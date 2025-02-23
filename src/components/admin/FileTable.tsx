@@ -11,6 +11,7 @@ import {
   Td,
   TableContainer,
   IconButton,
+  Tooltip,
 } from "@chakra-ui/react";
 import { TrashIcon } from "@/assets/IconSet";
 import AddFileModal from "@/components/admin/AddFileModal";
@@ -34,7 +35,7 @@ export default function FileList({
   };
 
   return (
-    <Box w="100%" bg="white" borderRadius={14} mt={6} p={20}>
+    <Box w="100%" bg="white" borderRadius={14} p={20}>
       <TableContainer>
         <Flex w="100%" align="center" justify="space-between">
           <Text fontSize="l" fontWeight="semibold">
@@ -65,7 +66,28 @@ export default function FileList({
               <Tr key={index}>
                 <Td>{index + 1}</Td>
                 <Td>{file.fileId}</Td>
-                <Td>{file.name}</Td>
+                <Td>
+                  <Tooltip
+                    closeOnClick={false}
+                    px={10}
+                    py={4}
+                    borderRadius={8}
+                    label={file.name}
+                    placement="top"
+                    fontSize="s"
+                    fontWeight="regular"
+                    hasArrow
+                    sx={{
+                      minWidth: "fit-content",
+                      maxWidth: "500px",
+                      textAlign: "center",
+                    }}
+                  >
+                    <Box maxW={500} isTruncated>
+                      {file.name}
+                    </Box>
+                  </Tooltip>
+                </Td>
                 <Td>{formatBytes(file.size)}</Td>
                 <Td>{new Date(file.createdDate).toLocaleString()}</Td>
                 <Td>

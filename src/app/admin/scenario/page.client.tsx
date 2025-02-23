@@ -39,7 +39,11 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
   const router = useRouter();
 
   const deleteHandler = async (scenarioId: number) => {
-    if (!confirm("정말 삭제하시겠습니까?")) {
+    if (
+      !confirm(
+        "정말 삭제하시겠습니까?\n(연결된 메일과 파일은 자동으로 삭제되지 않습니다.)"
+      )
+    ) {
       return;
     }
     try {
@@ -87,8 +91,8 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
                 <Th>공개여부</Th>
                 <Th>생성일</Th>
                 <Th>Todo 개수</Th>
-                <Th>파일 개수</Th>
                 <Th>메일 개수</Th>
+                <Th>파일 개수</Th>
                 <Th>수정</Th>
                 <Th>삭제</Th>
               </Tr>
@@ -111,8 +115,8 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
                   <Td>{scenario.isPublic ? "공개" : "비공개"}</Td>
                   <Td>{new Date(scenario.createdDate).toLocaleDateString()}</Td>
                   <Td>{scenario.todos.length}</Td>
-                  <Td>{scenario.scenarioFiles.length}</Td>
                   <Td>{scenario.scenarioMails.length}</Td>
+                  <Td>{scenario.scenarioFiles.length}</Td>
                   <Td>
                     <IconButton
                       bg="none"

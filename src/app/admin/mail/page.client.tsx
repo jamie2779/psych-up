@@ -74,8 +74,8 @@ export default function AdminMail({ mailList }: AdminMailProps) {
                 <Th>제목</Th>
                 <Th>피싱여부</Th>
                 <Th>파일 개수</Th>
-                <Th>연결된 시나리오 개수</Th>
                 <Th>생성일</Th>
+                <Th>연결된 시나리오 개수</Th>
                 <Th>수정</Th>
                 <Th>삭제</Th>
               </Tr>
@@ -90,8 +90,9 @@ export default function AdminMail({ mailList }: AdminMailProps) {
                   <Td>{mail.title}</Td>
                   <Td>{mail.isFishing ? "피싱" : "일반"}</Td>
                   <Td>{mail.mailFiles.length}</Td>
-                  <Td>{mail.scenarioMails.length}</Td>
                   <Td>{new Date(mail.createdDate).toLocaleDateString()}</Td>
+
+                  <Td>{mail.scenarioMails.length}</Td>
                   <Td>
                     <IconButton
                       bg="none"
@@ -124,7 +125,15 @@ export default function AdminMail({ mailList }: AdminMailProps) {
                         icon={<ProhibitIcon color="grey.shade2" />}
                         _hover={{ bg: "grey.shade1" }}
                         onClick={() => {
-                          alert("연결된 시나리오가 있어 삭제할 수 없습니다.");
+                          alert(
+                            `연결된 시나리오가 있어 삭제할 수 없습니다.${
+                              mail.scenarioMails.length > 0
+                                ? "\n시나리오 ID:"
+                                : ""
+                            }${mail.scenarioMails.map(
+                              (scenario) => ` ${scenario.scenarioId}`
+                            )}`
+                          );
                         }}
                       />
                     )}

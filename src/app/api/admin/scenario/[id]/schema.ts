@@ -6,5 +6,6 @@ export const scenarioPutSchema = z.object({
   detail: z.string(),
   isPublic: z.boolean(),
   todoList: z.array(z.string()),
+  mailList: z.array(z.number()),
   fileList: z.array(z.number()),
 });

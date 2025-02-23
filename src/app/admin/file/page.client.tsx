@@ -12,6 +12,7 @@ import {
   Td,
   TableContainer,
   IconButton,
+  Tooltip,
 } from "@chakra-ui/react";
 import { File, ScenarioFile, MailFile } from "@prisma/client";
 import { useRouter } from "next/navigation";
@@ -117,7 +118,28 @@ export default function AdminFile({ fileList }: AdminFileProps) {
                 <Tr key={index}>
                   <Td>{index + 1}</Td>
                   <Td>{file.fileId}</Td>
-                  <Td>{file.name}</Td>
+                  <Td>
+                    <Tooltip
+                      closeOnClick={false}
+                      px={10}
+                      py={4}
+                      borderRadius={8}
+                      label={file.name}
+                      placement="top"
+                      fontSize="s"
+                      fontWeight="regular"
+                      hasArrow
+                      sx={{
+                        minWidth: "fit-content",
+                        maxWidth: "300px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <Box maxW={180} isTruncated>
+                        {file.name}
+                      </Box>
+                    </Tooltip>
+                  </Td>
                   <Td>{formatBytes(file.size)}</Td>
                   <Td>{new Date(file.createdDate).toLocaleString()}</Td>
                   <Td>{file.scenarioFiles.length}</Td>

@@ -123,6 +123,21 @@ export async function PUT(
       })
     );
 
+    // 기존 메일 연결 해제 후 새롭게 연결
+    await prisma.scenarioMail.deleteMany({
+      where: { scenarioId: scenarioId },
+    });
+
+    if (data.mailList.length > 0) {
+      await prisma.scenarioMail.createMany({
+        data: data.mailList.map((mailId) => ({
+          scenarioId: scenarioId,
+          mailId: mailId,
+        })),
+      });
+    }
+
+    // 기존 파일 연결 해제 후 새롭게 연결
     await prisma.scenarioFile.deleteMany({
       where: { scenarioId: scenarioId },
     });

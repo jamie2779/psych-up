@@ -9,7 +9,7 @@ import {
   Textarea,
   Switch,
 } from "@chakra-ui/react";
-import FileList from "@/components/admin/FileList";
+import FileTable from "@/components/admin/FileTable";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Mail, ScenarioMail, MailFile, File } from "@prisma/client";
@@ -194,9 +194,9 @@ export default function MailForm({ mail }: MailFormProps) {
         </FormErrorMessage>
       </FormControl>
 
-      <FormControl>
+      <FormControl pt={6}>
         {/*파일 목록 */}
-        <FileList fileList={fileList} setFileList={setFileList} />
+        <FileTable fileList={fileList} setFileList={setFileList} />
       </FormControl>
       <FormControl display="flex" alignItems="center">
         <FormLabel px={5} fontSize="m">

@@ -22,7 +22,8 @@ import {
 } from "@chakra-ui/react";
 import { TrashIcon } from "@/assets/IconSet";
 import CreateTodoModal from "@/components/admin/CreateTodoModal";
-import FileList from "@/components/admin/FileList";
+import MailTable from "@/components/admin/MailTable";
+import FileTable from "@/components/admin/FileTable";
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
@@ -56,6 +57,10 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
   const [todoList, setTodoList] = useState<String[]>(
     scenario?.todos.map((todo) => todo.target) || []
   );
+  const [mailList, setMailList] = useState<Mail[]>(
+    scenario?.scenarioMails.map((scenarioMail) => scenarioMail.mail) || []
+  );
+
   const [fileList, setFileList] = useState<File[]>(
     scenario?.scenarioFiles.map((scenarioFile) => scenarioFile.file) || []
   );
@@ -72,6 +77,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
           detail: detail,
           isPublic: isPublic,
           todoList: todoList,
+          mailList: mailList.map((mail) => mail.mailId),
           fileList: fileList.map((file) => file.fileId),
         },
       }),
@@ -108,7 +114,8 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
       !title.trim() ||
       !detail.trim() ||
       !type.trim() ||
-      todoList.length === 0
+      (isPublic && todoList.length === 0) ||
+      (isPublic && mailList.length === 0)
     ) {
       setError(true);
       return;
@@ -194,7 +201,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
         </FormErrorMessage>
       </FormControl>
 
-      <FormControl isInvalid={error && todoList.length === 0}>
+      <FormControl isInvalid={error && isPublic && todoList.length === 0}>
         {/*Todo 목록 */}
         <Box
           w="100%"
@@ -203,7 +210,9 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
           mt={6}
           p={20}
           borderColor={
-            error && todoList.length === 0 ? "danger" : "transparent"
+            error && isPublic && todoList.length === 0
+              ? "danger"
+              : "transparent"
           }
           borderWidth={2}
         >
@@ -263,12 +272,30 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
           </TableContainer>
         </Box>
         <FormErrorMessage px={5} fontSize="m">
-          1개 이상의 Todo가 필요합니다
+          시나리오를 공개하려면 1개 이상의 메일이 필요합니다
         </FormErrorMessage>
       </FormControl>
 
-      <FormControl>
-        <FileList fileList={fileList} setFileList={setFileList} />
+      <FormControl isInvalid={error && isPublic && mailList.length === 0}>
+        <Box
+          mt={6}
+          borderRadius={14}
+          borderColor={
+            error && isPublic && mailList.length === 0
+              ? "danger"
+              : "transparent"
+          }
+          borderWidth={2}
+        >
+          <MailTable mailList={mailList} setMailList={setMailList} />
+        </Box>
+        <FormErrorMessage px={5} fontSize="m">
+          시나리오를 공개하려면 1개 이상의 메일이 필요합니다
+        </FormErrorMessage>
+      </FormControl>
+
+      <FormControl pt={6}>
+        <FileTable fileList={fileList} setFileList={setFileList} />
       </FormControl>
 
       {/*공개여부 */}

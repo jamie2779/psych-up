@@ -42,6 +42,11 @@ export async function POST(request: NextRequest) {
           file: { connect: { fileId } },
         })),
       },
+      scenarioMails: {
+        create: data.mailList.map((mailId) => ({
+          mail: { connect: { mailId } },
+        })),
+      },
     },
   });
 
