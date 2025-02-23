@@ -4,9 +4,15 @@ import logo from "@/assets/Logo2.svg";
 
 import Image from "next/image";
 import { Box, Flex, Button, VStack, HStack, Text } from "@chakra-ui/react";
-import { HomeIcon, PuzzleIcon, MailIcon, LogoutIcon } from "@/assets/IconSet";
+import {
+  HomeIcon,
+  PuzzleIcon,
+  MailIcon,
+  PersonIcon,
+  LogoutIcon,
+} from "@/assets/IconSet";
 import { useRouter, usePathname } from "next/navigation";
-import { User } from "@prisma/client";
+import { User, Permission } from "@prisma/client";
 
 import { signOut } from "next-auth/react";
 
@@ -17,6 +23,7 @@ interface DashboardNavProps {
 export default function DashboardNav({ user }: DashboardNavProps) {
   const router = useRouter();
   const pathname = usePathname();
+
   const menuItems = [
     { label: "홈", icon: HomeIcon, route: "/dashboard" },
     { label: "훈련", icon: PuzzleIcon, route: "/dashboard/training" },
@@ -72,7 +79,22 @@ export default function DashboardNav({ user }: DashboardNavProps) {
             {user.name + "님"}
           </Text>
         </HStack>
-
+        {user.permission === Permission.admin && (
+          <Button
+            leftIcon={<PersonIcon boxSize={24} color="error" />}
+            iconSpacing={5}
+            w="100%"
+            h={36}
+            fontSize="xs"
+            variant="outline"
+            borderColor="grey.shade2"
+            color="grey.shade2"
+            _hover={{ bg: "grey.shade2", color: "white" }}
+            onClick={() => router.push("/admin")}
+          >
+            관리자 페이지
+          </Button>
+        )}
         <Button
           leftIcon={<LogoutIcon boxSize={24} color="error" />}
           iconSpacing={5}
