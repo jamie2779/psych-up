@@ -1,20 +1,14 @@
 import dynamic from "next/dynamic";
+import { Box } from "@chakra-ui/react";
+import { renderTemplate } from "@/lib/utils";
 
 interface QuillNoSSRReaderProps {
   content: string;
-  data: Record<string, string>;
+  data: Record<string, any>;
 }
 
-const replacePlaceholders = (content: string, data: Record<string, string>) => {
-  return content.replace(
-    /{{(.*?)}}/g,
-    (_, key) => data[key.trim()] || `{{${key}}}`
-  );
-};
-
 export const QuillNoSSRReader = ({ content, data }: QuillNoSSRReaderProps) => {
-  const processedContent = replacePlaceholders(content, data);
-
+  const processedContent = renderTemplate(content, data);
   const Result = dynamic(
     async () => {
       const { default: QuillComponent } = await import("react-quill-new");
@@ -24,21 +18,27 @@ export const QuillNoSSRReader = ({ content, data }: QuillNoSSRReaderProps) => {
     },
     {
       loading: () => (
-        <div className="quill">
-          <div className="ql-container ql-bubble ql-disabled">
-            <div
-              className="ql-editor"
-              data-gramm="false"
-              dangerouslySetInnerHTML={{ __html: processedContent }}
-            />
+        <Box minH={100}>
+          <div className="quill">
+            <div className="ql-container ql-bubble ql-disabled">
+              <div
+                className="ql-editor"
+                data-gramm="false"
+                dangerouslySetInnerHTML={{ __html: processedContent }}
+              />
+            </div>
           </div>
-        </div>
+        </Box>
       ),
       ssr: false,
     }
   );
 
-  return <Result />;
+  return (
+    <Box minH={100}>
+      <Result />
+    </Box>
+  );
 };
 
 export default function ArticleViewer({

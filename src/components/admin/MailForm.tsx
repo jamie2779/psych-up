@@ -3,6 +3,8 @@ import "react-quill-new/dist/quill.snow.css";
 import DOMPurify from "dompurify";
 import {
   Box,
+  Text,
+  Flex,
   Button,
   Input,
   FormControl,
@@ -16,13 +18,29 @@ import {
   Tab,
   TabPanel,
   Textarea,
+  Accordion,
+  AccordionItem,
+  AccordionButton,
+  AccordionPanel,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverHeader,
+  PopoverBody,
+  PopoverArrow,
+  IconButton,
 } from "@chakra-ui/react";
 import ArticleEditor from "@/components/admin/ArticleEditor";
 import ArticleViewer from "@/components/ArticleViewer";
 import FileTable from "@/components/admin/FileTable";
+import DynamicForm from "@/components/admin/DynamicForm";
+import { ArrowAltIcon, TextIcon } from "@/assets/IconSet";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useDisclosure } from "@chakra-ui/hooks";
 import { Mail, ScenarioMail, MailFile, File } from "@prisma/client";
+import { extractPlaceholders, transformObject } from "@/lib/utils";
+
 import toast from "react-hot-toast";
 import ky from "ky";
 
@@ -39,6 +57,8 @@ export default function MailForm({ mail }: MailFormProps) {
   const [title, setTitle] = useState(mail?.title || "");
   const [article, setArticle] = useState(mail?.article || "");
   const [source, setSource] = useState(mail?.article || "");
+  const [sampleData, setSampleData] = useState<Record<string, any>>({});
+  const { isOpen, onToggle } = useDisclosure(); // 아코디언 상태 관리
   const [isFishing, setIsFishing] = useState(mail?.isFishing || false);
   const [fishingDetail, setFishingDetail] = useState(mail?.fishingDetail || "");
   const [fileList, setFileList] = useState<File[]>(
@@ -46,10 +66,6 @@ export default function MailForm({ mail }: MailFormProps) {
   );
   const [error, setError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-
-  const sampleData = {
-    name: "홍길동",
-  };
 
   const putMail = async (
     mail: Mail & { scenarioMails: ScenarioMail[] } & {
@@ -193,7 +209,48 @@ export default function MailForm({ mail }: MailFormProps) {
         }
       >
         <FormLabel px={5} fontSize="m">
-          메일 본문
+          <Flex gap={8} align="center">
+            <Text>메일 본문</Text>
+            <Popover placement="right-end" closeOnBlur={false}>
+              <PopoverTrigger>
+                <IconButton
+                  w={20}
+                  h={20}
+                  aria-label="popover"
+                  variant="goast"
+                  icon={
+                    <TextIcon
+                      boxSize="100%"
+                      _hover={{
+                        cursor: "pointer",
+                        fill: "grey.shade1",
+                      }}
+                    />
+                  }
+                />
+              </PopoverTrigger>
+              <PopoverContent w="fit-content">
+                <PopoverArrow />
+                <PopoverHeader>
+                  <Text fontSize="m">
+                    데이터 태그 사용법 : {"{{sample.3}}"}
+                  </Text>
+                </PopoverHeader>
+                <PopoverBody fontSize="s" maxW={400}>
+                  <Text>name : 사용자 이름 </Text>
+                  <Text>todo.[todoId] : todo 완료 API로 연결되는 url</Text>
+                  <Text>
+                    fishing.this : 현재 메일의 피싱을 기록하는 API로 연결되는
+                    url
+                  </Text>
+                  <Text>
+                    fishing.[mailId] : 특정 메일의 피싱을 기록하는 API로
+                    연결되는 url
+                  </Text>
+                </PopoverBody>
+              </PopoverContent>
+            </Popover>
+          </Flex>
         </FormLabel>
 
         <Box
@@ -246,7 +303,40 @@ export default function MailForm({ mail }: MailFormProps) {
                 />
               </TabPanel>
               <TabPanel>
-                <ArticleViewer content={article} data={sampleData} />
+                <Accordion allowMultiple>
+                  <AccordionItem>
+                    <AccordionButton onClick={onToggle}>
+                      <ArrowAltIcon
+                        boxSize={20}
+                        transform={isOpen ? "rotate(0deg)" : "rotate(-90deg)"}
+                        transition="transform 0.2s ease-in-out"
+                      />
+                      <Text px={5} fontSize="m">
+                        샘플 데이터 설정
+                      </Text>
+                    </AccordionButton>
+                    <AccordionPanel pb={4}>
+                      <DynamicForm
+                        placeholders={extractPlaceholders(article)}
+                        onChange={setSampleData}
+                      />
+                    </AccordionPanel>
+                  </AccordionItem>
+                </Accordion>
+                <ArticleViewer
+                  content={article}
+                  data={transformObject(
+                    extractPlaceholders(article).reduce(
+                      (acc, key) => {
+                        if (sampleData.hasOwnProperty(key)) {
+                          acc[key] = sampleData[key];
+                        }
+                        return acc;
+                      },
+                      {} as Record<string, any>
+                    )
+                  )}
+                />
               </TabPanel>
             </TabPanels>
           </Tabs>
