@@ -117,7 +117,6 @@ export default function SelectMailModal({
                         <Th>No.</Th>
                         <Th>Id</Th>
                         <Th>보낸이</Th>
-                        <Th>이메일</Th>
                         <Th>제목</Th>
                         <Th>피싱여부</Th>
                         <Th>생성일</Th>
@@ -130,7 +129,6 @@ export default function SelectMailModal({
                           <Td>{index + 1}</Td>
                           <Td>{mail.mailId}</Td>
                           <Td>{mail.sender}</Td>
-                          <Td>{mail.from}</Td>
                           <Td>
                             <Tooltip
                               closeOnClick={false}
