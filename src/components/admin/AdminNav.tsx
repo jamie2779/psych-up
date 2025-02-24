@@ -1,18 +1,19 @@
 "use client";
 import DefaultProfile from "@/assets/nav/DefaultProfile.svg";
-import logo from "@/assets/Logo2.svg";
+import logo from "@/assets/Logo.svg";
 
 import Image from "next/image";
 import { Box, Flex, Button, VStack, HStack, Text } from "@chakra-ui/react";
 import {
   HomeIcon,
+  PersonIcon,
   PuzzleIcon,
   MailIcon,
-  PersonIcon,
+  FileIcon,
   LogoutIcon,
 } from "@/assets/IconSet";
 import { useRouter, usePathname } from "next/navigation";
-import { User, Permission } from "@prisma/client";
+import { User } from "@prisma/client";
 
 import { signOut } from "next-auth/react";
 
@@ -23,11 +24,12 @@ interface DashboardNavProps {
 export default function DashboardNav({ user }: DashboardNavProps) {
   const router = useRouter();
   const pathname = usePathname();
-
   const menuItems = [
-    { label: "홈", icon: HomeIcon, route: "/dashboard" },
-    { label: "훈련", icon: PuzzleIcon, route: "/dashboard/training" },
-    { label: "메일함", icon: MailIcon, route: "/dashboard/mail" },
+    { label: "관리 홈", icon: HomeIcon, route: "/admin" },
+    { label: "유저 관리", icon: PersonIcon, route: "/admin/user" },
+    { label: "시나리오 관리", icon: PuzzleIcon, route: "/admin/scenario" },
+    { label: "메일 관리", icon: MailIcon, route: "/admin/mail" },
+    { label: "파일 관리", icon: FileIcon, route: "/admin/file" },
   ];
 
   return (
@@ -43,7 +45,17 @@ export default function DashboardNav({ user }: DashboardNavProps) {
       gap={30}
     >
       {/* 로고 */}
-      <Image src={logo} alt="logo" width={130} />
+      <Image src={logo} alt="logo" width={210} priority />
+      {/* 대시보드로 이동 버튼 */}
+      <Button
+        w="100%"
+        h={40}
+        fontSize="s"
+        fontWeight="medium"
+        onClick={() => router.push("/dashboard")}
+      >
+        대시보드로 이동
+      </Button>
 
       {/* 메뉴 리스트 */}
       <VStack width="100%" spacing={4}>
@@ -79,22 +91,7 @@ export default function DashboardNav({ user }: DashboardNavProps) {
             {user.name + "님"}
           </Text>
         </HStack>
-        {user.permission === Permission.admin && (
-          <Button
-            leftIcon={<PersonIcon boxSize={24} color="error" />}
-            iconSpacing={5}
-            w="100%"
-            h={36}
-            fontSize="xs"
-            variant="outline"
-            borderColor="grey.shade2"
-            color="grey.shade2"
-            _hover={{ bg: "grey.shade2", color: "white" }}
-            onClick={() => router.push("/admin")}
-          >
-            관리자 페이지
-          </Button>
-        )}
+
         <Button
           leftIcon={<LogoutIcon boxSize={24} color="error" />}
           iconSpacing={5}

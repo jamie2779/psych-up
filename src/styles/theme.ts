@@ -208,6 +208,64 @@ export const theme = extendTheme(
           color: "white",
         },
       },
+      Switch: {
+        baseStyle: {
+          track: {
+            bg: "grey.shade1",
+            borderRadius: "full",
+            position: "relative",
+            _checked: {
+              bg: "primary",
+            },
+          },
+          thumb: {
+            bg: "white",
+            position: "absolute",
+            top: "50%",
+            left: "2px",
+            transform: "translateY(-50%)",
+            transition: "transform 0.2s ease-in-out",
+            _checked: {
+              transform: "translateY(-50%) translateX(calc(100% + 6px))",
+            },
+          },
+        },
+        sizes: {
+          sm: {
+            track: { w: "32px", h: "16px", p: "2px" },
+            thumb: { w: "12px", h: "12px" },
+            _checked: {
+              thumb: { transform: "translateY(-50%)" },
+            },
+          },
+          md: {
+            track: { w: "40px", h: "20px", p: "2px" },
+            thumb: { w: "16px", h: "16px" },
+            _checked: {
+              thumb: { transform: "translateY(-50%)" },
+            },
+          },
+          lg: {
+            track: { w: "48px", h: "24px", p: "2px" },
+            thumb: { w: "20px", h: "20px" },
+            _checked: {
+              thumb: { transform: "translateY(-50%)" },
+            },
+          },
+        },
+        defaultProps: {
+          size: "md",
+        },
+      },
+      Checkbox: {
+        baseStyle: {
+          control: {
+            w: "24px",
+            h: "24px",
+            borderRadius: "4px",
+          },
+        },
+      },
     },
   },
   withDefaultColorScheme({
