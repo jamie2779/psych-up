@@ -3,14 +3,14 @@ import { Text, Box, Flex, Input, VStack } from "@chakra-ui/react";
 
 interface DynamicFormProps {
   placeholders: string[];
-  onChange: (data: Record<string, any>) => void;
+  onChange: (data: Record<string, unknown>) => void;
 }
 
 export default function DynamicForm({
   placeholders,
   onChange,
 }: DynamicFormProps) {
-  const [sampleData, setSampleData] = useState<Record<string, any>>({});
+  const [sampleData, setSampleData] = useState<Record<string, unknown>>({});
 
   const handleChange = (key: string, value: string) => {
     const updatedData = { ...sampleData, [key]: value };
@@ -40,7 +40,7 @@ export default function DynamicForm({
             px={10}
             fontSize="s"
             placeholder={`${key} 샘플데이터 입력`}
-            value={sampleData[key] || ""}
+            value={(sampleData[key] as string) || ""}
             onChange={(e) => handleChange(key, e.target.value)}
           />
         </Flex>

@@ -24,7 +24,7 @@ export function formatBytes(bytes: number, decimals = 2) {
  */
 export function renderTemplate(
   template: string,
-  data: Record<string, any>
+  data: Record<string, unknown>
 ): string {
   try {
     return Mustache.render(template, data);
@@ -74,9 +74,9 @@ export function extractPlaceholders(template: string): string[] {
  * @returns 점(.)이 포함된 키를 중첩 객체로 변환한 새 객체
  */
 export function transformObject(
-  input: Record<string, any>
-): Record<string, any> {
-  const output: Record<string, any> = {};
+  input: Record<string, unknown>
+): Record<string, unknown> {
+  const output: Record<string, unknown> = {};
 
   Object.keys(input).forEach((key) => {
     const value = input[key];
@@ -89,10 +89,14 @@ export function transformObject(
         if (index === keys.length - 1) {
           current[k] = value;
         } else {
-          if (typeof current[k] !== "object" || current[k] === null) {
-            current[k] = {};
+          if (
+            typeof current[k] !== "object" ||
+            current[k] === null ||
+            Array.isArray(current[k])
+          ) {
+            current[k] = {} as Record<string, unknown>;
           }
-          current = current[k];
+          current = current[k] as Record<string, unknown>;
         }
       });
     } else {

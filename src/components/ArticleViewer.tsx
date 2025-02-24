@@ -4,7 +4,7 @@ import { renderTemplate } from "@/lib/utils";
 
 interface QuillNoSSRReaderProps {
   content: string;
-  data: Record<string, any>;
+  data: Record<string, unknown>;
 }
 
 export const QuillNoSSRReader = ({ content, data }: QuillNoSSRReaderProps) => {
@@ -12,9 +12,12 @@ export const QuillNoSSRReader = ({ content, data }: QuillNoSSRReaderProps) => {
   const Result = dynamic(
     async () => {
       const { default: QuillComponent } = await import("react-quill-new");
-      return () => (
+      const QuillWrapper = () => (
         <QuillComponent theme="bubble" readOnly value={processedContent} />
       );
+      QuillWrapper.displayName = "QuillWrapper";
+
+      return QuillWrapper;
     },
     {
       loading: () => (

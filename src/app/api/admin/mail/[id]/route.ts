@@ -4,7 +4,10 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { Permission } from "@prisma/client";
 
-export async function DELETE(_request: NextRequest, props: { params: Promise<{ id: string }> }) {
+export async function DELETE(
+  _request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   const session = await auth();
 
@@ -44,7 +47,10 @@ export async function DELETE(_request: NextRequest, props: { params: Promise<{ i
   }
 }
 
-export async function PUT(request: NextRequest, props: { params: Promise<{ id: string }> }) {
+export async function PUT(
+  request: NextRequest,
+  props: { params: Promise<{ id: string }> }
+) {
   const params = await props.params;
   const session = await auth();
 

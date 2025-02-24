@@ -1,5 +1,5 @@
 import { Paperlogy } from "@/styles/font";
-import { border, extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
+import { extendTheme, withDefaultColorScheme } from "@chakra-ui/react";
 
 export const theme = extendTheme(
   {

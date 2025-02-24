@@ -1,6 +1,5 @@
 import dynamic from "next/dynamic";
 import "react-quill-new/dist/quill.snow.css";
-import { set } from "zod";
 
 const QuillNoSSRWrapper = dynamic(() => import("react-quill-new"), {
   ssr: false,

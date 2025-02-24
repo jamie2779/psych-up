@@ -63,7 +63,9 @@ export default function AddFileModal({
             }
           );
           // 업로드된 파일 하나씩 콜백 호출
-          addFile && addFile(response);
+          if (addFile) {
+            addFile(response);
+          }
         })
       );
       onClose();

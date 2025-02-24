@@ -139,7 +139,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
       await setTimeout(() => {
         router.push("/admin/scenario");
       }, 1000);
-    } catch (error) {
+    } catch {
       setIsLoading(false);
     }
   };

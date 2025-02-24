@@ -58,7 +58,7 @@ export default function SelectMailModal({
         );
         setTargetMails(unSelectedMails);
         setIsLoading(false);
-      } catch (err) {
+      } catch {
         toast.error("메일 목록을 불러오는 중 오류 발생");
         onClose();
       }

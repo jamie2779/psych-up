@@ -57,7 +57,7 @@ export default function MailForm({ mail }: MailFormProps) {
   const [title, setTitle] = useState(mail?.title || "");
   const [article, setArticle] = useState(mail?.article || "");
   const [source, setSource] = useState(mail?.article || "");
-  const [sampleData, setSampleData] = useState<Record<string, any>>({});
+  const [sampleData, setSampleData] = useState<Record<string, unknown>>({});
   const { isOpen, onToggle } = useDisclosure(); // 아코디언 상태 관리
   const [isFishing, setIsFishing] = useState(mail?.isFishing || false);
   const [fishingDetail, setFishingDetail] = useState(mail?.fishingDetail || "");
@@ -291,7 +291,7 @@ export default function MailForm({ mail }: MailFormProps) {
                   onChange={(e) => {
                     setSource(e.target.value);
                   }}
-                  onBlur={(_) => {
+                  onBlur={() => {
                     setArticle(source);
                   }}
                   isDisabled={isLoading}
@@ -320,16 +320,20 @@ export default function MailForm({ mail }: MailFormProps) {
                 </Accordion>
                 <ArticleViewer
                   content={article}
-                  data={transformObject(
-                    extractPlaceholders(article).reduce(
-                      (acc, key) => {
-                        if (sampleData.hasOwnProperty(key)) {
-                          acc[key] = sampleData[key];
-                        }
-                        return acc;
-                      },
-                      {} as Record<string, any>
-                    )
+                  data={Object.fromEntries(
+                    Object.entries(
+                      transformObject(
+                        extractPlaceholders(article).reduce(
+                          (acc, key) => {
+                            if (sampleData.hasOwnProperty(key)) {
+                              acc[key] = sampleData[key];
+                            }
+                            return acc;
+                          },
+                          {} as Record<string, unknown>
+                        )
+                      )
+                    ).map(([key, value]) => [key, String(value)])
                   )}
                 />
               </TabPanel>

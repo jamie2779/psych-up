@@ -3,7 +3,10 @@ import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { supabaseAdmin } from "@/lib/supabase";
 
-export async function GET(_request: NextRequest, props: { params: Promise<{ uuid: string }> }) {
+export async function GET(
+  _request: NextRequest,
+  props: { params: Promise<{ uuid: string }> }
+) {
   const params = await props.params;
   const session = await auth();
 
