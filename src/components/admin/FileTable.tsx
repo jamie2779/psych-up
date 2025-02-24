@@ -73,7 +73,7 @@ export default function FileList({
                     py={4}
                     borderRadius={8}
                     label={file.name}
-                    placement="top"
+                    placement="top-start"
                     fontSize="s"
                     fontWeight="regular"
                     hasArrow

@@ -13,6 +13,7 @@ import {
   Td,
   TableContainer,
   IconButton,
+  Tooltip,
 } from "@chakra-ui/react";
 import {
   Scenario,
@@ -105,14 +106,27 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
                   <Td>{index + 1}</Td>
                   <Td>{scenario.scenarioId}</Td>
                   <Td>{scenario.title}</Td>
-                  <Td
-                    maxW="200px"
-                    pr={40}
-                    whiteSpace="nowrap"
-                    overflow="hidden"
-                    textOverflow="ellipsis"
-                  >
-                    {scenario.detail}
+                  <Td>
+                    <Tooltip
+                      closeOnClick={false}
+                      px={10}
+                      py={4}
+                      borderRadius={8}
+                      label={scenario.detail}
+                      placement="top-start"
+                      fontSize="s"
+                      fontWeight="regular"
+                      hasArrow
+                      sx={{
+                        minWidth: "fit-content",
+                        maxWidth: "500px",
+                        textAlign: "center",
+                      }}
+                    >
+                      <Box maxW={300} isTruncated>
+                        {scenario.detail}
+                      </Box>
+                    </Tooltip>
                   </Td>
                   <Td>{scenario.isPublic ? "공개" : "비공개"}</Td>
                   <Td>{new Date(scenario.createdDate).toLocaleDateString()}</Td>
