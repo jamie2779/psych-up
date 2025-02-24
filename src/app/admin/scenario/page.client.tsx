@@ -23,6 +23,7 @@ import {
   Mail,
 } from "@prisma/client";
 import { useRouter } from "next/navigation";
+import TodoTableMoadal from "@/components/admin/TodoTableModal";
 import { EditIcon, TrashIcon } from "@/assets/IconSet";
 import toast from "react-hot-toast";
 import ky from "ky";
@@ -93,8 +94,9 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
                 <Th>Todo 개수</Th>
                 <Th>메일 개수</Th>
                 <Th>파일 개수</Th>
-                <Th>수정</Th>
-                <Th>삭제</Th>
+                <Th textAlign="center">Todo</Th>
+                <Th textAlign="center">수정</Th>
+                <Th textAlign="center">삭제</Th>
               </Tr>
             </Thead>
             <Tbody>
@@ -117,7 +119,13 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
                   <Td>{scenario.todos.length}</Td>
                   <Td>{scenario.scenarioMails.length}</Td>
                   <Td>{scenario.scenarioFiles.length}</Td>
-                  <Td>
+                  <Td textAlign="center">
+                    <TodoTableMoadal
+                      todoList={scenario.todos}
+                      scenarioTitle={scenario.title}
+                    />
+                  </Td>
+                  <Td textAlign="center">
                     <IconButton
                       bg="none"
                       boxSize={30}
@@ -131,7 +139,7 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
                       }
                     />
                   </Td>
-                  <Td>
+                  <Td textAlign="center">
                     <IconButton
                       bg="none"
                       boxSize={30}
@@ -147,7 +155,7 @@ export default function AdminScenario({ scenarioList }: AdminScenarioProps) {
             {scenarioList.length === 0 && (
               <Tbody>
                 <Tr>
-                  <Td colSpan={11} textAlign="center">
+                  <Td colSpan={12} textAlign="center">
                     시나리오가 없습니다.
                   </Td>
                 </Tr>
