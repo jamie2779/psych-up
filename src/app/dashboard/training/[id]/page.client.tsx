@@ -3,23 +3,28 @@
 import { Box, Text, VStack, Flex, Badge, Button } from "@chakra-ui/react";
 import { ArrowIcon } from "@/assets/IconSet";
 import { useRouter } from "next/navigation";
+import { Scenario,Todo,ScenarioFile,File } from "@prisma/client";
 
 interface TrainingDetailProps {
-  title: string;
-  detail: string;
-  type: string;
-  files: string[];
-  todos: string[];
+  scenario: (Scenario & { todos: Todo[] } & {
+      scenarioFiles: (ScenarioFile & { file: File })[];
+    });
 }
 
 export default function TrainingDetail({
-  title,
-  detail,
-  type,
-  files,
-  todos,
+  scenario,
 }: TrainingDetailProps) {
   const router = useRouter();
+
+  const scenarioStartHandler = async (scenarioId: number) => {
+    if (
+      !confirm(
+        "이 시나리오로 훈련을 시작하시겠습니까?"
+      )
+    ) {
+      return;
+    }
+  };
 
   return (
     <Box h="100%">
@@ -49,10 +54,10 @@ export default function TrainingDetail({
               </Text>
             </Flex>
             <Text fontSize="l" fontWeight="semibold">
-              {title}
+              {scenario.title}
             </Text>
             <Text fontSize="s" fontWeight="regular">
-              {detail}
+              {scenario.detail}
             </Text>
           </VStack>
           {/* 중단*/}
@@ -70,13 +75,13 @@ export default function TrainingDetail({
                 fontWeight="medium"
                 align="center"
               >
-                {files.length}
+                {scenario.scenarioFiles.length}
               </Flex>
             </Flex>
 
-            {files.map((file, index) => (
+            {scenario.scenarioFiles.map((scenarioFile, index) => (
               <Text key={index} fontSize="s" fontWeight="regular">
-                {file}
+                {scenarioFile.file.name}
               </Text>
             ))}
           </VStack>
@@ -84,10 +89,10 @@ export default function TrainingDetail({
           {/* 하단*/}
           <Flex align="end" justify="space-between" w="100%">
             <Flex gap={10} align="center">
-              <Badge>{type}</Badge>
-              <Text fontSize="s" fontWeight="regular" color="#B3B3B3">
+              <Badge>{scenario.type}</Badge>
+              {/* <Text fontSize="s" fontWeight="regular" color="#B3B3B3">
                 이 훈련은 지금까지 2명이 성공했어요
-              </Text>
+              </Text> */}
             </Flex>
             <Button
               w={95}
@@ -99,6 +104,7 @@ export default function TrainingDetail({
                 bg: "success",
                 transform: "scale(1.02)",
               }}
+              onClick={() => scenarioStartHandler(scenario.scenarioId)}
             >
               수락 및 시작
             </Button>
@@ -118,14 +124,14 @@ export default function TrainingDetail({
             <Text mb={16} fontSize="l" fontWeight="semibold">
               ✅ 이 훈련의 To-Do
             </Text>
-            {todos.map((todo, index) => (
+            {scenario.todos.map((todo, index) => (
               <Text key={index} fontSize="s" fontWeight="regular">
-                {index + 1}. {todo}
+                {index + 1}. {todo.target}
               </Text>
             ))}
           </VStack>
           <Text mt="auto" color="#B3B3B3" fontSize="s" fontWeight="regular">
-            {todos.length}개의 To-Do
+            {scenario.todos.length}개의 To-Do
           </Text>
         </Flex>
       </Flex>
