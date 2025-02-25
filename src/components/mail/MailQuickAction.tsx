@@ -3,11 +3,15 @@ import { Flex, IconButton } from "@chakra-ui/react";
 
 interface MailQuickActionProps {
   mailID: number;
+  gap?: number;
 }
 
-export default function MailQuickAction({ mailID }: MailQuickActionProps) {
+export default function MailQuickAction({
+  mailID,
+  gap = 16,
+}: MailQuickActionProps) {
   return (
-    <Flex gap={16}>
+    <Flex gap={gap}>
       <IconButton
         w={24}
         h={24}
