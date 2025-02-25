@@ -12,7 +12,9 @@ export default async function DashboardTraining() {
     });
 
     if (user) {
-      const scenarios = await prisma.scenario.findMany();
+      const scenarios = await prisma.scenario.findMany({
+        where: { isPublic: true }
+      });
       const trainingList = await prisma.training.findMany({
         where: { memberId: user.memberId },
         include:{
@@ -20,7 +22,7 @@ export default async function DashboardTraining() {
         }
       });
       const currentScenarioList = trainingList.map((training) => training.scenario);
-      
+
       return (
         <DashboardTrainingPage
           currentScenarioList={currentScenarioList}

@@ -4,6 +4,8 @@ import { Box, Text, VStack, Flex, Badge, Button } from "@chakra-ui/react";
 import { ArrowIcon } from "@/assets/IconSet";
 import { useRouter } from "next/navigation";
 import { Scenario,Todo,ScenarioFile,File } from "@prisma/client";
+import toast from "react-hot-toast";
+import ky from "ky";
 
 interface TrainingDetailProps {
   scenario: (Scenario & { todos: Todo[] } & {
@@ -17,13 +19,20 @@ export default function TrainingDetail({
   const router = useRouter();
 
   const scenarioStartHandler = async (scenarioId: number) => {
-    if (
-      !confirm(
-        "이 시나리오로 훈련을 시작하시겠습니까?"
-      )
-    ) {
+    if (!confirm("이 시나리오로 훈련을 시작하시겠습니까?")) {
       return;
     }
+
+    await toast.promise(ky.post("/api/training",
+      {json:{scenarioId}}
+    ),
+     {
+      loading: "훈련을 시작하는 중입니다.",
+      success: "훈련이 시작 되었습니다.",
+      error: "훈련 시작 도중 문제가 발생하였습니다",
+    });
+
+    router.refresh();
   };
 
   return (
