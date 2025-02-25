@@ -28,7 +28,7 @@ export default function DashboardTrainingPage({currentScenarioList, scenarioList
           showButton={true}
           scrollToRef={trainingListRef}
         />
-        <Box ref={trainingListRef}>
+        <Box w="100%" ref={trainingListRef}>
           <TrainingList
             title="전체 훈련 목록"
             scenarioList={scenarioList}
