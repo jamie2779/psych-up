@@ -4,7 +4,7 @@ import { Box, Flex, Text, VStack, HStack } from "@chakra-ui/react";
 import { useState } from "react";
 import MailQuickAction from "./MailQuickAction";
 
-export interface MailListElementData {
+export interface MailData {
   mailID: number;
   sender: string;
   from: string;
@@ -20,11 +20,13 @@ export interface MailListElementData {
 }
 
 interface MailListElementDataProps {
-  mailListElementData: MailListElementData;
+  mailListElementData: MailData;
+  onClick?: () => void;
 }
 
 export default function MailListElement({
   mailListElementData,
+  onClick,
 }: MailListElementDataProps) {
   const [isHover, setHover] = useState(false);
 
@@ -38,6 +40,10 @@ export default function MailListElement({
       borderRadius={14}
       pl={12}
       pr={36}
+      _hover={{
+        pointer: "cursor",
+      }}
+      onClick={onClick}
       onMouseEnter={() => {
         setHover(true);
       }}
@@ -63,14 +69,24 @@ export default function MailListElement({
           <Text fontSize={"s"} color={"#a6a6a6"}>
             {mailListElementData.sender}ㆍ{mailListElementData.from}
           </Text>
-          <Text fontSize={"s"} color={"#a6a6a6"} textOverflow={"ellipsis"}>
+          <Text
+            fontSize={"s"}
+            color={"#a6a6a6"}
+            noOfLines={1}
+            textOverflow={"ellipsis"}
+          >
             {mailListElementData.article.replaceAll("\n", " ")}
           </Text>
         </VStack>
       </HStack>
       {/* hover가 아닐 땐 시간이 뜹니다 */}
       {!isHover && (
-        <Text fontSize={"xs"} color={"#a6a6a6"}>
+        <Text
+          fontSize={"xs"}
+          color={"#a6a6a6"}
+          noOfLines={1}
+          minW={"fit-content"}
+        >
           {mailListElementData.createdAt.toLocaleString("sv-SE", {
             year: "numeric",
             month: "2-digit",

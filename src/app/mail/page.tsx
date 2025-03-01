@@ -1,5 +1,5 @@
-import Mail from "./page.client";
+import { redirect } from "next/navigation";
 
-export default async function MailPage() {
-  return <Mail />;
+export default function MailPage() {
+  return redirect("/dashboard/mail");
 }

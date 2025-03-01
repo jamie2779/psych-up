@@ -1,6 +1,6 @@
-import { MailListElementData } from "@/components/mail/MailListElement";
+import { MailData } from "@/components/mail/MailListElement";
 
-export const mailListData: MailListElementData[] = [
+export const mailListData: MailData[] = [
   {
     mailID: 1,
     sender: "John Doe",
@@ -8,7 +8,7 @@ export const mailListData: MailListElementData[] = [
     to: "jane.smith@example.com",
     title: "Project Update",
     article:
-      "Here is the latest update on the project. Please review and provide feedback.",
+      "Here is the latest update on the project. Please review and provide feedback. Here is the latest update on the project. Please review and provide feedback. Here is the latest update on the project. Please review and provide feedback.\nHere is the latest update on the project. Please review and provide feedback.",
     files: ["report.pdf", "summary.xlsx"],
     isRead: true,
     isDownloaded: false,
