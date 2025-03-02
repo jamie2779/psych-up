@@ -1,6 +1,6 @@
 "use client";
 import { Box, Text, VStack } from "@chakra-ui/react";
-import TrainingList from "@/components/TrainingList";
+import TrainingList from "@/components/dashboard/TrainingList";
 import { useRef } from "react";
 import { Scenario } from "@prisma/client";
 
@@ -9,7 +9,10 @@ interface DashboardTrainingPageProps {
   scenarioList: Scenario[];
 }
 
-export default function DashboardTrainingPage({currentScenarioList, scenarioList}: DashboardTrainingPageProps) {
+export default function DashboardTrainingPage({
+  currentScenarioList,
+  scenarioList,
+}: DashboardTrainingPageProps) {
   const trainingListRef = useRef<HTMLDivElement>(null);
   return (
     <Box h="100%">

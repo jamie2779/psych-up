@@ -8,9 +8,13 @@ import { redirect } from "next/navigation";
 
 interface MailLayoutProps {
   children: ReactNode;
+  params: { id?: string };
 }
 
-export default async function MailLayout({ children }: MailLayoutProps) {
+export default async function MailLayout({
+  children,
+  params,
+}: MailLayoutProps) {
   const session = await auth();
 
   if (!session?.user?.email) {
@@ -23,6 +27,30 @@ export default async function MailLayout({ children }: MailLayoutProps) {
 
   if (!user) {
     return redirect("/signup");
+  }
+
+  if (!params?.id) {
+    return redirect("/404");
+  }
+
+  const trainingId = Number(params.id);
+
+  if (Number.isNaN(trainingId)) {
+    return redirect("/404");
+  }
+
+  const training = await prisma.training.findFirst({
+    where: {
+      memberId: user.memberId,
+      trainingId: trainingId,
+      status: {
+        not: "FAIL",
+      },
+    },
+  });
+
+  if (!training) {
+    return redirect("/404");
   }
 
   return (

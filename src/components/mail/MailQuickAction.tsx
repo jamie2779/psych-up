@@ -1,14 +1,17 @@
 import { ProhibitIcon, StarIcon, TrashIcon } from "@/assets/IconSet";
 import { Flex, IconButton } from "@chakra-ui/react";
+import { MailBox } from "@prisma/client";
 
 interface MailQuickActionProps {
   mailID: number;
+  mailBox?: MailBox;
   gap?: number;
 }
 
 export default function MailQuickAction({
   mailID,
   gap = 16,
+  mailBox,
 }: MailQuickActionProps) {
   return (
     <Flex gap={gap}>
@@ -23,6 +26,7 @@ export default function MailQuickAction({
         icon={
           <StarIcon
             boxSize="100%"
+            fill={mailBox === "STARRED" ? "yellow" : "none"}
             _hover={{
               cursor: "pointer",
               fill: "yellow",

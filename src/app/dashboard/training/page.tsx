@@ -8,20 +8,22 @@ export default async function DashboardTraining() {
 
   if (session?.user?.email) {
     const user = await prisma.user.findUnique({
-      where: { email: session.user.email }
+      where: { email: session.user.email },
     });
 
     if (user) {
       const scenarios = await prisma.scenario.findMany({
-        where: { isPublic: true }
+        where: { isPublic: true },
       });
       const trainingList = await prisma.training.findMany({
-        where: { memberId: user.memberId },
-        include:{
+        where: { memberId: user.memberId, status: "ACTIVE" },
+        include: {
           scenario: true,
-        }
+        },
       });
-      const currentScenarioList = trainingList.map((training) => training.scenario);
+      const currentScenarioList = trainingList.map(
+        (training) => training.scenario
+      );
 
       return (
         <DashboardTrainingPage

@@ -1,38 +1,47 @@
-import { MailData } from "./MailListElement";
-
-import { Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
 
 import MailProfile from "./MailProfile";
 import MailQuickAction from "./MailQuickAction";
+import { Mail, MailFile, File, MailBox } from "@prisma/client";
+import ArticleViewer from "../ArticleViewer";
 
 interface MailDataProps {
-  mailData: MailData | null;
+  mailHolderId?: number;
+  mailBox?: MailBox;
+  mailData?: Mail & { mailFiles: (MailFile & { file: File })[] };
+  articleData?: Record<string, string>;
 }
 
-export default function MailDisplay({ mailData }: MailDataProps) {
-  if (mailData === null) {
+export default function MailDisplay({
+  mailData,
+  mailHolderId,
+  mailBox,
+  articleData,
+}: MailDataProps) {
+  if (!mailData) {
     return <></>;
   }
 
   return (
-    <Flex w={600} minW={600} h="100vh" flexDirection={"column"}>
-      <Flex
-        w="100%"
-        h={84}
-        p={30}
-        flexDirection={"row"}
-        backgroundColor={"white"}
-        borderBottom={"2px solid #f4f7ff"}
-      >
-        <MailQuickAction mailID={mailData?.mailID} gap={30} />
-      </Flex>
-      <VStack
-        align={"start"}
-        w={600}
-        minW={600}
-        h="100vh"
-        backgroundColor="white"
-      >
+    <Flex
+      w={600}
+      minW={600}
+      h="100%"
+      flexDirection={"column"}
+      backgroundColor={"white"}
+    >
+      {mailHolderId && (
+        <Flex
+          w="100%"
+          h={84}
+          p={30}
+          flexDirection={"row"}
+          borderBottom={"2px solid #f4f7ff"}
+        >
+          <MailQuickAction mailID={mailHolderId} mailBox={mailBox} gap={30} />
+        </Flex>
+      )}
+      <VStack align={"start"} w={600} minW={600} backgroundColor="white">
         {/* 메일 제목 */}
         <Text p={20} fontSize="xl" fontWeight="700">
           {mailData?.title}
@@ -58,7 +67,7 @@ export default function MailDisplay({ mailData }: MailDataProps) {
           </HStack>
           {/* 수신한 날짜 */}
           <Text fontSize={"xs"} color="#acacac">
-            {mailData?.createdAt.toLocaleString("sv-SE", {
+            {mailData?.createdDate.toLocaleString("sv-SE", {
               year: "2-digit",
               month: "2-digit",
               day: "2-digit",
@@ -67,11 +76,11 @@ export default function MailDisplay({ mailData }: MailDataProps) {
             })}
           </Text>
         </Flex>
-        {/* 메일 내용 */}
-        <Text p={20} fontSize={"s"} lineHeight={"200%"}>
-          {mailData?.article}
-        </Text>
       </VStack>
+      {/* 메일 내용 */}
+      <Box w={600} minW={600} p={20} overflow="auto" flex="1">
+        <ArticleViewer content={mailData?.article} data={articleData || {}} />
+      </Box>
     </Flex>
   );
 }

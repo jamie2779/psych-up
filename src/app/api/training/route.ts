@@ -22,7 +22,6 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
-
   const parse = trainingPostSchema.safeParse(body);
 
   if (!parse.success) {
@@ -57,13 +56,56 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const training = await prisma.training.create({
-    data: {
-      scenarioId: data.scenarioId,
-      memberId: user.memberId,
-      limitDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 일주일 후
-    },
-  });
+  try {
+    const result = await prisma.$transaction(async (tx) => {
+      // 훈련 생성
+      const training = await tx.training.create({
+        data: {
+          scenarioId: data.scenarioId,
+          memberId: user.memberId,
+          limitDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 일주일 후
+        },
+      });
 
-  return NextResponse.json(training);
+      // 해당 시나리오의 TODO 리스트 가져오기
+      const todos = await tx.todo.findMany({
+        where: {
+          scenarioId: data.scenarioId,
+        },
+      });
+
+      // TODO 등록
+      await tx.todoHolder.createMany({
+        data: todos.map((todo) => ({
+          trainingId: training.trainingId,
+          todoId: todo.todoId,
+        })),
+      });
+
+      // 해당 시나리오의 이메일 가져오기
+      const mails = await tx.scenarioMail.findMany({
+        where: {
+          scenarioId: data.scenarioId,
+        },
+      });
+
+      // 메일 등록
+      await tx.mailHolder.createMany({
+        data: mails.map((mail) => ({
+          trainingId: training.trainingId,
+          mailId: mail.mailId,
+        })),
+      });
+
+      return training;
+    });
+
+    return NextResponse.json(result);
+  } catch (error) {
+    console.error("Transaction failed:", error);
+    return NextResponse.json(
+      { error: "Internal Server Error" },
+      { status: 500 }
+    );
+  }
 }
