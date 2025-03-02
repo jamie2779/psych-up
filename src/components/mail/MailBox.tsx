@@ -21,7 +21,7 @@ export default function MailBox({
 
   useEffect(() => {
     if (viewing_mail?.isRead === false) {
-      ky.get(`/api/mail/${viewing_mail.mailHolderId}`);
+      ky.get(`/api/mail/${viewing_mail.mailHolderId}/read`);
 
       setMailListData((prev) =>
         prev.map((mail) =>

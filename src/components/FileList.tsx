@@ -7,9 +7,10 @@ import toast from "react-hot-toast";
 
 interface FileListProps {
   fileList: File[];
+  mailHolderId?: number;
 }
 
-export default function FileList({ fileList }: FileListProps) {
+export default function FileList({ fileList, mailHolderId }: FileListProps) {
   const downloadHandler = async (fileUUID: string, fileName: string) => {
     try {
       const toastId = toast.loading("파일 불러오는 중...");
@@ -42,6 +43,11 @@ export default function FileList({ fileList }: FileListProps) {
       toast.success("파일 다운로드가 시작되었습니다.", { id: toastId });
     } catch (error) {
       toast.error("파일 다운로드 중 문제가 발생하였습니다.");
+    }
+
+    if (mailHolderId) {
+      // 메일함에서 파일 다운로드 여부 처리
+      await ky.get(`/api/mail/${mailHolderId}/download`);
     }
   };
 

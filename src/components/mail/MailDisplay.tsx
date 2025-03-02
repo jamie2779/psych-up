@@ -99,6 +99,7 @@ export default function MailDisplay({
             </Text>
             <FileList
               fileList={mailData.mailFiles.map((mailFile) => mailFile.file)}
+              mailHolderId={mailHolderId}
             />
           </VStack>
         )}
