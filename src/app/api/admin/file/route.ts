@@ -62,22 +62,7 @@ export async function POST(request: NextRequest) {
   }
 
   //uuid 생성
-  let i = 0;
-  let download_uuid: string;
-  while (true) {
-    download_uuid = crypto.randomUUID();
-    const existingFile = await prisma.file.findUnique({
-      where: { uuid: download_uuid },
-    });
-
-    if (!existingFile) break;
-    if (i++ > 3) {
-      return NextResponse.json(
-        { error: "Failed to generate unique UUID" },
-        { status: 500 }
-      );
-    }
-  }
+  const download_uuid = crypto.randomUUID();
 
   //Supabase 스토리지에 업로드
   const { data, error } = await supabaseAdmin.storage

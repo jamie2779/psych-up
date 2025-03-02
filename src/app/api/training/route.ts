@@ -79,6 +79,7 @@ export async function POST(request: NextRequest) {
         data: todos.map((todo) => ({
           trainingId: training.trainingId,
           todoId: todo.todoId,
+          uuid: crypto.randomUUID(),
         })),
       });
 
@@ -94,6 +95,7 @@ export async function POST(request: NextRequest) {
         data: mails.map((mail) => ({
           trainingId: training.trainingId,
           mailId: mail.mailId,
+          uuid: crypto.randomUUID(),
         })),
       });
 
