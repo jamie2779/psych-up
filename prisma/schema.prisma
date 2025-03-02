@@ -52,9 +52,11 @@ model MailHolder {
   mailHolderId Int      @id @default(autoincrement())
   trainingId   Int
   mailId       Int
+  uuid         String   @unique
   mailBox      MailBox  @default(INBOX)
   isRead       Boolean  @default(false)
   isDownloaded Boolean  @default(false)
+  isFooled     Boolean  @default(false)
   createdDate  DateTime @default(now())
 
   training Training @relation(fields: [trainingId], references: [trainingId], onDelete: Cascade)
@@ -136,6 +138,7 @@ model TodoHolder {
   todoHolderId  Int       @id @default(autoincrement())
   trainingId    Int
   todoId        Int
+  uuid          String    @unique
   isCompleted   Boolean   @default(false)
   completedDate DateTime?
   createdDate   DateTime  @default(now())
