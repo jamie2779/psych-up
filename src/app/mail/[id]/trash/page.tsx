@@ -32,6 +32,7 @@ export default async function MailTrashPage(props: {
         },
       },
     },
+    orderBy: [{ createdDate: "desc" }, { mailHolderId: "desc" }],
   });
 
   return <MailBox mailListData={mailListData} title="휴지통" />;

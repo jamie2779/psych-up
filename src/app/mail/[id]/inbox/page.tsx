@@ -19,7 +19,7 @@ export default async function MailInboxPage(props: {
   const mailListData = await prisma.mailHolder.findMany({
     where: {
       trainingId: trainingId,
-      mailBox: "INBOX",
+      mailBox: { in: ["INBOX", "STARRED"] },
     },
     include: {
       mail: {
@@ -32,6 +32,7 @@ export default async function MailInboxPage(props: {
         },
       },
     },
+    orderBy: [{ createdDate: "desc" }, { mailHolderId: "desc" }],
   });
 
   return <MailBox mailListData={mailListData} title="받은 메일함" />;

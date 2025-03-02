@@ -8,13 +8,14 @@ import { redirect } from "next/navigation";
 
 interface MailLayoutProps {
   children: ReactNode;
-  params: { id?: string };
+  params: Promise<{ id?: string }>;
 }
 
-export default async function MailLayout({
-  children,
-  params,
-}: MailLayoutProps) {
+export default async function MailLayout(props: MailLayoutProps) {
+  const params = await props.params;
+
+  const { children } = props;
+
   const session = await auth();
 
   if (!session?.user?.email) {

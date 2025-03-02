@@ -32,6 +32,7 @@ export default async function MailStarPage(props: {
         },
       },
     },
+    orderBy: [{ createdDate: "desc" }, { mailHolderId: "desc" }],
   });
 
   return <MailBox mailListData={mailListData} title="중요 메일함" />;

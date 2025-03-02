@@ -32,6 +32,7 @@ export default async function MailSpamPage(props: {
         },
       },
     },
+    orderBy: [{ createdDate: "desc" }, { mailHolderId: "desc" }],
   });
 
   return <MailBox mailListData={mailListData} title="스팸 메일함" />;

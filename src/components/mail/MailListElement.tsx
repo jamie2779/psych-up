@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, Flex, Text, VStack, HStack } from "@chakra-ui/react";
+import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import MailQuickAction from "./MailQuickAction";
 import { MailHolder, Mail, MailFile, File } from "@prisma/client";
@@ -12,11 +12,13 @@ export type MailData = MailHolder & {
 interface MailListElementDataProps {
   mailListElementData: MailData;
   onClick?: () => void;
+  setViewingMail?: (mailData: MailData | null) => void;
 }
 
 export default function MailListElement({
   mailListElementData,
   onClick,
+  setViewingMail,
 }: MailListElementDataProps) {
   const [isHover, setHover] = useState(false);
 
@@ -91,6 +93,7 @@ export default function MailListElement({
         <MailQuickAction
           mailHolderId={mailListElementData.mailHolderId}
           mailBox={mailListElementData.mailBox}
+          setViewingMail={setViewingMail}
         />
       )}
     </Flex>

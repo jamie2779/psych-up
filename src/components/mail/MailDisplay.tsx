@@ -4,12 +4,14 @@ import MailProfile from "./MailProfile";
 import MailQuickAction from "./MailQuickAction";
 import { Mail, MailFile, File, MailBox } from "@prisma/client";
 import ArticleViewer from "../ArticleViewer";
+import { MailData } from "@/components/mail/MailListElement";
 
 interface MailDataProps {
   mailHolderId?: number;
   mailBox?: MailBox;
   mailData?: Mail & { mailFiles: (MailFile & { file: File })[] };
   articleData?: Record<string, string>;
+  setViewingMail?: (mailData: MailData | null) => void;
 }
 
 export default function MailDisplay({
@@ -17,6 +19,7 @@ export default function MailDisplay({
   mailHolderId,
   mailBox,
   articleData,
+  setViewingMail,
 }: MailDataProps) {
   if (!mailData) {
     return <></>;
@@ -42,6 +45,7 @@ export default function MailDisplay({
             mailHolderId={mailHolderId}
             mailBox={mailBox}
             gap={30}
+            setViewingMail={setViewingMail}
           />
         </Flex>
       )}

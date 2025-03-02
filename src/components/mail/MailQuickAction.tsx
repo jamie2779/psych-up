@@ -1,31 +1,43 @@
 import { ProhibitIcon, StarIcon, TrashIcon } from "@/assets/IconSet";
 import { Flex, IconButton } from "@chakra-ui/react";
+import { useRouter } from "next/navigation";
 import { MailBox } from "@prisma/client";
 import ky from "ky";
 import toast from "react-hot-toast";
+import { MailData } from "@/components/mail/MailListElement";
 
 interface MailQuickActionProps {
   mailHolderId: number;
   mailBox?: MailBox;
   gap?: number;
+  setViewingMail?: (mailData: MailData | null) => void;
 }
 
 export default function MailQuickAction({
   mailHolderId,
   gap = 16,
   mailBox,
+  setViewingMail,
 }: MailQuickActionProps) {
-  const mailBoxHandler = async (mailHolderId: number, mailBox: MailBox) => {
+  const router = useRouter();
+
+  const mailBoxHandler = async (
+    mailHolderId: number,
+    targetMailBox: MailBox
+  ) => {
     await toast.promise(
       ky.post("/api/mailbox", {
-        json: { mailHolderId: mailHolderId, mailBox: mailBox },
+        json: { mailHolderId: mailHolderId, mailBox: targetMailBox },
       }),
       {
-        loading: "처리 중입니다.",
-        success: "처리 되었습니다.",
-        error: "처리 중 문제가 발생하였습니다.",
+        loading: "이동 중입니다.",
+        success: "이동 되었습니다.",
+        error: "이동 중 문제가 발생하였습니다.",
       }
     );
+
+    setViewingMail?.(null);
+    router.refresh();
   };
 
   return (
@@ -35,7 +47,8 @@ export default function MailQuickAction({
         h={24}
         aria-label="Star"
         variant="ghost"
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           if (mailBox !== "STARRED") mailBoxHandler(mailHolderId, "STARRED");
           else mailBoxHandler(mailHolderId, "INBOX");
         }}
@@ -45,7 +58,7 @@ export default function MailQuickAction({
             fill={mailBox === "STARRED" ? "yellow" : "none"}
             _hover={{
               cursor: "pointer",
-              fill: "yellow",
+              transform: "scale(1.1)",
             }}
           />
         }
@@ -55,7 +68,8 @@ export default function MailQuickAction({
         h={24}
         aria-label="Prohibit"
         variant="ghost"
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           if (mailBox !== "SPAM") mailBoxHandler(mailHolderId, "SPAM");
           else mailBoxHandler(mailHolderId, "INBOX");
         }}
@@ -65,7 +79,7 @@ export default function MailQuickAction({
             fill={mailBox === "SPAM" ? "danger" : "none"}
             _hover={{
               cursor: "pointer",
-              fill: "danger",
+              transform: "scale(1.1)",
             }}
           />
         }
@@ -75,7 +89,8 @@ export default function MailQuickAction({
         h={24}
         aria-label="Trash"
         variant="ghost"
-        onClick={() => {
+        onClick={(e) => {
+          e.stopPropagation();
           if (mailBox !== "TRASH") mailBoxHandler(mailHolderId, "TRASH");
           else mailBoxHandler(mailHolderId, "INBOX");
         }}
@@ -85,7 +100,7 @@ export default function MailQuickAction({
             fill={mailBox === "TRASH" ? "grey" : "none"}
             _hover={{
               cursor: "pointer",
-              fill: "grey",
+              transform: "scale(1.1)",
             }}
           />
         }

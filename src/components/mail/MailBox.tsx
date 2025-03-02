@@ -11,7 +11,7 @@ interface MailBoxProps {
 }
 
 export default function MailBox({ mailListData, title }: MailBoxProps) {
-  const [viewing_mail, setViewingMailID] = useState<MailData | null>(null);
+  const [viewing_mail, setViewingMail] = useState<MailData | null>(null);
 
   return (
     <Flex flexDirection="row" w="100%">
@@ -40,8 +40,9 @@ export default function MailBox({ mailListData, title }: MailBoxProps) {
               key={mailListElementData.mailHolderId}
               mailListElementData={mailListElementData}
               onClick={() => {
-                setViewingMailID(mailListElementData);
+                setViewingMail(mailListElementData);
               }}
+              setViewingMail={setViewingMail}
             />
           ))}
           {mailListData.length === 0 && (
@@ -90,6 +91,7 @@ export default function MailBox({ mailListData, title }: MailBoxProps) {
           mailHolderId={viewing_mail?.mailHolderId}
           mailData={viewing_mail?.mail}
           mailBox={viewing_mail?.mailBox}
+          setViewingMail={setViewingMail}
         />
       </Box>
     </Flex>
