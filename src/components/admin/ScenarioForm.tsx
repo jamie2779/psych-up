@@ -22,6 +22,7 @@ import {
 } from "@chakra-ui/react";
 import { TrashIcon } from "@/assets/IconSet";
 import CreateTodoModal, { TodoItem } from "@/components/admin/CreateTodoModal";
+import CreateFormatModal, { DataFormatItem } from "./CreateFormatModal";
 import MailTable from "@/components/admin/MailTable";
 import FileTable from "@/components/admin/FileTable";
 
@@ -34,12 +35,13 @@ import {
   File,
   ScenarioMail,
   Mail,
+  DataFormat,
 } from "@prisma/client";
 import toast from "react-hot-toast";
 import ky from "ky";
 
 interface ScenarioFormProps {
-  scenario?: Scenario & { todos: Todo[] } & {
+  scenario?: Scenario & { todos: Todo[] } & { dataFormats: DataFormat[] } & {
     scenarioFiles: (ScenarioFile & { file: File })[];
   } & {
     scenarioMails: (ScenarioMail & { mail: Mail })[];
@@ -61,6 +63,14 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
     })) || []
   );
 
+  const [dataFormatList, setDataFormatList] = useState<DataFormatItem[]>(
+    scenario?.dataFormats.map((dataFormat) => ({
+      name: dataFormat.name,
+      tag: dataFormat.tag,
+      type: dataFormat.type,
+    })) || []
+  );
+
   const [mailList, setMailList] = useState<Mail[]>(
     scenario?.scenarioMails.map((scenarioMail) => scenarioMail.mail) || []
   );
@@ -70,6 +80,10 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
   );
   const createTodo = async (newTarget: TodoItem) => {
     setTodoList((prev) => [...prev, newTarget]); // 기존 목록에 추가
+  };
+
+  const createFormat = async (newTarget: DataFormatItem) => {
+    setDataFormatList((prev) => [...prev, newTarget]); // 기존 목록에 추가
   };
 
   const putScenario = async (scenario: Scenario & { todos: Todo[] }) => {
@@ -83,6 +97,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
           todoList: todoList,
           mailList: mailList.map((mail) => mail.mailId),
           fileList: fileList.map((file) => file.fileId),
+          dataFormatList: dataFormatList,
         },
       }),
       {
@@ -104,6 +119,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
           todoList: todoList,
           mailList: mailList.map((mail) => mail.mailId),
           fileList: fileList.map((file) => file.fileId),
+          dataFormatList: dataFormatList,
         },
       }),
       {
@@ -206,8 +222,86 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
         </FormErrorMessage>
       </FormControl>
 
+      <FormControl>
+        <Box
+          w="100%"
+          bg="white"
+          borderRadius={14}
+          mt={6}
+          p={20}
+          borderColor={
+            error && isPublic && todoList.length === 0
+              ? "danger"
+              : "transparent"
+          }
+          borderWidth={2}
+        >
+          <TableContainer>
+            <Flex w="100%" align="center" justify="space-between">
+              <Text fontSize="l" fontWeight="semibold">
+                필요 정보 목록
+              </Text>
+              <CreateFormatModal
+                isDisabled={isLoading}
+                CreateFormat={createFormat}
+              />
+            </Flex>
+            <Table size="l" fontSize="m">
+              <Thead>
+                <Tr>
+                  <Th>No.</Th>
+                  <Th>이름</Th>
+                  <Th>태그</Th>
+                  <Th>자료형</Th>
+                  <Th>삭제</Th>
+                </Tr>
+              </Thead>
+              <Tbody>
+                {dataFormatList.map((dataFormat, index) => (
+                  <Tr key={index}>
+                    <Td>{index + 1}</Td>
+                    <Td>{dataFormat.name}</Td>
+                    <Td>{dataFormat.tag}</Td>
+                    <Td>{dataFormat.type}</Td>
+
+                    <Td>
+                      <IconButton
+                        bg="none"
+                        boxSize={30}
+                        aria-label="Delete Todo"
+                        icon={<TrashIcon color="grey.shade2" />}
+                        _hover={{ bg: "grey.shade1" }}
+                        onClick={() => {
+                          setDataFormatList((prev) =>
+                            prev.filter((_, idx) => idx !== index)
+                          );
+                        }}
+                        isDisabled={isLoading}
+                      />
+                    </Td>
+                  </Tr>
+                ))}
+              </Tbody>
+              {dataFormatList.length === 0 && (
+                <Tbody>
+                  <Tr>
+                    <Td colSpan={5} textAlign="center">
+                      필요 정보가 없습니다.
+                    </Td>
+                  </Tr>
+                </Tbody>
+              )}
+            </Table>
+            <Flex w="100%" align="center" justify="end">
+              <Text fontSize="m" color="grey.shade2" fontWeight="medium">
+                정보 수: {dataFormatList.length}
+              </Text>
+            </Flex>
+          </TableContainer>
+        </Box>
+      </FormControl>
+
       <FormControl isInvalid={error && isPublic && todoList.length === 0}>
-        {/*Todo 목록 */}
         <Box
           w="100%"
           bg="white"

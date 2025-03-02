@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { scenarioPutSchema } from "./schema";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { Permission } from "@prisma/client";
+import { DataType, Permission } from "@prisma/client";
 
 export async function DELETE(
   _request: NextRequest,
@@ -118,6 +118,24 @@ export async function PUT(
           data: {
             tag: todo.tag,
             target: todo.target,
+            scenarioId: updatedScenario.scenarioId,
+          },
+        });
+      })
+    );
+
+    // 기존 정보 포멧 삭제 후 새롭게 저장
+    await prisma.dataFormat.deleteMany({
+      where: { scenarioId },
+    });
+
+    await Promise.all(
+      data.dataFormatList.map(async (dataFormat) => {
+        await prisma.dataFormat.create({
+          data: {
+            tag: dataFormat.tag,
+            name: dataFormat.name,
+            type: dataFormat.type as DataType,
             scenarioId: updatedScenario.scenarioId,
           },
         });

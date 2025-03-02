@@ -181,8 +181,8 @@ enum MailBox {
 }
 
 enum DataType {
-  NUMBER
   STRING
+  NUMBER
   BOOLEAN
   FLOAT
   DATETIME
