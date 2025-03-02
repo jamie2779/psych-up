@@ -39,6 +39,7 @@ model Training {
   limitDate     DateTime
   completedDate DateTime?
   score         Int?
+  data          Json?
   createdDate   DateTime       @default(now())
   modifiedDate  DateTime       @default(now()) @updatedAt
 
@@ -75,6 +76,7 @@ model Scenario {
   trainings     Training[]
   scenarioFiles ScenarioFile[]
   scenarioMails ScenarioMail[]
+  dataFormats   DataFormat[]
   todos         Todo[]
 }
 
@@ -147,6 +149,19 @@ model TodoHolder {
   todo     Todo     @relation(fields: [todoId], references: [todoId], onDelete: Cascade)
 }
 
+model DataFormat {
+  dataFormatId Int @id @default(autoincrement())
+  scenarioId   Int
+
+  name         String
+  tag          String
+  type         DataType
+  createdDate  DateTime @default(now())
+  modifiedDate DateTime @default(now()) @updatedAt
+
+  scenario Scenario @relation(fields: [scenarioId], references: [scenarioId], onDelete: Cascade)
+}
+
 enum Permission {
   admin
   user
@@ -163,4 +178,14 @@ enum MailBox {
   STARRED
   SPAM
   TRASH
+}
+
+enum DataType {
+  NUMBER
+  STRING
+  BOOLEAN
+  FLOAT
+  DATETIME
+  DATE
+  TIME
 }
