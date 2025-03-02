@@ -96,6 +96,9 @@ export async function POST(request: NextRequest) {
           trainingId: training.trainingId,
           mailId: mail.mailId,
           uuid: crypto.randomUUID(),
+          createdDate: new Date(
+            Date.now() - (Math.floor(Math.random() * 10075) + 5) * 60 * 1000 //일주일 ~ 5분전 랜덤한 시간 빼기
+          ),
         })),
       });
 
