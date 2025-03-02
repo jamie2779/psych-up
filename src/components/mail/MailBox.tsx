@@ -1,17 +1,39 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Box, Flex, List, Text } from "@chakra-ui/react";
 
 import MailListElement, { MailData } from "@/components/mail/MailListElement";
 import MailDisplay from "@/components/mail/MailDisplay";
+import ky from "ky";
 
 interface MailBoxProps {
   mailListData: MailData[];
-  title: String;
+  title: string;
 }
 
-export default function MailBox({ mailListData, title }: MailBoxProps) {
+export default function MailBox({
+  mailListData: initialMailListData,
+  title,
+}: MailBoxProps) {
+  const [mailListData, setMailListData] =
+    useState<MailData[]>(initialMailListData);
   const [viewing_mail, setViewingMail] = useState<MailData | null>(null);
+
+  useEffect(() => {
+    if (viewing_mail?.isRead === false) {
+      ky.get(`/api/mail/${viewing_mail.mailHolderId}`);
+
+      setMailListData((prev) =>
+        prev.map((mail) =>
+          mail.mailHolderId === viewing_mail.mailHolderId
+            ? { ...mail, isRead: true }
+            : mail
+        )
+      );
+
+      setViewingMail((prev) => (prev ? { ...prev, isRead: true } : prev));
+    }
+  }, [viewing_mail]);
 
   return (
     <Flex flexDirection="row" w="100%">
@@ -26,7 +48,7 @@ export default function MailBox({ mailListData, title }: MailBoxProps) {
         >
           {title}
         </Text>
-        {/* 임시 리스트 박스 */}
+        {/* 메일 리스트 */}
         <List
           spacing={10}
           w="100%"
@@ -39,9 +61,7 @@ export default function MailBox({ mailListData, title }: MailBoxProps) {
             <MailListElement
               key={mailListElementData.mailHolderId}
               mailListElementData={mailListElementData}
-              onClick={() => {
-                setViewingMail(mailListElementData);
-              }}
+              onClick={() => setViewingMail(mailListElementData)}
               setViewingMail={setViewingMail}
             />
           ))}
