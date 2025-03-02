@@ -16,23 +16,5 @@ export default async function MailIDPage(props: {
     return redirect("/404");
   }
 
-  const mailListData = await prisma.mailHolder.findMany({
-    where: {
-      trainingId: trainingId,
-      mailBox: "INBOX",
-    },
-    include: {
-      mail: {
-        include: {
-          mailFiles: {
-            include: {
-              file: true,
-            },
-          },
-        },
-      },
-    },
-  });
-
-  return <MailBox mailListData={mailListData} title="받은 메일함" />;
+  return redirect(`/mail/${trainingId}/inbox`);
 }
