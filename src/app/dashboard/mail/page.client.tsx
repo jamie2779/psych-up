@@ -48,7 +48,7 @@ export default function DashboardMailPage({
               훈련 중인 메일함
             </Text>
             {mailboxData
-              .filter((data) => data.isCompleted)
+              .filter((data) => !data.isCompleted)
               .map((data, index) => (
                 <MailboxElement key={index} mailboxData={data} />
               ))}

@@ -25,6 +25,7 @@ interface TrainingDetailProps {
   isFailed: boolean;
   todoList?: (TodoHolder & { todo: Todo })[];
   fishingList?: (Mail & { mailFiles: (MailFile & { file: File })[] })[];
+  trainingId?: number;
 }
 
 export default function TrainingDetail({
@@ -33,6 +34,7 @@ export default function TrainingDetail({
   isFailed,
   todoList,
   fishingList,
+  trainingId,
 }: TrainingDetailProps) {
   const router = useRouter();
 
@@ -206,7 +208,7 @@ export default function TrainingDetail({
                 수락 및 시작
               </Button>
             )}
-            {trainingStatus === TrainingStatus.ACTIVE && (
+            {trainingStatus === TrainingStatus.ACTIVE && trainingId && (
               <Flex gap={6}>
                 <Button
                   w={95}
@@ -219,7 +221,7 @@ export default function TrainingDetail({
                     bg: "danger",
                     color: "white",
                   }}
-                  onClick={() => scenarioFailHandler(scenario.scenarioId)}
+                  onClick={() => scenarioFailHandler(trainingId)}
                 >
                   훈련 포기
                 </Button>
@@ -227,7 +229,7 @@ export default function TrainingDetail({
                   h={35}
                   fontSize="s"
                   fontWeight="medium"
-                  onClick={() => router.push(`/mail/${scenario.scenarioId}`)}
+                  onClick={() => router.push(`/mail/${trainingId}`)}
                 >
                   이 훈련의 메일함으로 이동
                 </Button>
@@ -238,7 +240,7 @@ export default function TrainingDetail({
                 h={35}
                 fontSize="s"
                 fontWeight="medium"
-                onClick={() => router.push(`/mail/${scenario.scenarioId}`)}
+                onClick={() => router.push(`/mail/${trainingId}`)}
               >
                 이 훈련의 메일함으로 이동
               </Button>

@@ -94,6 +94,7 @@ export default async function TrainingDetailPage(props: {
           isFailed={false}
           todoList={todos}
           fishingList={fishingList.map((fishing) => fishing.mail)}
+          trainingId={training.trainingId}
         />
       );
     } else {
@@ -103,6 +104,7 @@ export default async function TrainingDetailPage(props: {
           trainingStatus={training.status}
           isFailed={false}
           todoList={todos}
+          trainingId={training.trainingId}
         />
       );
     }
