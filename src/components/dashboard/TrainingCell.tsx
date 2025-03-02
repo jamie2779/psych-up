@@ -1,20 +1,13 @@
 "use client";
 import { Text, Flex, VStack, Badge } from "@chakra-ui/react";
 import { useRouter } from "next/navigation";
+import { Scenario } from "@prisma/client";
 
 interface TrainingCellProps {
-  id: number;
-  type: string;
-  title: string;
-  detail: string;
+  scenario: Scenario;
 }
 
-export default function TrainingCell({
-  id,
-  type,
-  title,
-  detail,
-}: TrainingCellProps) {
+export default function TrainingCell({ scenario }: TrainingCellProps) {
   const router = useRouter();
   return (
     <Flex
@@ -24,7 +17,7 @@ export default function TrainingCell({
       borderRadius={14}
       justify="space-between"
       flexDirection="column"
-      onClick={() => router.push(`/dashboard/training/${id}`)}
+      onClick={() => router.push(`/dashboard/training/${scenario.scenarioId}`)}
       _hover={{
         cursor: "pointer",
         boxShadow: "0px 4px 20px rgba(0, 31, 99, 0.05)",
@@ -33,13 +26,13 @@ export default function TrainingCell({
     >
       <VStack spacing={16} align="flex-start">
         <Text fontSize="l" fontWeight="semibold">
-          {title}
+          {scenario.title}
         </Text>
         <Text fontSize="s" fontWeight="regular">
-          {detail}
+          {scenario.detail}
         </Text>
       </VStack>
-      <Badge>{type}</Badge>
+      <Badge>{scenario.type}</Badge>
     </Flex>
   );
 }

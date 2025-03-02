@@ -139,7 +139,7 @@ export default function MailForm({ mail }: MailFormProps) {
       await setTimeout(() => {
         router.push("/admin/mail");
       }, 1000);
-    } catch (error) {
+    } catch (_) {
       setIsLoading(false);
     }
   };

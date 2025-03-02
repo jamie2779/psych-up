@@ -1,6 +1,6 @@
 import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
-import DashboardNav from "@/components/DashboardNav";
+import DashboardNav from "@/components/dashboard/DashboardNav";
 import AnimationWrapper from "@/components/AnimationWrapper";
 import { Flex, Box } from "@chakra-ui/react";
 import { ReactNode } from "react";

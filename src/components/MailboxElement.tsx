@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation";
 
 export interface MailboxData {
   type: string;
-  typeColor: string;
   title: string;
+  isCompleted: boolean;
   progress: number;
   trainingId: number;
 }
@@ -35,7 +35,7 @@ export default function MailboxElement({ mailboxData }: MailboxDataProps) {
         fontSize="s"
         fontWeight="regular"
         color="white"
-        bg={mailboxData.typeColor}
+        bg="primary"
         px={14}
         py={6}
         borderRadius={24}

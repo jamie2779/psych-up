@@ -1,32 +1,24 @@
 "use client";
 
-import { Box, Flex, Text, VStack, HStack } from "@chakra-ui/react";
+import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import MailQuickAction from "./MailQuickAction";
+import { MailHolder, Mail, MailFile, File } from "@prisma/client";
 
-export interface MailData {
-  mailID: number;
-  sender: string;
-  from: string;
-  to: string;
-  title: string;
-  article: string;
-  files: string[];
-  isRead: boolean;
-  isDownloaded: boolean;
-  status: string;
-  createdAt: Date;
-  modifiedAt: Date;
-}
+export type MailData = MailHolder & {
+  mail: Mail & { mailFiles: (MailFile & { file: File })[] };
+};
 
 interface MailListElementDataProps {
   mailListElementData: MailData;
   onClick?: () => void;
+  setViewingMail?: (mailData: MailData | null) => void;
 }
 
 export default function MailListElement({
   mailListElementData,
   onClick,
+  setViewingMail,
 }: MailListElementDataProps) {
   const [isHover, setHover] = useState(false);
 
@@ -41,7 +33,7 @@ export default function MailListElement({
       pl={12}
       pr={36}
       _hover={{
-        pointer: "cursor",
+        cursor: "pointer",
       }}
       onClick={onClick}
       onMouseEnter={() => {
@@ -51,34 +43,34 @@ export default function MailListElement({
         setHover(false);
       }}
     >
-      <HStack spacing={12}>
+      <Flex gap={12} align="center">
         {/* isRead 태그 */}
         <Box
           w={8}
           h={8}
-          borderRadius={"100%"}
+          borderRadius="full"
           backgroundColor={
             mailListElementData.isRead ? "transparent" : "secondary"
           }
         />
         {/* 메일의 내용 (세로 방향 스택) */}
-        <VStack align={"start"} spacing={0}>
+        <VStack flex="1" align={"start"} spacing={0}>
           <Text mb={3} fontSize={"m"} fontWeight={"600"}>
-            {mailListElementData.title}
+            {mailListElementData.mail.title}
           </Text>
           <Text fontSize={"s"} color={"#a6a6a6"}>
-            {mailListElementData.sender}ㆍ{mailListElementData.from}
+            {mailListElementData.mail.sender}ㆍ{mailListElementData.mail.from}
           </Text>
-          <Text
+          {/* <Text
             fontSize={"s"}
             color={"#a6a6a6"}
             noOfLines={1}
             textOverflow={"ellipsis"}
           >
-            {mailListElementData.article.replaceAll("\n", " ")}
-          </Text>
+            {mailListElementData.mail.article.replaceAll("\n", " ")}
+          </Text> */}
         </VStack>
-      </HStack>
+      </Flex>
       {/* hover가 아닐 땐 시간이 뜹니다 */}
       {!isHover && (
         <Text
@@ -87,7 +79,7 @@ export default function MailListElement({
           noOfLines={1}
           minW={"fit-content"}
         >
-          {mailListElementData.createdAt.toLocaleString("sv-SE", {
+          {mailListElementData.createdDate.toLocaleString("sv-SE", {
             year: "numeric",
             month: "2-digit",
             day: "2-digit",
@@ -97,7 +89,13 @@ export default function MailListElement({
         </Text>
       )}
       {/* hover중일 땐 퀵메뉴가 뜹니다 */}
-      {isHover && <MailQuickAction mailID={mailListElementData.mailID} />}
+      {isHover && (
+        <MailQuickAction
+          mailHolderId={mailListElementData.mailHolderId}
+          mailBox={mailListElementData.mailBox}
+          setViewingMail={setViewingMail}
+        />
+      )}
     </Flex>
   );
 }

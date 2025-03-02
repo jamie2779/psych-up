@@ -45,7 +45,7 @@ model Training {
   user        User         @relation(fields: [memberId], references: [memberId], onDelete: Cascade)
   scenario    Scenario     @relation(fields: [scenarioId], references: [scenarioId], onDelete: Cascade)
   mailHolders MailHolder[]
-  todoHolder  TodoHolder[]
+  todoHolders TodoHolder[]
 }
 
 model MailHolder {

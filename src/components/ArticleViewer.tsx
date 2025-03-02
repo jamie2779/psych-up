@@ -13,7 +13,9 @@ export const QuillNoSSRReader = ({ content, data }: QuillNoSSRReaderProps) => {
     async () => {
       const { default: QuillComponent } = await import("react-quill-new");
       const QuillWrapper = () => (
-        <QuillComponent theme="bubble" readOnly value={processedContent} />
+        <Box fontSize="s">
+          <QuillComponent theme="bubble" readOnly value={processedContent} />
+        </Box>
       );
       QuillWrapper.displayName = "QuillWrapper";
 
@@ -21,7 +23,7 @@ export const QuillNoSSRReader = ({ content, data }: QuillNoSSRReaderProps) => {
     },
     {
       loading: () => (
-        <Box minH={100}>
+        <Box fontSize="s" minH={100}>
           <div className="quill">
             <div className="ql-container ql-bubble ql-disabled">
               <div
@@ -38,7 +40,7 @@ export const QuillNoSSRReader = ({ content, data }: QuillNoSSRReaderProps) => {
   );
 
   return (
-    <Box minH={100}>
+    <Box fontSize="s" minH={100}>
       <Result />
     </Box>
   );
@@ -51,5 +53,9 @@ export default function ArticleViewer({
   content: string;
   data: Record<string, string>;
 }) {
-  return <QuillNoSSRReader content={content} data={data} />;
+  return (
+    <Box fontSize="s">
+      <QuillNoSSRReader content={content} data={data} />
+    </Box>
+  );
 }

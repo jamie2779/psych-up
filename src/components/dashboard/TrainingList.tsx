@@ -13,29 +13,23 @@ import {
 import { BackIcon, SearchIcon } from "@/assets/IconSet";
 import TrainingCell from "./TrainingCell";
 import NewTrainingCell from "./NewTrainingCell";
-
-export interface TrainingData {
-  id: number;
-  type: string;
-  title: string;
-  detail: string;
-}
+import { Scenario } from "@prisma/client";
 
 interface TrainingListProps {
   title: string;
-  trainingListData: TrainingData[];
+  scenarioList: Scenario[];
   showButton: boolean;
   scrollToRef?: React.RefObject<HTMLDivElement | null>; // 스크롤할 ref 추가
 }
 
 export default function TrainingList({
   title,
-  trainingListData,
+  scenarioList,
   scrollToRef,
 }: TrainingListProps) {
   // 중복되지 않는 type 추출
   const uniqueTypes = Array.from(
-    new Set(trainingListData.map((item) => item.type))
+    new Set(scenarioList.map((item) => item.type))
   );
 
   // 상태 관리
@@ -43,7 +37,7 @@ export default function TrainingList({
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   // 필터링 로직
-  const filteredData = trainingListData.filter((data) => {
+  const filteredData = scenarioList.filter((data) => {
     const matchesType = selectedType ? data.type === selectedType : true;
     const matchesSearch =
       searchQuery === "" ||
@@ -118,13 +112,23 @@ export default function TrainingList({
       </Flex>
 
       {/* 필터링된 결과 출력 */}
-      <SimpleGrid columns={{ base: 1, sm: 2, md: 3, lg: 4 }} spacing={20}>
-        {filteredData.length > 0 ? (
+      <SimpleGrid
+        w="100%"
+        columns={{ base: 1, sm: 2, md: 3, lg: 4 }}
+        spacing={20}
+      >
+        {(!searchQuery && !selectedType) || filteredData.length > 0 ? (
           <>
             {filteredData.map((data, index) => (
-              <TrainingCell key={index} {...data} />
+              <TrainingCell key={index} scenario={data} />
             ))}
-            {scrollToRef && <NewTrainingCell scrollToRef={scrollToRef} />}
+            {scrollToRef ? (
+              <NewTrainingCell scrollToRef={scrollToRef} />
+            ) : (
+              scenarioList.length === 0 && (
+                <Text color="grey.shade2">훈련이 존재하지 않습니다</Text>
+              )
+            )}
           </>
         ) : (
           <Text color="grey.shade2">일치하는 항목이 없습니다.</Text>

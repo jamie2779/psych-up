@@ -3,23 +3,69 @@
 import { Box, Text, VStack, Flex, Badge, Button } from "@chakra-ui/react";
 import { ArrowIcon } from "@/assets/IconSet";
 import { useRouter } from "next/navigation";
+import FishingList from "@/components/dashboard/FishingList";
+import FileList from "@/components/FileList";
+import {
+  Scenario,
+  Todo,
+  TodoHolder,
+  ScenarioFile,
+  File,
+  TrainingStatus,
+  Mail,
+  MailFile,
+} from "@prisma/client";
+import toast from "react-hot-toast";
+import ky from "ky";
 
 interface TrainingDetailProps {
-  title: string;
-  detail: string;
-  type: string;
-  files: string[];
-  todos: string[];
+  scenario: Scenario & { todos: Todo[] } & {
+    scenarioFiles: (ScenarioFile & { file: File })[];
+  };
+  trainingStatus?: TrainingStatus;
+  isFailed: boolean;
+  todoList?: (TodoHolder & { todo: Todo })[];
+  fishingList?: (Mail & { mailFiles: (MailFile & { file: File })[] })[];
+  trainingId?: number;
 }
 
 export default function TrainingDetail({
-  title,
-  detail,
-  type,
-  files,
-  todos,
+  scenario,
+  trainingStatus,
+  isFailed,
+  todoList,
+  fishingList,
+  trainingId,
 }: TrainingDetailProps) {
   const router = useRouter();
+
+  const scenarioStartHandler = async (scenarioId: number) => {
+    if (!confirm("이 시나리오로 훈련을 시작하시겠습니까?")) {
+      return;
+    }
+
+    await toast.promise(ky.post("/api/training", { json: { scenarioId } }), {
+      loading: "훈련을 시작하는 중입니다.",
+      success: "훈련이 시작 되었습니다.",
+      error: "훈련 시작 도중 문제가 발생하였습니다",
+    });
+
+    router.refresh();
+  };
+
+  const scenarioFailHandler = async (scenarioId: number) => {
+    if (!confirm("이 훈련을 포기하시겠습니까?")) {
+      return;
+    }
+
+    await toast.promise(ky.delete(`/api/training/${scenarioId}`), {
+      loading: "훈련을 포기하는 중입니다",
+      success: "훈련을 포기했습니다.",
+      error: "훈련 포기 도중 문제가 발생하였습니다",
+    });
+
+    router.refresh();
+  };
 
   return (
     <Box h="100%">
@@ -49,17 +95,17 @@ export default function TrainingDetail({
               </Text>
             </Flex>
             <Text fontSize="l" fontWeight="semibold">
-              {title}
+              {scenario.title}
             </Text>
             <Text fontSize="s" fontWeight="regular">
-              {detail}
+              {scenario.detail}
             </Text>
           </VStack>
           {/* 중단*/}
           <VStack align="flex-start" spacing={10} py={20}>
             <Flex gap={8}>
               <Text fontSize="s" fontWeight="medium">
-                첨부파일
+                첨부파일 {!todoList && "(훈련 시작 후 확인 가능)"}
               </Text>
               <Flex
                 px={10}
@@ -70,38 +116,91 @@ export default function TrainingDetail({
                 fontWeight="medium"
                 align="center"
               >
-                {files.length}
+                {scenario.scenarioFiles.length}
               </Flex>
             </Flex>
-
-            {files.map((file, index) => (
-              <Text key={index} fontSize="s" fontWeight="regular">
-                {file}
-              </Text>
-            ))}
+            {todoList ? (
+              <FileList
+                fileList={scenario.scenarioFiles.map(
+                  (scenarioFile) => scenarioFile.file
+                )}
+              />
+            ) : (
+              scenario.scenarioFiles.map((scenarioFile, index) => (
+                <Text
+                  key={index}
+                  fontSize="s"
+                  fontWeight="regular"
+                  filter="blur(5px)"
+                  userSelect="none"
+                >
+                  {"a".repeat(scenarioFile.file.name.length)}
+                </Text>
+              ))
+            )}
           </VStack>
 
           {/* 하단*/}
           <Flex align="end" justify="space-between" w="100%">
             <Flex gap={10} align="center">
-              <Badge>{type}</Badge>
-              <Text fontSize="s" fontWeight="regular" color="#B3B3B3">
+              <Badge>{scenario.type}</Badge>
+              {/* <Text fontSize="s" fontWeight="regular" color="#B3B3B3">
                 이 훈련은 지금까지 2명이 성공했어요
-              </Text>
+              </Text> */}
             </Flex>
-            <Button
-              w={95}
-              h={35}
-              bg="success"
-              fontSize="s"
-              fontWeight="medium"
-              _hover={{
-                bg: "success",
-                transform: "scale(1.02)",
-              }}
-            >
-              수락 및 시작
-            </Button>
+            {(!trainingStatus || trainingStatus === TrainingStatus.FAIL) && (
+              <Button
+                w={95}
+                h={35}
+                bg="success"
+                fontSize="s"
+                fontWeight="medium"
+                _hover={{
+                  bg: "success",
+                  transform: "scale(1.02)",
+                }}
+                onClick={() => scenarioStartHandler(scenario.scenarioId)}
+              >
+                수락 및 시작
+              </Button>
+            )}
+            {trainingStatus === TrainingStatus.ACTIVE && trainingId && (
+              <Flex gap={6}>
+                <Button
+                  w={95}
+                  h={35}
+                  variant="outline"
+                  color="danger"
+                  fontSize="s"
+                  fontWeight="medium"
+                  _hover={{
+                    bg: "danger",
+                    color: "white",
+                  }}
+                  onClick={() => scenarioFailHandler(trainingId)}
+                >
+                  훈련 포기
+                </Button>
+                <Button
+                  h={35}
+                  fontSize="s"
+                  fontWeight="medium"
+                  onClick={() => router.push(`/mail/${trainingId}`)}
+                >
+                  이 훈련의 메일함으로 이동
+                </Button>
+              </Flex>
+            )}
+            {trainingStatus === TrainingStatus.COMPLETE && (
+              <Button
+                h={35}
+                fontSize="s"
+                fontWeight="medium"
+                onClick={() => router.push(`/mail/${trainingId}`)}
+              >
+                이 훈련의 메일함으로 이동
+              </Button>
+            )}
           </Flex>
         </VStack>
 
@@ -118,17 +217,47 @@ export default function TrainingDetail({
             <Text mb={16} fontSize="l" fontWeight="semibold">
               ✅ 이 훈련의 To-Do
             </Text>
-            {todos.map((todo, index) => (
-              <Text key={index} fontSize="s" fontWeight="regular">
-                {index + 1}. {todo}
-              </Text>
-            ))}
+            {todoList
+              ? todoList.map((todo, index) => (
+                  <Text
+                    key={index}
+                    fontSize="s"
+                    fontWeight="regular"
+                    textDecoration={todo.isCompleted ? "line-through" : "none"}
+                  >
+                    {index + 1}. {todo.todo.target}
+                  </Text>
+                ))
+              : scenario.todos.map((todo, index) => (
+                  <Text
+                    filter="blur(5px)"
+                    key={index}
+                    fontSize="s"
+                    fontWeight="regular"
+                    userSelect="none"
+                  >
+                    {index + 1}. {"a".repeat(todo.target.length)}
+                  </Text>
+                ))}
           </VStack>
-          <Text mt="auto" color="#B3B3B3" fontSize="s" fontWeight="regular">
-            {todos.length}개의 To-Do
-          </Text>
+          {todoList ? (
+            <Text mt="auto" color="#B3B3B3" fontSize="s" fontWeight="regular">
+              {todoList.length}개의 To-Do 중{" "}
+              {todoList.filter((todo) => todo.isCompleted).length}개 완료
+            </Text>
+          ) : (
+            <Text mt="auto" color="#B3B3B3" fontSize="s" fontWeight="regular">
+              {scenario.todos.length}개의 To-Do (훈련 시작 후 확인 가능)
+            </Text>
+          )}
         </Flex>
       </Flex>
+      {isFailed && (
+        <Text px={45} mt={10} fontWeight="regular" fontSize="s" color="danger">
+          ※ 이전에 포기했던 훈련이에요!
+        </Text>
+      )}
+      {fishingList && <FishingList fishingList={fishingList} />}
     </Box>
   );
 }
