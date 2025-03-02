@@ -38,7 +38,11 @@ export default function MailDisplay({
           flexDirection={"row"}
           borderBottom={"2px solid #f4f7ff"}
         >
-          <MailQuickAction mailID={mailHolderId} mailBox={mailBox} gap={30} />
+          <MailQuickAction
+            mailHolderId={mailHolderId}
+            mailBox={mailBox}
+            gap={30}
+          />
         </Flex>
       )}
       <VStack align={"start"} w={600} minW={600} backgroundColor="white">

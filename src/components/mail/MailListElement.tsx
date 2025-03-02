@@ -89,7 +89,7 @@ export default function MailListElement({
       {/* hover중일 땐 퀵메뉴가 뜹니다 */}
       {isHover && (
         <MailQuickAction
-          mailID={mailListElementData.mailHolderId}
+          mailHolderId={mailListElementData.mailHolderId}
           mailBox={mailListElementData.mailBox}
         />
       )}

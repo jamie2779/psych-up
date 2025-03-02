@@ -1,18 +1,33 @@
 import { ProhibitIcon, StarIcon, TrashIcon } from "@/assets/IconSet";
 import { Flex, IconButton } from "@chakra-ui/react";
 import { MailBox } from "@prisma/client";
+import ky from "ky";
+import toast from "react-hot-toast";
 
 interface MailQuickActionProps {
-  mailID: number;
+  mailHolderId: number;
   mailBox?: MailBox;
   gap?: number;
 }
 
 export default function MailQuickAction({
-  mailID,
+  mailHolderId,
   gap = 16,
   mailBox,
 }: MailQuickActionProps) {
+  const mailBoxHandler = async (mailHolderId: number, mailBox: MailBox) => {
+    await toast.promise(
+      ky.post("/api/mailbox", {
+        json: { mailHolderId: mailHolderId, mailBox: mailBox },
+      }),
+      {
+        loading: "처리 중입니다.",
+        success: "처리 되었습니다.",
+        error: "처리 중 문제가 발생하였습니다.",
+      }
+    );
+  };
+
   return (
     <Flex gap={gap}>
       <IconButton
@@ -21,7 +36,8 @@ export default function MailQuickAction({
         aria-label="Star"
         variant="ghost"
         onClick={() => {
-          confirm(`Delete mail ID: ${mailID}`);
+          if (mailBox !== "STARRED") mailBoxHandler(mailHolderId, "STARRED");
+          else mailBoxHandler(mailHolderId, "INBOX");
         }}
         icon={
           <StarIcon
@@ -40,11 +56,13 @@ export default function MailQuickAction({
         aria-label="Prohibit"
         variant="ghost"
         onClick={() => {
-          confirm(`Delete mail ID: ${mailID}`);
+          if (mailBox !== "SPAM") mailBoxHandler(mailHolderId, "SPAM");
+          else mailBoxHandler(mailHolderId, "INBOX");
         }}
         icon={
           <ProhibitIcon
             boxSize="100%"
+            fill={mailBox === "SPAM" ? "danger" : "none"}
             _hover={{
               cursor: "pointer",
               fill: "danger",
@@ -58,11 +76,13 @@ export default function MailQuickAction({
         aria-label="Trash"
         variant="ghost"
         onClick={() => {
-          confirm(`Delete mail ID: ${mailID}`);
+          if (mailBox !== "TRASH") mailBoxHandler(mailHolderId, "TRASH");
+          else mailBoxHandler(mailHolderId, "INBOX");
         }}
         icon={
           <TrashIcon
             boxSize="100%"
+            fill={mailBox === "TRASH" ? "grey" : "none"}
             _hover={{
               cursor: "pointer",
               fill: "grey",
