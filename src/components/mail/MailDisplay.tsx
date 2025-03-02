@@ -1,9 +1,10 @@
-import { Box, Flex, HStack, Text, VStack } from "@chakra-ui/react";
+import { Box, Flex, HStack, Text, VStack, Divider } from "@chakra-ui/react";
 
 import MailProfile from "./MailProfile";
 import MailQuickAction from "./MailQuickAction";
 import { Mail, MailFile, File, MailBox } from "@prisma/client";
 import ArticleViewer from "../ArticleViewer";
+import FileList from "../FileList";
 import { MailData } from "@/components/mail/MailListElement";
 
 interface MailDataProps {
@@ -49,7 +50,13 @@ export default function MailDisplay({
           />
         </Flex>
       )}
-      <VStack align={"start"} w={600} minW={600} backgroundColor="white">
+      <VStack
+        align={"start"}
+        w={600}
+        minW={600}
+        pb={10}
+        backgroundColor="white"
+      >
         {/* 메일 제목 */}
         <Text p={20} fontSize="xl" fontWeight="700">
           {mailData?.title}
@@ -84,9 +91,23 @@ export default function MailDisplay({
             })}
           </Text>
         </Flex>
+        {/* 첨부파일 */}
+        {mailData?.mailFiles.length > 0 && (
+          <VStack w="100%" mt={10} px={20} boxSizing="border-box" align="start">
+            <Text fontSize="s" fontWeight="medium">
+              첨부파일 ({mailData.mailFiles.length})
+            </Text>
+            <FileList
+              fileList={mailData.mailFiles.map((mailFile) => mailFile.file)}
+            />
+          </VStack>
+        )}
+        <Box px={20} pt={10} boxSizing="border-box" w="100%">
+          <Divider />
+        </Box>
       </VStack>
       {/* 메일 내용 */}
-      <Box w={600} minW={600} p={20} overflow="auto" flex="1">
+      <Box w={600} minW={600} px={20} overflow="auto" flex="1">
         <ArticleViewer content={mailData?.article} data={articleData || {}} />
       </Box>
     </Flex>
