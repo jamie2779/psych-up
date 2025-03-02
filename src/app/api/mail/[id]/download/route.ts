@@ -41,7 +41,7 @@ export async function GET(
       data: { isDownloaded: true },
     });
     return NextResponse.json({ success: true });
-  } catch (e) {
+  } catch (_) {
     return NextResponse.json(
       { error: "Failed to update mail" },
       { status: 500 }

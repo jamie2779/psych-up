@@ -7,9 +7,7 @@ interface TrainingCellProps {
   scenario: Scenario;
 }
 
-export default function TrainingCell({
-  scenario
-}: TrainingCellProps) {
+export default function TrainingCell({ scenario }: TrainingCellProps) {
   const router = useRouter();
   return (
     <Flex

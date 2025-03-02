@@ -47,7 +47,7 @@ export default function SignUp() {
       setTimeout(() => {
         router.push("/dashboard");
       }, 1000);
-    } catch (error) {
+    } catch (_) {
       setIsLoading(false);
     }
   };
