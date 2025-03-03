@@ -3,12 +3,17 @@ import { useState } from "react";
 import { Box, Text, Flex, VStack, Button } from "@chakra-ui/react";
 import { Mail, MailFile, File } from "@prisma/client";
 import FishingModal from "@/components/dashboard/FishingModal";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 interface FishingListProps {
   fishingList: (Mail & { mailFiles: (MailFile & { file: File })[] })[];
+  articleData: JsonValue;
 }
 
-export default function FishingList({ fishingList }: FishingListProps) {
+export default function FishingList({
+  fishingList,
+  articleData,
+}: FishingListProps) {
   const [opened, setOpened] = useState(false);
   return (
     <Box w="100%" maxW={1280} px={40} mt={10}>
@@ -41,7 +46,13 @@ export default function FishingList({ fishingList }: FishingListProps) {
         {opened && (
           <VStack w="100%" spacing={6}>
             {fishingList.map((mail, index) => {
-              return <FishingModal key={index} fishingMail={mail} />;
+              return (
+                <FishingModal
+                  key={index}
+                  fishingMail={mail}
+                  articleData={articleData}
+                />
+              );
             })}
           </VStack>
         )}

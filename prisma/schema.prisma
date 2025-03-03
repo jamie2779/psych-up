@@ -155,7 +155,7 @@ model DataFormat {
 
   name         String
   tag          String
-  type         DataType
+  placeholder  String
   createdDate  DateTime @default(now())
   modifiedDate DateTime @default(now()) @updatedAt
 
@@ -178,14 +178,4 @@ enum MailBox {
   STARRED
   SPAM
   TRASH
-}
-
-enum DataType {
-  STRING
-  NUMBER
-  BOOLEAN
-  FLOAT
-  DATETIME
-  DATE
-  TIME
 }

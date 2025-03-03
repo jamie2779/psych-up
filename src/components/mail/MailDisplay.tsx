@@ -6,12 +6,13 @@ import { Mail, MailFile, File, MailBox } from "@prisma/client";
 import ArticleViewer from "../ArticleViewer";
 import FileList from "../FileList";
 import { MailData } from "@/components/mail/MailListElement";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 interface MailDataProps {
   mailHolderId?: number;
   mailBox?: MailBox;
   mailData?: Mail & { mailFiles: (MailFile & { file: File })[] };
-  articleData?: Record<string, string>;
+  articleData?: JsonValue;
   setViewingMail?: (mailData: MailData | null) => void;
 }
 

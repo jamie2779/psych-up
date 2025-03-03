@@ -1,14 +1,16 @@
 import dynamic from "next/dynamic";
 import { Box } from "@chakra-ui/react";
 import { renderTemplate } from "@/lib/utils";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 interface QuillNoSSRReaderProps {
   content: string;
-  data: Record<string, unknown>;
+  data: JsonValue;
 }
 
 export const QuillNoSSRReader = ({ content, data }: QuillNoSSRReaderProps) => {
   const processedContent = renderTemplate(content, data);
+
   const Result = dynamic(
     async () => {
       const { default: QuillComponent } = await import("react-quill-new");
@@ -51,7 +53,7 @@ export default function ArticleViewer({
   data,
 }: {
   content: string;
-  data: Record<string, string>;
+  data: JsonValue;
 }) {
   return (
     <Box fontSize="s">

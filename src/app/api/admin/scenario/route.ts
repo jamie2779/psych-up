@@ -3,7 +3,6 @@ import { auth } from "@/auth";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
 import { Permission } from "@prisma/client";
-import { DataType } from "@prisma/client";
 
 export async function POST(request: NextRequest) {
   const session = await auth();
@@ -67,9 +66,9 @@ export async function POST(request: NextRequest) {
     data.dataFormatList.map(async (dataFormat) => {
       await prisma.dataFormat.create({
         data: {
-          tag: dataFormat.tag,
           name: dataFormat.name,
-          type: dataFormat.type as DataType,
+          tag: dataFormat.tag,
+          placeholder: dataFormat.placeholder,
           scenarioId: scenario.scenarioId,
         },
       });

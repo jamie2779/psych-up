@@ -5,15 +5,18 @@ import { Box, Flex, List, Text } from "@chakra-ui/react";
 import MailListElement, { MailData } from "@/components/mail/MailListElement";
 import MailDisplay from "@/components/mail/MailDisplay";
 import ky from "ky";
+import { ArticleDataType } from "@/lib/utils";
 
 interface MailBoxProps {
   mailListData: MailData[];
   title: string;
+  articleData: ArticleDataType;
 }
 
 export default function MailBox({
   mailListData: initialMailListData,
   title,
+  articleData,
 }: MailBoxProps) {
   const [mailListData, setMailListData] =
     useState<MailData[]>(initialMailListData);
@@ -112,6 +115,13 @@ export default function MailBox({
           mailData={viewing_mail?.mail}
           mailBox={viewing_mail?.mailBox}
           setViewingMail={setViewingMail}
+          articleData={{
+            ...articleData,
+            fishing:
+              viewing_mail?.mail.mailId && articleData.fishingData
+                ? articleData.fishingData[viewing_mail.mail.mailId] || null
+                : null,
+          }}
         />
       </Box>
     </Flex>

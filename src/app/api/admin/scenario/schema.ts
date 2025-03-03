@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { DataType } from "@prisma/client";
 
 export const scenarioPostSchema = z.object({
   title: z.string(),
@@ -11,7 +10,7 @@ export const scenarioPostSchema = z.object({
     z.object({
       tag: z.string(),
       name: z.string(),
-      type: z.enum(Object.values(DataType) as [string, ...string[]]),
+      placeholder: z.string(),
     })
   ),
   mailList: z.array(z.number()),

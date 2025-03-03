@@ -2,7 +2,7 @@ import { auth } from "@/auth";
 import { scenarioPutSchema } from "./schema";
 import prisma from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
-import { DataType, Permission } from "@prisma/client";
+import { Permission } from "@prisma/client";
 
 export async function DELETE(
   _request: NextRequest,
@@ -133,9 +133,9 @@ export async function PUT(
       data.dataFormatList.map(async (dataFormat) => {
         await prisma.dataFormat.create({
           data: {
-            tag: dataFormat.tag,
             name: dataFormat.name,
-            type: dataFormat.type as DataType,
+            tag: dataFormat.tag,
+            placeholder: dataFormat.placeholder,
             scenarioId: updatedScenario.scenarioId,
           },
         });

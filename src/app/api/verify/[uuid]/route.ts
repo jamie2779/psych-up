@@ -33,6 +33,17 @@ export async function GET(
     },
   });
 
+  if (
+    todoHolder &&
+    todoHolder.training.memberId === user.memberId &&
+    todoHolder.isCompleted
+  ) {
+    return new NextResponse(
+      `<script>alert("이미 확인된 요청입니다."); window.close();</script>`,
+      { headers: { "Content-Type": "text/html; charset=UTF-8" } }
+    );
+  }
+
   if (todoHolder && todoHolder.training.memberId === user.memberId) {
     await prisma.todoHolder.update({
       where: {
@@ -43,7 +54,10 @@ export async function GET(
         completedDate: new Date(),
       },
     });
-    return NextResponse.json({ success: true });
+    return new NextResponse(
+      `<script>alert("확인되었습니다."); window.close();</script>`,
+      { headers: { "Content-Type": "text/html; charset=UTF-8" } }
+    );
   }
 
   const mailHolder = await prisma.mailHolder.findUnique({
@@ -55,6 +69,17 @@ export async function GET(
     },
   });
 
+  if (
+    mailHolder &&
+    mailHolder.training.memberId === user.memberId &&
+    mailHolder.isFooled
+  ) {
+    return new NextResponse(
+      `<script>alert("이미 확인된 요청입니다."); window.close();</script>`,
+      { headers: { "Content-Type": "text/html; charset=UTF-8" } }
+    );
+  }
+
   if (mailHolder && mailHolder.training.memberId === user.memberId) {
     await prisma.mailHolder.update({
       where: {
@@ -64,7 +89,10 @@ export async function GET(
         isFooled: true,
       },
     });
-    return NextResponse.json({ success: true });
+    return new NextResponse(
+      `<script>alert("확인되었습니다."); window.close();</script>`,
+      { headers: { "Content-Type": "text/html; charset=UTF-8" } }
+    );
   }
 
   return NextResponse.json({ error: "target not found" }, { status: 404 });

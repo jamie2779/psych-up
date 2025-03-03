@@ -1,3 +1,5 @@
+import { Mail, MailHolder, Todo, TodoHolder, User } from "@prisma/client";
+import { JsonValue } from "@prisma/client/runtime/library";
 import Mustache from "mustache";
 
 /**
@@ -22,10 +24,7 @@ export function formatBytes(bytes: number, decimals = 2) {
  * @param data 치환할 데이터
  * @returns 변환된 문자열
  */
-export function renderTemplate(
-  template: string,
-  data: Record<string, unknown>
-): string {
+export function renderTemplate(template: string, data: JsonValue): string {
   try {
     return Mustache.render(template, data);
   } catch {
@@ -105,4 +104,48 @@ export function transformObject(
   });
 
   return output;
+}
+
+/**
+ * 사용자가 작성한 데이터를 저장하는 인터페이스
+ */
+export interface ArticleDataType {
+  name: string;
+  data: JsonValue;
+  todo: Record<string, string>;
+  fishingData: Record<string, string>;
+}
+
+/**
+ * 데이터들을 조합하여 최종 JSON 데이터를 생성하는 함수
+ * @param user
+ * @param data
+ * @param mailHolders
+ * @param todoHolders
+ * @returns
+ */
+export function dataGenerator(
+  user: User,
+  data: JsonValue,
+  mailHolders: (MailHolder & { mail: Mail })[] = [],
+  todoHolders: (TodoHolder & { todo: Todo })[] = []
+): ArticleDataType {
+  const todoData = Object.fromEntries(
+    todoHolders.map((todoHolder) => [
+      todoHolder.todo.tag,
+      `/api/verify/${todoHolder.uuid}`,
+    ])
+  );
+  const fishingData = Object.fromEntries(
+    mailHolders.map((mailHolder) => [
+      mailHolder.mail.mailId,
+      `/api/verify/${mailHolder.uuid}`,
+    ])
+  );
+  return {
+    name: user.name,
+    data: data,
+    todo: todoData,
+    fishingData: fishingData,
+  };
 }

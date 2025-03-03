@@ -242,6 +242,7 @@ export default function MailForm({ mail }: MailFormProps) {
                     todo.[tag] : 특정 태그의 todo 완료 API로 연결되는 url
                   </Text>
                   <Text>fishing : 현재 메일의 피싱 API로 연결되는 url</Text>
+                  <Text>data.[tag] : 훈련 시작시 입력한 데이터로 치환</Text>
                 </PopoverBody>
               </PopoverContent>
             </Popover>

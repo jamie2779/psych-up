@@ -67,7 +67,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
     scenario?.dataFormats.map((dataFormat) => ({
       name: dataFormat.name,
       tag: dataFormat.tag,
-      type: dataFormat.type,
+      placeholder: dataFormat.placeholder,
     })) || []
   );
 
@@ -252,7 +252,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
                   <Th>No.</Th>
                   <Th>이름</Th>
                   <Th>태그</Th>
-                  <Th>자료형</Th>
+                  <Th>예시(플레이스홀더)</Th>
                   <Th>삭제</Th>
                 </Tr>
               </Thead>
@@ -262,7 +262,7 @@ export default function ScenarioForm({ scenario }: ScenarioFormProps) {
                     <Td>{index + 1}</Td>
                     <Td>{dataFormat.name}</Td>
                     <Td>{dataFormat.tag}</Td>
-                    <Td>{dataFormat.type}</Td>
+                    <Td>{dataFormat.placeholder}</Td>
 
                     <Td>
                       <IconButton
