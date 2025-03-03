@@ -15,12 +15,17 @@ import {
 import { useDisclosure } from "@chakra-ui/react";
 import { Mail, MailFile, File } from "@prisma/client";
 import MailDisplay from "@/components/mail/MailDisplay";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 interface FishingModalProps {
   fishingMail: Mail & { mailFiles: (MailFile & { file: File })[] };
+  articleData: JsonValue;
 }
 
-export default function FishingModal({ fishingMail }: FishingModalProps) {
+export default function FishingModal({
+  fishingMail,
+  articleData,
+}: FishingModalProps) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   return (
@@ -62,7 +67,7 @@ export default function FishingModal({ fishingMail }: FishingModalProps) {
           <ModalBody w="100%">
             <Flex gap={30}>
               <Box w="50%" maxH={750}>
-                <MailDisplay mailData={fishingMail} />
+                <MailDisplay mailData={fishingMail} articleData={articleData} />
               </Box>
               <Center height="700">
                 <Divider orientation="vertical" />

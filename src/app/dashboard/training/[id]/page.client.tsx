@@ -5,6 +5,7 @@ import { ArrowIcon } from "@/assets/IconSet";
 import { useRouter } from "next/navigation";
 import FishingList from "@/components/dashboard/FishingList";
 import FileList from "@/components/FileList";
+import TrainingFormModal from "@/components/dashboard/TrainingFormModal";
 import {
   Scenario,
   Todo,
@@ -14,18 +15,21 @@ import {
   TrainingStatus,
   Mail,
   MailFile,
+  DataFormat,
 } from "@prisma/client";
 import toast from "react-hot-toast";
 import ky from "ky";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 interface TrainingDetailProps {
-  scenario: Scenario & { todos: Todo[] } & {
+  scenario: Scenario & { todos: Todo[] } & { dataFormats: DataFormat[] } & {
     scenarioFiles: (ScenarioFile & { file: File })[];
   };
   trainingStatus?: TrainingStatus;
   isFailed: boolean;
   todoList?: (TodoHolder & { todo: Todo })[];
   fishingList?: (Mail & { mailFiles: (MailFile & { file: File })[] })[];
+  articleData?: JsonValue;
   trainingId?: number;
 }
 
@@ -35,23 +39,10 @@ export default function TrainingDetail({
   isFailed,
   todoList,
   fishingList,
+  articleData,
   trainingId,
 }: TrainingDetailProps) {
   const router = useRouter();
-
-  const scenarioStartHandler = async (scenarioId: number) => {
-    if (!confirm("이 시나리오로 훈련을 시작하시겠습니까?")) {
-      return;
-    }
-
-    await toast.promise(ky.post("/api/training", { json: { scenarioId } }), {
-      loading: "훈련을 시작하는 중입니다.",
-      success: "훈련이 시작 되었습니다.",
-      error: "훈련 시작 도중 문제가 발생하였습니다",
-    });
-
-    router.refresh();
-  };
 
   const scenarioFailHandler = async (scenarioId: number) => {
     if (!confirm("이 훈련을 포기하시겠습니까?")) {
@@ -149,20 +140,7 @@ export default function TrainingDetail({
               </Text> */}
             </Flex>
             {(!trainingStatus || trainingStatus === TrainingStatus.FAIL) && (
-              <Button
-                w={95}
-                h={35}
-                bg="success"
-                fontSize="s"
-                fontWeight="medium"
-                _hover={{
-                  bg: "success",
-                  transform: "scale(1.02)",
-                }}
-                onClick={() => scenarioStartHandler(scenario.scenarioId)}
-              >
-                수락 및 시작
-              </Button>
+              <TrainingFormModal scenario={scenario} />
             )}
             {trainingStatus === TrainingStatus.ACTIVE && trainingId && (
               <Flex gap={6}>
@@ -257,7 +235,12 @@ export default function TrainingDetail({
           ※ 이전에 포기했던 훈련이에요!
         </Text>
       )}
-      {fishingList && <FishingList fishingList={fishingList} />}
+      {fishingList && (
+        <FishingList
+          fishingList={fishingList}
+          articleData={articleData || {}}
+        />
+      )}
     </Box>
   );
 }

@@ -6,6 +6,13 @@ export const scenarioPostSchema = z.object({
   detail: z.string(),
   isPublic: z.boolean(),
   todoList: z.array(z.object({ tag: z.string(), target: z.string() })),
+  dataFormatList: z.array(
+    z.object({
+      tag: z.string(),
+      name: z.string(),
+      placeholder: z.string(),
+    })
+  ),
   mailList: z.array(z.number()),
   fileList: z.array(z.number()),
 });

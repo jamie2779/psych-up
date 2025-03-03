@@ -10,10 +10,11 @@ import {
   File,
   ScenarioMail,
   Mail,
+  DataFormat,
 } from "@prisma/client";
 
 interface AdminEditScenarioProps {
-  scenario: Scenario & { todos: Todo[] } & {
+  scenario: Scenario & { todos: Todo[] } & { dataFormats: DataFormat[] } & {
     scenarioFiles: (ScenarioFile & { file: File })[];
   } & {
     scenarioMails: (ScenarioMail & { mail: Mail })[];

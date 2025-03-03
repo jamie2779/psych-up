@@ -61,5 +61,19 @@ export async function POST(request: NextRequest) {
       });
     })
   );
+
+  await Promise.all(
+    data.dataFormatList.map(async (dataFormat) => {
+      await prisma.dataFormat.create({
+        data: {
+          name: dataFormat.name,
+          tag: dataFormat.tag,
+          placeholder: dataFormat.placeholder,
+          scenarioId: scenario.scenarioId,
+        },
+      });
+    })
+  );
+
   return NextResponse.json(scenario);
 }

@@ -124,6 +124,24 @@ export async function PUT(
       })
     );
 
+    // 기존 정보 포멧 삭제 후 새롭게 저장
+    await prisma.dataFormat.deleteMany({
+      where: { scenarioId },
+    });
+
+    await Promise.all(
+      data.dataFormatList.map(async (dataFormat) => {
+        await prisma.dataFormat.create({
+          data: {
+            name: dataFormat.name,
+            tag: dataFormat.tag,
+            placeholder: dataFormat.placeholder,
+            scenarioId: updatedScenario.scenarioId,
+          },
+        });
+      })
+    );
+
     // 기존 메일 연결 해제 후 새롭게 연결
     await prisma.scenarioMail.deleteMany({
       where: { scenarioId: scenarioId },

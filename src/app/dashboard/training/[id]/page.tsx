@@ -2,6 +2,7 @@ import { auth } from "@/auth";
 import TrainingDetail from "./page.client";
 import prisma from "@/lib/prisma";
 import { redirect } from "next/navigation";
+import { dataGenerator } from "@/lib/utils";
 
 export default async function TrainingDetailPage(props: {
   params?: Promise<{ id?: string }>;
@@ -36,6 +37,7 @@ export default async function TrainingDetailPage(props: {
     where: { scenarioId: scenarioId },
     include: {
       todos: true,
+      dataFormats: true,
       scenarioFiles: {
         include: {
           file: true,
@@ -87,6 +89,8 @@ export default async function TrainingDetailPage(props: {
         },
       });
 
+      const articleData = dataGenerator(user, training.data);
+
       return (
         <TrainingDetail
           scenario={scenario}
@@ -95,6 +99,7 @@ export default async function TrainingDetailPage(props: {
           todoList={todos}
           fishingList={fishingList.map((fishing) => fishing.mail)}
           trainingId={training.trainingId}
+          articleData={{ ...articleData }}
         />
       );
     } else {

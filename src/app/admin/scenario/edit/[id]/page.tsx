@@ -21,6 +21,7 @@ export default async function AdminEditScenarioPage(props: {
       where: { scenarioId },
       include: {
         todos: true,
+        dataFormats: true,
         scenarioFiles: {
           include: {
             file: true,

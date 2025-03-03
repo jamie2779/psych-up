@@ -35,10 +35,22 @@ export async function POST(request: NextRequest) {
       scenarioId: data.scenarioId,
       isPublic: true,
     },
+    include: {
+      dataFormats: true,
+    },
   });
 
   if (!scenario) {
     return NextResponse.json({ error: "Scenario not found" }, { status: 404 });
+  }
+
+  if (
+    !scenario.dataFormats.every((df) => Object.keys(data.data).includes(df.tag))
+  ) {
+    return NextResponse.json(
+      { error: "Missing required data fields" },
+      { status: 400 }
+    );
   }
 
   const curTraining = await prisma.training.findFirst({
@@ -63,6 +75,7 @@ export async function POST(request: NextRequest) {
         data: {
           scenarioId: data.scenarioId,
           memberId: user.memberId,
+          data: data.data,
           limitDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000), // 일주일 후
         },
       });
@@ -79,6 +92,7 @@ export async function POST(request: NextRequest) {
         data: todos.map((todo) => ({
           trainingId: training.trainingId,
           todoId: todo.todoId,
+          uuid: crypto.randomUUID(),
         })),
       });
 
@@ -94,6 +108,10 @@ export async function POST(request: NextRequest) {
         data: mails.map((mail) => ({
           trainingId: training.trainingId,
           mailId: mail.mailId,
+          uuid: crypto.randomUUID(),
+          createdDate: new Date(
+            Date.now() - (Math.floor(Math.random() * 10075) + 5) * 60 * 1000 //일주일 ~ 5분전 랜덤한 시간 빼기
+          ),
         })),
       });
 

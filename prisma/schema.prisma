@@ -39,6 +39,7 @@ model Training {
   limitDate     DateTime
   completedDate DateTime?
   score         Int?
+  data          Json?
   createdDate   DateTime       @default(now())
   modifiedDate  DateTime       @default(now()) @updatedAt
 
@@ -52,9 +53,11 @@ model MailHolder {
   mailHolderId Int      @id @default(autoincrement())
   trainingId   Int
   mailId       Int
+  uuid         String   @unique
   mailBox      MailBox  @default(INBOX)
   isRead       Boolean  @default(false)
   isDownloaded Boolean  @default(false)
+  isFooled     Boolean  @default(false)
   createdDate  DateTime @default(now())
 
   training Training @relation(fields: [trainingId], references: [trainingId], onDelete: Cascade)
@@ -73,6 +76,7 @@ model Scenario {
   trainings     Training[]
   scenarioFiles ScenarioFile[]
   scenarioMails ScenarioMail[]
+  dataFormats   DataFormat[]
   todos         Todo[]
 }
 
@@ -136,12 +140,26 @@ model TodoHolder {
   todoHolderId  Int       @id @default(autoincrement())
   trainingId    Int
   todoId        Int
+  uuid          String    @unique
   isCompleted   Boolean   @default(false)
   completedDate DateTime?
   createdDate   DateTime  @default(now())
 
   training Training @relation(fields: [trainingId], references: [trainingId], onDelete: Cascade)
   todo     Todo     @relation(fields: [todoId], references: [todoId], onDelete: Cascade)
+}
+
+model DataFormat {
+  dataFormatId Int @id @default(autoincrement())
+  scenarioId   Int
+
+  name         String
+  tag          String
+  placeholder  String
+  createdDate  DateTime @default(now())
+  modifiedDate DateTime @default(now()) @updatedAt
+
+  scenario Scenario @relation(fields: [scenarioId], references: [scenarioId], onDelete: Cascade)
 }
 
 enum Permission {
