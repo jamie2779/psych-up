@@ -6,12 +6,14 @@ import { Scenario } from "@prisma/client";
 
 interface DashboardTrainingPageProps {
   currentScenarioList: Scenario[];
-  scenarioList: Scenario[];
+  completedScenarioList: Scenario[];
+  newScenarioList: Scenario[];
 }
 
 export default function DashboardTrainingPage({
   currentScenarioList,
-  scenarioList,
+  completedScenarioList,
+  newScenarioList,
 }: DashboardTrainingPageProps) {
   const trainingListRef = useRef<HTMLDivElement>(null);
   return (
@@ -31,10 +33,20 @@ export default function DashboardTrainingPage({
           showButton={true}
           scrollToRef={trainingListRef}
         />
+        {completedScenarioList.length > 0 && (
+          <Box w="100%">
+            <TrainingList
+              title="완료한 훈련"
+              scenarioList={completedScenarioList}
+              showButton={false}
+            />
+          </Box>
+        )}
+
         <Box w="100%" ref={trainingListRef}>
           <TrainingList
-            title="전체 훈련 목록"
-            scenarioList={scenarioList}
+            title="미완료 훈련"
+            scenarioList={newScenarioList}
             showButton={false}
           />
         </Box>
