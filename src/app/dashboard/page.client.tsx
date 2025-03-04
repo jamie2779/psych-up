@@ -84,7 +84,7 @@ export default function DashboardHome({
     },
   ];
 
-  const tipList: String[] = [
+  const tipList: string[] = [
     "의심스러운 이메일의 링크를 클릭하지 마세요.",
     "첨부파일을 열기 전에 발신자를 확인하세요.",
     "이메일 주소를 주의깊게 살펴보세요.",
