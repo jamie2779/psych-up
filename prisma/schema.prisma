@@ -39,6 +39,8 @@ model Training {
   limitDate     DateTime
   completedDate DateTime?
   score         Int?
+  fishingCount  Int?
+  fooledCount   Int?
   data          Json?
   createdDate   DateTime       @default(now())
   modifiedDate  DateTime       @default(now()) @updatedAt

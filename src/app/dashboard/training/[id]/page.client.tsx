@@ -16,6 +16,7 @@ import {
   Mail,
   MailFile,
   DataFormat,
+  Training,
 } from "@prisma/client";
 import toast from "react-hot-toast";
 import ky from "ky";
@@ -29,6 +30,7 @@ interface TrainingDetailProps {
   isFailed: boolean;
   todoList?: (TodoHolder & { todo: Todo })[];
   fishingList?: (Mail & { mailFiles: (MailFile & { file: File })[] })[];
+  training?: Training;
   articleData?: JsonValue;
   trainingId?: number;
 }
@@ -41,6 +43,7 @@ export default function TrainingDetail({
   fishingList,
   articleData,
   trainingId,
+  training,
 }: TrainingDetailProps) {
   const router = useRouter();
 
@@ -235,11 +238,53 @@ export default function TrainingDetail({
           ※ 이전에 포기했던 훈련이에요!
         </Text>
       )}
-      {fishingList && (
-        <FishingList
-          fishingList={fishingList}
-          articleData={articleData || {}}
-        />
+      {fishingList && training && (
+        <Flex w="100%" maxW={1280} px={40} mt={10} gap={10}>
+          <FishingList
+            fishingList={fishingList}
+            articleData={articleData || {}}
+          />
+          <Flex
+            flex="1"
+            bg="white"
+            p={26}
+            borderRadius={14}
+            justify="space-between"
+            flexDirection="column"
+            h="fit-content"
+          >
+            <VStack align="flex-start">
+              <Text mb={8} fontSize="l" fontWeight="semibold">
+                🏆 훈련 결과!
+              </Text>
+              <Flex gap={6}>
+                <Text fontSize="l" fontWeight="regular">
+                  당한 피싱 개수:
+                </Text>
+                <Text
+                  fontSize="l"
+                  fontWeight="regular"
+                  color={
+                    training.fooledCount && training.fooledCount > 0
+                      ? "danger"
+                      : "success"
+                  }
+                >
+                  {training.fooledCount} / {training.fishingCount}
+                </Text>
+              </Flex>
+
+              <Flex gap={6}>
+                <Text fontSize="l" fontWeight="regular">
+                  획득한 점수:
+                </Text>
+                <Text fontSize="l" fontWeight="regular" color="success">
+                  {training.score} 점
+                </Text>
+              </Flex>
+            </VStack>
+          </Flex>
+        </Flex>
       )}
     </Box>
   );

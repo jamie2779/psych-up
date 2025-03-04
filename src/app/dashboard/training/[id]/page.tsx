@@ -72,7 +72,7 @@ export default async function TrainingDetailPage(props: {
     });
 
     if (training.status === "COMPLETE") {
-      const fishingList = await prisma.scenarioMail.findMany({
+      const mailList = await prisma.scenarioMail.findMany({
         where: {
           scenarioId: scenarioId,
         },
@@ -89,6 +89,8 @@ export default async function TrainingDetailPage(props: {
         },
       });
 
+      const fishingList = mailList.filter((mail) => mail.mail.isFishing);
+
       const articleData = dataGenerator(user, training.data);
 
       return (
@@ -100,6 +102,7 @@ export default async function TrainingDetailPage(props: {
           fishingList={fishingList.map((fishing) => fishing.mail)}
           trainingId={training.trainingId}
           articleData={{ ...articleData }}
+          training={training}
         />
       );
     } else {
