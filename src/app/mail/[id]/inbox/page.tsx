@@ -55,7 +55,7 @@ export default async function MailInboxPage(props: {
     where: {
       memberId: user.memberId,
       trainingId: trainingId,
-      status: "ACTIVE",
+      status: { not: "FAIL" },
     },
     include: {
       mailHolders: {

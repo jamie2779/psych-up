@@ -55,7 +55,7 @@ export default async function MailSpamPage(props: {
     where: {
       memberId: user.memberId,
       trainingId: trainingId,
-      status: "ACTIVE",
+      status: { not: "FAIL" },
     },
     include: {
       mailHolders: {
