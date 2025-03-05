@@ -7,6 +7,7 @@ import ArticleViewer from "../ArticleViewer";
 import FileList from "../FileList";
 import { MailData } from "@/components/mail/MailListElement";
 import { JsonValue } from "@prisma/client/runtime/library";
+import { renderTemplate } from "@/lib/utils";
 
 interface MailDataProps {
   mailHolderId?: number;
@@ -60,7 +61,7 @@ export default function MailDisplay({
       >
         {/* 메일 제목 */}
         <Text p={20} fontSize="xl" fontWeight="700">
-          {mailData?.title}
+          {renderTemplate(mailData?.title, articleData ?? {})}
         </Text>
         {/* 보낸 사람의 프로필 */}
         <Flex
@@ -74,10 +75,10 @@ export default function MailDisplay({
             <MailProfile name={mailData?.sender ?? "Unnamed"} />
             <VStack align={"start"} spacing={0}>
               <Text fontSize={"s"} fontWeight={500}>
-                {mailData?.sender}
+                {renderTemplate(mailData?.sender, articleData ?? {})}
               </Text>
               <Text fontSize={"xs"} color="#acacac">
-                From. {mailData?.from}
+                From. {renderTemplate(mailData?.from, articleData ?? {})}
               </Text>
             </VStack>
           </HStack>

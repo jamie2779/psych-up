@@ -4,6 +4,8 @@ import { Box, Flex, Text, VStack } from "@chakra-ui/react";
 import { useState } from "react";
 import MailQuickAction from "./MailQuickAction";
 import { MailHolder, Mail, MailFile, File } from "@prisma/client";
+import { renderTemplate } from "@/lib/utils";
+import { JsonValue } from "@prisma/client/runtime/library";
 
 export type MailData = MailHolder & {
   mail: Mail & { mailFiles: (MailFile & { file: File })[] };
@@ -13,12 +15,14 @@ interface MailListElementDataProps {
   mailListElementData: MailData;
   onClick?: () => void;
   setViewingMail?: (mailData: MailData | null) => void;
+  articleData?: JsonValue;
 }
 
 export default function MailListElement({
   mailListElementData,
   onClick,
   setViewingMail,
+  articleData,
 }: MailListElementDataProps) {
   const [isHover, setHover] = useState(false);
 
@@ -56,10 +60,11 @@ export default function MailListElement({
         {/* 메일의 내용 (세로 방향 스택) */}
         <VStack flex="1" align={"start"} spacing={0}>
           <Text mb={3} fontSize={"m"} fontWeight={"600"}>
-            {mailListElementData.mail.title}
+            {renderTemplate(mailListElementData.mail.title, articleData || {})}
           </Text>
           <Text fontSize={"s"} color={"#a6a6a6"}>
-            {mailListElementData.mail.sender}ㆍ{mailListElementData.mail.from}
+            {renderTemplate(mailListElementData.mail.sender, articleData || {})}
+            ㆍ{renderTemplate(mailListElementData.mail.from, articleData || {})}
           </Text>
           {/* <Text
             fontSize={"s"}
