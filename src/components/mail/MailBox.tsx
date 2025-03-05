@@ -66,6 +66,15 @@ export default function MailBox({
               mailListElementData={mailListElementData}
               onClick={() => setViewingMail(mailListElementData)}
               setViewingMail={setViewingMail}
+              articleData={{
+                ...articleData,
+                fishing:
+                  mailListElementData.mail.mailId && articleData.fishingData
+                    ? articleData.fishingData[
+                        mailListElementData.mail.mailId
+                      ] || null
+                    : null,
+              }}
             />
           ))}
           {mailListData.length === 0 && (

@@ -72,10 +72,10 @@ export default function AdminMail({ mailList }: AdminMailProps) {
                 <Th>보낸이</Th>
                 <Th>보낸사람 메일</Th>
                 <Th>제목</Th>
-                <Th>피싱여부</Th>
-                <Th>파일 개수</Th>
+                <Th>타입</Th>
+                <Th>파일</Th>
                 <Th>생성일</Th>
-                <Th>연결된 시나리오 개수</Th>
+                <Th>시나리오</Th>
                 <Th>수정</Th>
                 <Th>삭제</Th>
               </Tr>
