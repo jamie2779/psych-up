@@ -16,19 +16,37 @@ export default async function DashboardTraining() {
         where: { isPublic: true },
       });
       const trainingList = await prisma.training.findMany({
-        where: { memberId: user.memberId, status: "ACTIVE" },
+        where: { memberId: user.memberId, status: { not: "FAIL" } },
         include: {
           scenario: true,
         },
       });
-      const currentScenarioList = trainingList.map(
-        (training) => training.scenario
+
+      const currentScenarioList = trainingList
+        .filter((training) => training.status === "ACTIVE")
+        .map((training) => training.scenario);
+
+      const completedScenarioList = trainingList
+        .filter((training) => training.status === "COMPLETE")
+        .map((training) => training.scenario);
+
+      const newScenarioList = scenarios.filter(
+        (scenario) =>
+          !currentScenarioList.find(
+            (currentScenario) =>
+              currentScenario.scenarioId === scenario.scenarioId
+          ) &&
+          !completedScenarioList.find(
+            (completedScenario) =>
+              completedScenario.scenarioId === scenario.scenarioId
+          )
       );
 
       return (
         <DashboardTrainingPage
           currentScenarioList={currentScenarioList}
-          scenarioList={scenarios}
+          completedScenarioList={completedScenarioList}
+          newScenarioList={newScenarioList}
         />
       );
     } else {

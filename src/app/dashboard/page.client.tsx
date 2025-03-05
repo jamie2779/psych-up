@@ -13,28 +13,38 @@ import { useRouter } from "next/navigation";
 
 interface DashboardHomePageProps {
   user: User;
-  currentTraining: number;
-  totalTodo: number;
-  completedTodo: number;
+  totalActiveTodo: number;
+  completedActiveTodo: number;
+  trainingCount: number;
+  fishingCount: number;
+  fooledCount: number;
+  mailCount: number;
+  todoCount: number;
+  totalScore: number;
 }
 
 interface TrainingData {
   badge: string;
   text: string;
-  data: number;
+  data: string;
 }
 
 interface MailData {
   title: string;
   color: string;
-  count: number;
+  data: string;
 }
 
 export default function DashboardHome({
   user,
-  currentTraining,
-  totalTodo,
-  completedTodo,
+  totalActiveTodo,
+  completedActiveTodo,
+  trainingCount,
+  fishingCount,
+  fooledCount,
+  mailCount,
+  todoCount,
+  totalScore,
 }: DashboardHomePageProps) {
   const [isClient, setIsClient] = useState(false);
   const router = useRouter();
@@ -46,25 +56,41 @@ export default function DashboardHome({
   const trainingData: TrainingData[] = [
     {
       badge: PassBadge,
-      text: "이번주에 성공한 훈련",
-      data: 10,
+      text: "완료한 훈련 개수",
+      data: `${trainingCount}개`,
     },
     {
       badge: WarningBadge,
-      text: "이번주에 포기한 훈련",
-      data: 3,
+      text: "피싱 회피율",
+      data:
+        fishingCount === 0
+          ? "0%"
+          : `${(((fishingCount - fooledCount) / fishingCount) * 100).toFixed(1)}%`,
     },
     {
       badge: FailBadge,
-      text: "이번주에 실패한 훈련",
-      data: 5,
+      text: "당한 피싱 수",
+      data: `${fooledCount}회`,
     },
   ];
 
   const mailData: MailData[] = [
-    { title: "수신한 메일", count: 102, color: "black" },
-    { title: "승인한 메일", count: 71, color: "primary" },
-    { title: "삭제한 메일", count: 31, color: "danger" },
+    { title: "수신한 메일", data: `${mailCount}개`, color: "black" },
+    { title: "완료한 Todo", data: `${todoCount}개`, color: "success" },
+    {
+      title: "지금까지 얻은 점수",
+      data: `${totalScore}점`,
+      color: "secondary",
+    },
+  ];
+
+  const tipList: string[] = [
+    "의심스러운 이메일의 링크를 클릭하지 마세요.",
+    "첨부파일을 열기 전에 발신자를 확인하세요.",
+    "이메일 주소를 주의깊게 살펴보세요.",
+    "자신의 개인정보를 SNS에 공유하지 마세요.",
+    "급하게 조치를 요구하는 이메일을 경계하세요.",
+    "정기적인 보안 교육과 훈련에 참여하세요",
   ];
 
   return (
@@ -91,9 +117,11 @@ export default function DashboardHome({
           <Text fontSize="xl" fontWeight="medium">
             😁
           </Text>
-          <Text fontSize="s" fontWeight="medium">
-            현재 {currentTraining}개의 훈련을 진행하고 있어요!
-          </Text>
+          {isClient && (
+            <Text fontSize="s" fontWeight="medium">
+              Tip: {tipList[Math.floor(Math.random() * tipList.length)]}
+            </Text>
+          )}
         </Flex>
 
         {/* 2단 */}
@@ -112,10 +140,18 @@ export default function DashboardHome({
               {isClient && (
                 <PieChart width={200} height={200}>
                   <Pie
-                    data={[
-                      { value: completedTodo },
-                      { value: totalTodo - completedTodo },
-                    ]}
+                    data={
+                      totalActiveTodo === 0
+                        ? [{ value: 0 }, { value: 0 }, { value: 100 }]
+                        : [
+                            {
+                              value: completedActiveTodo,
+                            },
+                            {
+                              value: totalActiveTodo - completedActiveTodo,
+                            },
+                          ]
+                    }
                     cx="50%"
                     cy="50%"
                     innerRadius={70}
@@ -126,10 +162,10 @@ export default function DashboardHome({
                   >
                     <Cell fill="#5EBFFB" pointerEvents="none" />
                     <Cell fill="none" pointerEvents="none" />
+                    <Cell fill="grey" pointerEvents="none" />
                   </Pie>
                 </PieChart>
               )}
-
               <Text
                 position="absolute"
                 top="50%"
@@ -137,23 +173,35 @@ export default function DashboardHome({
                 transform="translate(-50%, -50%)"
                 fontSize="28px"
                 fontWeight="bold"
-                color="primary"
+                color={totalActiveTodo === 0 ? "grey" : "primary"}
               >
-                {((completedTodo / totalTodo) * 100) % 1 === 0
-                  ? (completedTodo / totalTodo) * 100 // 정수인 경우
-                  : ((completedTodo / totalTodo) * 100).toFixed(1)}
+                {totalActiveTodo === 0
+                  ? 0
+                  : ((completedActiveTodo / totalActiveTodo) * 100) % 1 === 0
+                    ? (completedActiveTodo / totalActiveTodo) * 100 // 정수인 경우
+                    : ((completedActiveTodo / totalActiveTodo) * 100).toFixed(
+                        1
+                      )}
                 %
               </Text>
             </Box>
             <VStack pt={22} spacing={30} align="flex-start">
-              <VStack spacing={8} align="flex-start">
-                <Text fontSize="s" fontWeight="regular">
-                  진행 중인 모든 훈련의 To-Do 중
-                </Text>
-                <Text fontSize="xl" fontWeight="semibold">
-                  {completedTodo}개 완료
-                </Text>
-              </VStack>
+              {totalActiveTodo === 0 ? (
+                <VStack spacing={8} align="flex-start">
+                  <Text fontSize="s" fontWeight="regular">
+                    진행중인 훈련이 없습니다
+                  </Text>
+                </VStack>
+              ) : (
+                <VStack spacing={8} align="flex-start">
+                  <Text fontSize="s" fontWeight="regular">
+                    진행 중인 모든 훈련의 To-Do 중
+                  </Text>
+                  <Text fontSize="xl" fontWeight="semibold">
+                    {completedActiveTodo}개 완료
+                  </Text>
+                </VStack>
+              )}
 
               <Flex
                 gap={5}
@@ -194,7 +242,7 @@ export default function DashboardHome({
                     {item.text}
                   </Text>
                   <Text fontSize="l" fontWeight="bold">
-                    {item.data}개
+                    {item.data}
                   </Text>
                 </VStack>
               </Flex>
@@ -216,7 +264,7 @@ export default function DashboardHome({
               justify="center"
             >
               <Text fontSize="xl" fontWeight="bold" color={item.color}>
-                {item.count}개
+                {item.data}
               </Text>
               <Text
                 fontSize="s"

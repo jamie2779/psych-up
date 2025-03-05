@@ -35,10 +35,10 @@ export default function AdminEditMail({ mail }: AdminEditMailProps) {
         </Flex>
 
         <Text fontSize={32} fontWeight="medium" textStyle="gradient2">
-          시나리오 편집
+          메일 편집
         </Text>
         <Text fontSize="m" color="grey.shade2" fontWeight="regular">
-          기존 시나리오를 편집합니다
+          기존 메일을 편집합니다
         </Text>
       </VStack>
 
