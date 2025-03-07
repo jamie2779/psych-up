@@ -95,11 +95,12 @@ export default function Home() {
               maxWidth={600}
               userSelect="none"
             >
-              여기에 사이크-업에 대한 목표나 간단한 서비스를 소개하는 곳입니다
-              <br />이 내용은 나중에 회의를 통해 정하도록 하겠습니다!
+              스피어피싱 메일은 기밀정보 유출과 금융 사기를 유발합니다.
+              <br />
+              스스로 피싱 메일을 판단하는 능력을 기를 수 있는 서비스
               <br />
               <br />
-              지금 바로 사이크업을 시작해보세요
+              지금 바로 Psych-Up을 시작해보세요!
             </Text>
             <Button
               variant="outline"
