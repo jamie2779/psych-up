@@ -18,7 +18,10 @@ export default function DashboardMailPage({
     const doneTodoCount = training.todoHolders.filter(
       (todo) => todo.isCompleted
     ).length;
-    const progress = Math.floor((doneTodoCount / allTodoCount) * 100);
+    const progress =
+      training.status === "COMPLETE"
+        ? 100
+        : Math.floor((doneTodoCount / allTodoCount) * 100);
 
     return {
       type: training.scenario.type,
