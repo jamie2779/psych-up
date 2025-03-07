@@ -35,7 +35,7 @@ export default async function MailStarredPage(props: {
   const mailListData = await prisma.mailHolder.findMany({
     where: {
       trainingId: trainingId,
-      mailBox: "SPAM",
+      mailBox: "STARRED",
     },
     include: {
       mail: {
